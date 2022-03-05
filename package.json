@@ -1,12 +1,17 @@
 {
   "dependencies": {
     "@discordjs/voice": "^0.8.0",
+    "canvas": "^2.9.0",
+    "canvas-senpai": "^2.0.3",
     "discord.js": "^13.6.0",
     "dotenv": "^14.2.0",
-    "nodemon": "^2.0.15"
+    "mongoose": "^6.2.4",
+    "nodemon": "^2.0.15",
+    "spamnya": "^1.1.1",
+    "yarn": "^1.22.17"
   },
   "scripts": {
-    "start": " npm run build && node dist/index.js",
+    "start": "node ./dist/index.js",
     "build": "babel ./src -d dist",
     "dev": "nodemon --ignore dist && npm start ",
     "lint": "eslint"
