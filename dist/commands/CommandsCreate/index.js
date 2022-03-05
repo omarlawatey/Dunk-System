@@ -96,8 +96,8 @@ var _unwarn = _interopRequireDefault(require("./unwarn"));
 
 var _warnList = _interopRequireDefault(require("./warnList"));
 
-var _badword = _interopRequireDefault(require("./badword"));
-
 var _badWordList = _interopRequireDefault(require("./badWordList"));
+
+var _badword = _interopRequireDefault(require("./badword"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
