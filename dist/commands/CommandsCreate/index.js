@@ -96,7 +96,7 @@ var _unwarn = _interopRequireDefault(require('./unwarn'));
 
 var _warnList = _interopRequireDefault(require('./warnList'));
 
-var _badWordList = _interopRequireDefault(require('./badWordList.js'));
+// var _badWordList = _interopRequireDefault(require('./badWordList.js'));
 
 var _badword = _interopRequireDefault(require('./badword'));
 
