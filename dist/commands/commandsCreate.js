@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports.default = void 0;
 
-var _index = require("./CommandsCreate/index.js");
+var _index = require('./CommandsCreate/index.js');
 
 const commandsCreate = (commands, DiscordJS) => {
   commands?.create((0, _index.mute)(DiscordJS));
@@ -18,8 +18,8 @@ const commandsCreate = (commands, DiscordJS) => {
   commands?.create((0, _index.warn)(DiscordJS));
   commands?.create((0, _index.unwarn)(DiscordJS));
   commands?.create((0, _index.warnList)(DiscordJS));
-  commands?.create((0, _index.badword)(DiscordJS));
   commands?.create((0, _index.badWordList)(DiscordJS));
+  commands?.create((0, _index.badword)(DiscordJS));
 };
 
 var _default = commandsCreate;
