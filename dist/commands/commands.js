@@ -18,7 +18,7 @@ const commands = (interaction, client) => {
   (0, _index.warn)(interaction);
   (0, _index.unwarn)(interaction);
   (0, _index.warnList)(interaction);
-  (0, _index.badWordList)(interaction);
+  // (0, _index.badWordList)(interaction);
   (0, _index.badword)(interaction);
 };
 
