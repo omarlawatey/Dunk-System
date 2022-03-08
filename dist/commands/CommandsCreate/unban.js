@@ -19,7 +19,8 @@ const unban = DiscordJS => {
       description: 'unban reason',
       required: 'true',
       type: DiscordJS.Constants.ApplicationCommandOptionTypes.STRING
-    }]
+    }],
+    defaultPermission: false
   };
 };
 

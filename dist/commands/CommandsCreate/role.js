@@ -36,7 +36,8 @@ const role = DiscordJS => {
       description: 'role reason',
       required: 'true',
       type: DiscordJS.Constants.ApplicationCommandOptionTypes.STRING
-    }]
+    }],
+    defaultPermission: false
   };
 };
 

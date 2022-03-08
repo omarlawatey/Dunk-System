@@ -191,7 +191,7 @@ const makeliveServerStatus = async (guild, role) => {
 exports.makeliveServerStatus = makeliveServerStatus;
 
 const makeServerInfo = async (guild, type) => {
-  let infoChannel = guild.channels.cache.get(_static.default.serverInfoChannelId);
+  let infoChannel = await guild.channels.cache.get(_static.default.serverInfoChannelId);
   let returnedStatus = await _DataBase.ServerInfo.findOne({
     guildId: guild.id
   });
@@ -222,22 +222,12 @@ const makeServerInfo = async (guild, type) => {
     returnedStatus = await _DataBase.ServerInfo.findOne({
       guildId: guild.id
     });
-  } else if (type === 'members') {
+  } else if (type === 'members' || type === 'channels') {
     await _DataBase.ServerInfo.updateOne({
       guildId: guild.id
     }, {
       $set: {
-        serverMembersCount: guild.memberCount
-      }
-    }).then(_ => {});
-    returnedStatus = await _DataBase.ServerInfo.findOne({
-      guildId: guild.id
-    });
-  } else if (type === 'channels') {
-    await _DataBase.ServerInfo.updateOne({
-      guildId: guild.id
-    }, {
-      $set: {
+        serverMembersCount: guild.memberCount,
         serverChannelsCount: guild.channels.cache.size
       }
     }).then(_ => {});
@@ -257,14 +247,18 @@ const makeServerInfo = async (guild, type) => {
     });
   }
 
-  await infoChannel.bulkDelete(1).then(async _ => {
-    await infoChannel.send({
-      embeds: [new _discord.MessageEmbed().setThumbnail(guild.iconURL()).setColor('#0b0808').addField('اسم السيرفر🔠 :', returnedStatus.serverName, true).addField('ايدي السيرفر🆔️:', returnedStatus.guildId, true).addField('تاريخ الانشاء 📅: ', returnedStatus.serverCreatedDate, true).addField(' مملوك بواسطة 👑 : ', `<@${returnedStatus.serverOwnerId}>`, true).addField('الأعضاء👥: ', returnedStatus.serverMembersCount, true).addField(' المنطقة🌍: ', 'Europe', true).addField('  عدد الرومات🚪: ', returnedStatus.serverChannelsCount, true).addField('عدد الرولات 🔒: ', returnedStatus.serverRolesCount, true).setFooter({
-        text: guild.name,
-        iconURL: guild.iconURL()
-      })]
+  try {
+    await infoChannel.bulkDelete(5).then(async _ => {
+      await infoChannel.send({
+        embeds: [new _discord.MessageEmbed().setThumbnail(guild.iconURL()).setColor('#0b0808').addField('اسم السيرفر🔠 :', returnedStatus.serverName, true).addField('ايدي السيرفر🆔️:', returnedStatus.guildId, true).addField('تاريخ الانشاء 📅: ', returnedStatus.serverCreatedDate, true).addField(' مملوك بواسطة 👑 : ', `<@${returnedStatus.serverOwnerId}>`, true).addField('الأعضاء👥: ', returnedStatus.serverMembersCount, true).addField(' المنطقة🌍: ', 'Europe', true).addField('  عدد الرومات🚪: ', returnedStatus.serverChannelsCount, true).addField('عدد الرولات 🔒: ', returnedStatus.serverRolesCount, true).setFooter({
+          text: guild.name,
+          iconURL: guild.iconURL()
+        })]
+      });
     });
-  });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 exports.makeServerInfo = makeServerInfo;

@@ -9,11 +9,11 @@ var _discord = require("discord.js");
 
 const TempChannelsCommands = (user, message, id, baseRoles) => {
   if (message.channel.id === id) {
-    if (message.content.split(' ')[0] === 'lock') {
+    if (message.content.toLowerCase().split(' ')[0] === 'lock') {
       if (!user.voice.channel) return;
       let vc = user.voice.channel;
 
-      if (message.content.toLocaleLowerCase().split(' ').length === 1) {
+      if (message.content.toLowerCase().split(' ').length === 1) {
         const vcMembers = vc.members.map(i => i);
         const lockMembers = vcMembers.map(member => {
           return {
@@ -28,7 +28,7 @@ const TempChannelsCommands = (user, message, id, baseRoles) => {
         }, ...lockMembers]);
       }
 
-      if (message.content.toLocaleLowerCase().split(' ').length >= 2) {
+      if (message.content.toLowerCase().split(' ').length >= 2) {
         if (!message.mentions.users || !message.mentions.roles) return;
         let perAddTo = [...(message.mentions.users ? message.mentions.users.map(i => i).filter(i => i) : []), ...(message.mentions.roles ? message.mentions.roles.map(i => i).filter(i => i) : [])];
         perAddTo.forEach(item => {
@@ -40,11 +40,11 @@ const TempChannelsCommands = (user, message, id, baseRoles) => {
       }
     }
 
-    if (message.content.split(' ')[0] === 'unlock') {
+    if (message.content.toLowerCase().split(' ')[0] === 'unlock') {
       if (!user.voice.channel) return;
       let vc = user.voice.channel;
 
-      if (message.content.split(' ').length === 1) {
+      if (message.content.toLowerCase().split(' ').length === 1) {
         const vcMembers = vc.members.map(i => i);
         const lockMembers = vcMembers.map(member => {
           return {
@@ -58,7 +58,7 @@ const TempChannelsCommands = (user, message, id, baseRoles) => {
         }, ...lockMembers]);
       }
 
-      if (message.content.toLocaleLowerCase().split(' ').length >= 2) {
+      if (message.content.toLowerCase().split(' ').length >= 2) {
         if (!message.mentions.users || !message.mentions.roles) return;
         let perAddTo = [...(message.mentions.users ? message.mentions.users.map(i => i).filter(i => i) : []), ...(message.mentions.roles ? message.mentions.roles.map(i => i).filter(i => i) : [])];
         perAddTo.forEach(item => {
@@ -70,11 +70,11 @@ const TempChannelsCommands = (user, message, id, baseRoles) => {
       }
     }
 
-    if (message.content.split(' ')[0] === 'show') {
+    if (message.content.toLowerCase().split(' ')[0] === 'show') {
       if (!user.voice.channel) return;
       let vc = user.voice.channel;
 
-      if (message.content.split(' ').length === 1) {
+      if (message.content.toLowerCase().split(' ').length === 1) {
         const vcMembers = vc.members.map(i => i);
         const lockMembers = vcMembers.map(member => {
           return {
@@ -101,7 +101,7 @@ const TempChannelsCommands = (user, message, id, baseRoles) => {
         });
       }
 
-      if (message.content.toLocaleLowerCase().split(' ').length >= 2) {
+      if (message.content.toLowerCase().split(' ').length >= 2) {
         if (!message.mentions.users || !message.mentions.roles) return;
         let perAddTo = [...(message.mentions.users ? message.mentions.users.map(i => i).filter(i => i) : []), ...(message.mentions.roles ? message.mentions.roles.map(i => i).filter(i => i) : [])];
         perAddTo.forEach(item => {
@@ -113,11 +113,11 @@ const TempChannelsCommands = (user, message, id, baseRoles) => {
       }
     }
 
-    if (message.content.split(' ')[0] === 'hide') {
+    if (message.content.toLowerCase().split(' ')[0] === 'hide') {
       if (!user.voice.channel) return;
       let vc = user.voice.channel;
 
-      if (message.content.split(' ').length === 1) {
+      if (message.content.toLowerCase().split(' ').length === 1) {
         const vcMembers = vc.members.map(i => i);
         const lockMembers = vcMembers.map(member => {
           return {
@@ -145,7 +145,7 @@ const TempChannelsCommands = (user, message, id, baseRoles) => {
         });
       }
 
-      if (message.content.toLocaleLowerCase().split(' ').length >= 2) {
+      if (message.content.toLowerCase().split(' ').length >= 2) {
         if (!message.mentions.users || !message.mentions.roles) return;
         let perAddTo = [...(message.mentions.users ? message.mentions.users.map(i => i).filter(i => i) : []), ...(message.mentions.roles ? message.mentions.roles.map(i => i).filter(i => i) : [])];
         perAddTo.forEach(item => {

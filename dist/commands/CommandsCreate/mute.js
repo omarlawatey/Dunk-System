@@ -24,7 +24,8 @@ const mute = DiscordJS => {
       description: 'mute reason',
       required: 'true',
       type: DiscordJS.Constants.ApplicationCommandOptionTypes.STRING
-    }]
+    }],
+    defaultPermission: false
   };
 };
 

@@ -8,6 +8,8 @@ var _mongoose = _interopRequireDefault(require("mongoose"));
 
 var _ms = _interopRequireDefault(require("ms"));
 
+var _helpers = require("./assets/helpers");
+
 var _static = _interopRequireDefault(require("./assets/static"));
 
 var _subFunctions = require("./assets/subFunctions");
@@ -29,7 +31,7 @@ _dotenv.default.config();
 // =========================================
 const {
   serverId,
-  welcomeChannelId,
+  welcome,
   tempChannels: {
     tempCategoryId,
     restrictedChannels,
@@ -46,7 +48,7 @@ const client = new _discord.default.Client({
 client.on('guildMemberAdd', member => {
   if (member.user.bot) return;
   const guild = client.guilds.cache.get(serverId);
-  const welcomeChannel = guild.channels.cache.get(welcomeChannelId);
+  const welcomeChannel = guild.channels.cache.get(welcome.Id);
   (0, _functions.Welcome)(welcomeChannel, member);
 }); // Role Watcher
 
@@ -56,7 +58,7 @@ client.on('guildMemberUpdate', async (oldsState, newState) => {
 }); // Temporary Channels
 
 client.on('voiceStateUpdate', (oldState, newState) => {
-  if (newState.user.bot) return;
+  if (newState.member.user.bot) return;
   const guild = client.guilds.cache.get(serverId);
   (0, _functions.TempChannels)(oldState, newState, guild, tempCategoryId, restrictedChannels);
 });
@@ -73,10 +75,12 @@ client.on('messageCreate', async message => {
 }); // Server Status Update
 
 client.on('guildUpdate', (oldState, newState) => (0, _subFunctions.makeServerInfo)(newState, 'name'));
-client.on('guildMemberAdd', member => (0, _subFunctions.makeServerInfo)(member.guild, 'members'));
-client.on('guildMemberRemove', member => (0, _subFunctions.makeServerInfo)(member.guild, 'members'));
-client.on('channelCreate', channel => (0, _subFunctions.makeServerInfo)(channel.guild, 'channels'));
-client.on('channelDelete', channel => (0, _subFunctions.makeServerInfo)(channel.guild, 'channels'));
+client.on('guildMemberAdd', member => {
+  (0, _subFunctions.makeServerInfo)(member.guild, 'members');
+});
+client.on('guildMemberRemove', member => {
+  (0, _subFunctions.makeServerInfo)(member.guild, 'members');
+});
 client.on('roleCreate', role => (0, _subFunctions.makeServerInfo)(role.guild, 'roles'));
 client.on('roleDelete', role => (0, _subFunctions.makeServerInfo)(role.guild, 'roles')); // Link Blocker
 
@@ -84,11 +88,11 @@ client.on('messageCreate', message => {
   if (message.member.user.bot) return;
   (0, _functions.LinkBlocker)(message);
 }); // BadWord Watcher
-
-client.on('messageCreate', async message => {
-  if (message.member.user.bot) return;
-  (0, _functions.BadWordWatcher)(message);
-}); // Anti Spammer
+// client.on('messageCreate', async message => {
+//   if (message.member.user.bot) return;
+//   BadWordWatcher(message);
+// });
+// Anti Spammer
 
 client.on('messageCreate', async message => {
   if (message.member.user.bot) return;
@@ -133,11 +137,16 @@ client.on('ready', async () => {
   console.log('The Bot Is Ready');
   const guild = client.guilds.cache.get(serverId);
   const editVc = guild.channels.cache.get(editChannelId.id);
-  await editVc.permissionOverwrites.set([...editChannelId.baseRoles, {
-    id: editChannelId.baseRoles[1].id,
-    allow: [...editChannelId.baseRoles[1].allow],
-    deny: [_discord.Permissions.FLAGS.SEND_MESSAGES]
-  }]);
+
+  try {
+    await editVc.permissionOverwrites.set([...editChannelId.baseRoles, {
+      id: editChannelId.baseRoles[1].id,
+      allow: [...editChannelId.baseRoles[1].allow],
+      deny: [_discord.Permissions.FLAGS.SEND_MESSAGES]
+    }]);
+  } catch (err) {
+    err;
+  }
 }); // =========================================
 
 client.login(process.env.TOKEN);

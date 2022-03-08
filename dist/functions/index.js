@@ -9,12 +9,6 @@ Object.defineProperty(exports, "AntiSpammer", {
     return _AntiSpammer.default;
   }
 });
-Object.defineProperty(exports, "BadWordWatcher", {
-  enumerable: true,
-  get: function () {
-    return _BadWordWatcher.default;
-  }
-});
 Object.defineProperty(exports, "LinkBlocker", {
   enumerable: true,
   get: function () {
@@ -71,8 +65,6 @@ var _TempChannelsCommands = _interopRequireDefault(require("./TempChannelsComman
 var _ServerStatusUpdate = _interopRequireDefault(require("./ServerStatusUpdate.js"));
 
 var _LinkBlocker = _interopRequireDefault(require("./LinkBlocker.js"));
-
-var _BadWordWatcher = _interopRequireDefault(require("./BadWordWatcher.js"));
 
 var _AntiSpammer = _interopRequireDefault(require("./AntiSpammer.js"));
 

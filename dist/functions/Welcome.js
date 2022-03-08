@@ -18,7 +18,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const RoleWatcher = async (welcomeChannel, member) => {
   const canva = new _canvasSenpai.CanvasSenpai();
   let data = await canva.welcome(member, {
-    link: 'https://github.com/omarlawatey/Dunk-System/blob/main/Images/WelcomeImage.png?raw=true',
+    link: 'https://raw.githubusercontent.com/omarlawatey/Dunk-System/Develope/Images/WelcomeImage.png',
     block: false
   });
   const attachment = new _discord.MessageAttachment(data, 'welcome-image.png');
@@ -31,6 +31,10 @@ const RoleWatcher = async (welcomeChannel, member) => {
 > **Make Sure Read:** <#${_static.default.rulesChannelId}>
 > **Total Member:** **${member.guild.memberCount}**
 > **& Have a Nice Time With US**`
+    });
+
+    _static.default.welcome.autoRole.forEach(item => {
+      member.roles.add(item);
     });
   });
 };

@@ -14,7 +14,8 @@ const warnList = DiscordJS => {
       description: 'user to warnList',
       required: 'false',
       type: DiscordJS.Constants.ApplicationCommandOptionTypes.USER
-    }]
+    }],
+    defaultPermission: false
   };
 };
 

@@ -19,7 +19,8 @@ const ban = DiscordJS => {
       description: 'ban reason',
       required: 'true',
       type: DiscordJS.Constants.ApplicationCommandOptionTypes.STRING
-    }]
+    }],
+    defaultPermission: false
   };
 };
 

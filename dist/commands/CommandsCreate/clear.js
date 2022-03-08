@@ -14,7 +14,8 @@ const clear = DiscordJS => {
       description: 'clear amount',
       required: 'true',
       type: DiscordJS.Constants.ApplicationCommandOptionTypes.NUMBER
-    }]
+    }],
+    defaultPermission: false
   };
 };
 
