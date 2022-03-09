@@ -8,13 +8,13 @@ var _mongoose = _interopRequireDefault(require("mongoose"));
 
 var _ms = _interopRequireDefault(require("ms"));
 
-var _helpers = require("./assets/helpers");
-
 var _static = _interopRequireDefault(require("./assets/static"));
 
 var _subFunctions = require("./assets/subFunctions");
 
 var _commands = require("./commands");
+
+var _CrashHandler = _interopRequireDefault(require("./assets/CrashHandler"));
 
 var _functions = require("./functions/");
 
@@ -43,6 +43,9 @@ const client = new _discord.default.Client({
   intents: [_discord.Intents.FLAGS.GUILDS, _discord.Intents.FLAGS.GUILD_MESSAGES, _discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS, _discord.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, _discord.Intents.FLAGS.GUILD_PRESENCES, _discord.Intents.FLAGS.GUILD_VOICE_STATES, _discord.Intents.FLAGS.GUILD_MEMBERS],
   partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 }); // =========================================
+// Error Handlers
+
+(0, _CrashHandler.default)(); // =========================================
 // Welcome To New Guild Members
 
 client.on('guildMemberAdd', member => {
