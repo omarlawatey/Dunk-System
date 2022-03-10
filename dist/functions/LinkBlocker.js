@@ -15,7 +15,7 @@ var _subFunctions = require("../assets/subFunctions");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const LinkBlocker = message => {
+const LinkBlocker = async message => {
   const links = {
     discordInvites: /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li|club)|discordapp\.com\/invite|discord\.com\/invite)\/.+[a-z]/gi,
     urls: /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.com))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))?/
@@ -36,13 +36,13 @@ const LinkBlocker = message => {
       text: message.guild.name,
       iconURL: message.guild.iconURL()
     }).setThumbnail(message.member.user.avatarURL()).setTimestamp(Date.now());
-    message.guild.channels.cache.get(_static.default.logsChannelsId).send({
+    await message.guild.channels.cache.get(_static.default.logsChannelsId).send({
       embeds: [embed]
     });
     return;
   }
 
-  if (!message.content.split('.').pop() === 'gif' && (0, _helpers.urlFinder)(message.content, links.urls)) {
+  if ((0, _helpers.urlFinder)(message.content, links.urls) && message.embeds.map(i => i.type)[0] !== 'gifv') {
     message.reply({
       content: 'Links is not allowed in chat',
       ephemeral: true
@@ -57,7 +57,7 @@ const LinkBlocker = message => {
       text: message.guild.name,
       iconURL: message.guild.iconURL()
     }).setThumbnail(message.member.user.avatarURL()).setTimestamp(Date.now());
-    message.guild.channels.cache.get(_static.default.logsChannelsId).send({
+    await message.guild.channels.cache.get(_static.default.logsChannelsId).send({
       embeds: [embed]
     });
     return;

@@ -26,6 +26,7 @@ const createChannel = (newState, activityName) => newState.guild.channels.create
   parent: newState.channel.parent.id
 }).then(vc => {
   newState.member.voice.setChannel(vc);
+  vc.permissionOverwrites.set([..._static.default.tempChannels.editChannelId.baseRoles]);
   newState.member.guild.channels.cache.get(_static.default.tempChannels.editChannelId.id).permissionOverwrites.edit(newState.member.id, {
     SEND_MESSAGES: true
   });
@@ -250,7 +251,7 @@ const makeServerInfo = async (guild, type) => {
   try {
     await infoChannel.bulkDelete(5).then(async _ => {
       await infoChannel.send({
-        embeds: [new _discord.MessageEmbed().setThumbnail(guild.iconURL()).setColor('#0b0808').addField('اسم السيرفر🔠 :', returnedStatus.serverName, true).addField('ايدي السيرفر🆔️:', returnedStatus.guildId, true).addField('تاريخ الانشاء 📅: ', returnedStatus.serverCreatedDate, true).addField(' مملوك بواسطة 👑 : ', `<@${returnedStatus.serverOwnerId}>`, true).addField('الأعضاء👥: ', returnedStatus.serverMembersCount, true).addField(' المنطقة🌍: ', 'Europe', true).addField('  عدد الرومات🚪: ', returnedStatus.serverChannelsCount, true).addField('عدد الرولات 🔒: ', returnedStatus.serverRolesCount, true).setFooter({
+        embeds: [new _discord.MessageEmbed().setThumbnail(guild.iconURL()).setColor('#ff0000').addField('اسم السيرفر🔠 :', returnedStatus.serverName, true).addField('ايدي السيرفر🆔️:', returnedStatus.guildId, true).addField('تاريخ الانشاء 📅: ', returnedStatus.serverCreatedDate, true).addField(' مملوك بواسطة 👑 : ', `<@${returnedStatus.serverOwnerId}>`, true).addField('الأعضاء👥: ', returnedStatus.serverMembersCount, true).addField(' المنطقة🌍: ', 'Europe', true).addField('  عدد الرومات🚪: ', returnedStatus.serverChannelsCount, true).addField('عدد الرولات 🔒: ', returnedStatus.serverRolesCount, true).setFooter({
           text: guild.name,
           iconURL: guild.iconURL()
         })]

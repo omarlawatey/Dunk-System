@@ -23,6 +23,8 @@ const urlFinder = (url, regex) => regex.test(url.toLowerCase());
 
 exports.urlFinder = urlFinder;
 
-const fontGenerator = text => text.toUpperCase().split('').map(letter => _static.default.font?.[letter] ? _static.default.font?.[letter] : letter).join('');
+const fontGenerator = text => {
+  return text.toUpperCase().split('').map(letter => _static.default.font?.[letter] ? _static.default.font?.[letter] : letter).join('');
+};
 
 exports.fontGenerator = fontGenerator;
