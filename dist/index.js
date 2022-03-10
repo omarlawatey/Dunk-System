@@ -49,7 +49,14 @@ const client = new _discord.default.Client({
 // Welcome To New Guild Members
 
 client.on('guildMemberAdd', member => {
-  if (member.user.bot) return;
+  if (member.user.bot) {
+    _static.default.welcome.botsRole.forEach(item => {
+      member.roles.add(item);
+    });
+
+    return;
+  }
+
   const guild = client.guilds.cache.get(serverId);
   const welcomeChannel = guild.channels.cache.get(welcome.Id);
   (0, _functions.Welcome)(welcomeChannel, member);
@@ -100,6 +107,27 @@ client.on('messageCreate', message => {
 client.on('messageCreate', async message => {
   if (message.member.user.bot) return;
   (0, _functions.AntiSpammer)(message);
+}); // Server Booster Detector
+
+client.on('guildMemberUpdate', async (oldState, newState) => {
+  if (oldState?.user.bot) return;
+  const oldStatus = oldState?.premiumSince;
+  const newStatus = newState?.remiumSince;
+  const boostChannel = await client.channels.cache.get(_static.default.boostChannelId);
+
+  if (!oldStatus && newStatus) {
+    const embed = new MessageEmbed().setColor('#ff1493').setTitle('[![AnimatedBoost](https://emoji.gg/assets/emoji/3395-animatedboost.gif)](https://emoji.gg/emoji/3395-animatedboost) Server Boosted').setDescription(`${newState} Boosted The Server!!!`).addFields('Total Boosts', newState.guild.premiumSubscriptionCount, false);
+    boostChannel.send({
+      embed: [embed]
+    });
+  }
+
+  if (!newStatus && oldStatus) {
+    const embed = new MessageEmbed().setColor('#32174d').setTitle('[![blank_boost_grey](https://emoji.gg/assets/emoji/8913-blank-boost-grey.png)](https://emoji.gg/emoji/8913-blank-boost-grey) Server Unboosted').setDescription(`${newState} Unboosted The Server!!!`).addFields('Total Boosts', newState.guild.premiumSubscriptionCount, false);
+    boostChannel.send({
+      embed: [embed]
+    });
+  }
 }); // =========================================
 // slash Commands
 
