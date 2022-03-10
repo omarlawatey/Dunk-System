@@ -345,8 +345,8 @@ const welcomeImage = async (member, link) => {
   image.circle();
   let raw = await image.getBufferAsync('image/png');
   const avatar = await _canvas.default.loadImage(raw); // Draw a shape onto the main canvas
+  // ctx.drawImage(avatar, 70, 98, 150, 150);
 
-  ctx.drawImage(avatar, 70, 98, 150, 150);
   return canvas.toBuffer();
 };
 
