@@ -9,18 +9,12 @@ var _discord = require("discord.js");
 
 var _subFunctions = require("../assets/subFunctions");
 
-var _canvasSenpai = require("canvas-senpai");
-
 var _static = _interopRequireDefault(require("../assets/static"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const RoleWatcher = async (welcomeChannel, member) => {
-  const canva = new _canvasSenpai.CanvasSenpai();
-  let data = await canva.welcome(member, {
-    link: 'https://raw.githubusercontent.com/omarlawatey/Dunk-System/Develope/Images/WelcomeImage.png',
-    block: false
-  });
+  let data = await (0, _subFunctions.welcomeImage)(member, 'https://raw.githubusercontent.com/omarlawatey/Dunk-System/Develope/Images/WelcomeImage.png');
   const attachment = new _discord.MessageAttachment(data, 'welcome-image.png');
   await welcomeChannel.send({
     files: [attachment]

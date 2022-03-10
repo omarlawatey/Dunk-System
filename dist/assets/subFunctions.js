@@ -3,11 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.unMuteEmbed = exports.makeliveServerStatus = exports.makeWarn = exports.makeServerInfo = exports.makeBadWord = exports.createChannel = exports.channelArranger = void 0;
+exports.welcomeImage = exports.unMuteEmbed = exports.makeliveServerStatus = exports.makeWarn = exports.makeServerInfo = exports.makeBadWord = exports.createChannel = exports.channelArranger = void 0;
 
 var _discord = require("discord.js");
 
 var _canvas = _interopRequireDefault(require("canvas"));
+
+var _jimp = _interopRequireDefault(require("jimp"));
 
 var _helpers = require("../assets/helpers");
 
@@ -314,3 +316,38 @@ const makeBadWord = async (guild, badword, type = 'add') => {
 };
 
 exports.makeBadWord = makeBadWord;
+
+const welcomeImage = async (member, link) => {
+  const canvas = _canvas.default.createCanvas(705, 344);
+
+  const ctx = canvas.getContext('2d');
+  const font = 'Manrope';
+  const fixedbkg = await _canvas.default.loadImage(link);
+  ctx.drawImage(fixedbkg, 0, 0, 705, 344);
+  ctx.strokeRect(0, 0, 705, 344);
+  let xname = member.user.username;
+  ctx.font = `bold 32px ${font}`;
+  ctx.fillStyle = '#FFFFFF';
+  ctx.textAlign = 'start';
+  ctx.strokeStyle = '#f5f5f5';
+  const name = xname;
+  xname.length > 16 ? xname.substring(0, 16).trim() + '...' : xname;
+  ctx.fillText(`${name}`, 348, 160);
+  ctx.strokeText(`${name}`, 348, 160);
+  ctx.font = `bold 32px ${font}`;
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillText(`#${member.user.discriminator}`, 348, 205);
+  let image = await _jimp.default.read(member.user.displayAvatarURL({
+    format: 'jpg',
+    dynamic: true
+  }));
+  image.resize(1024, 1024);
+  image.circle();
+  let raw = await image.getBufferAsync('image/png');
+  const avatar = await _canvas.default.loadImage(raw); // Draw a shape onto the main canvas
+
+  ctx.drawImage(avatar, 70, 98, 150, 150);
+  return canvas.toBuffer();
+};
+
+exports.welcomeImage = welcomeImage;

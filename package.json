@@ -5,6 +5,7 @@
     "canvas-senpai": "^2.0.3",
     "discord.js": "^13.6.0",
     "dotenv": "^14.2.0",
+    "jimp": "^0.16.1",
     "mongoose": "^6.2.4",
     "nodemon": "^2.0.15",
     "spamnya": "^1.1.1",
