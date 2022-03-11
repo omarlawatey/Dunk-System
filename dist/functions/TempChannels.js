@@ -71,15 +71,19 @@ const TempChannels = async (oldState, newState, guild, categoryId, restrictedCha
         }, 500);
       }
     } catch (err) {
-      console.log(err);
+      console.log('delete and close edit vc ' + err);
     }
   });
   setTimeout(() => {
-    (0, _subFunctions.channelArranger)(guild.channels.cache.get(categoryId).children.filter(i => !restrictedChannels.includes(i.id)).map(({
-      name
-    }) => {
-      return name;
-    }), guild, categoryId, restrictedChannels);
+    try {
+      (0, _subFunctions.channelArranger)(guild.channels.cache.get(categoryId).children.filter(i => !restrictedChannels.includes(i.id)).map(({
+        name
+      }) => {
+        return name;
+      }), guild, categoryId, restrictedChannels);
+    } catch (error) {
+      console.log('Channel Rearanger ' + error);
+    }
   }, 1200);
 };
 

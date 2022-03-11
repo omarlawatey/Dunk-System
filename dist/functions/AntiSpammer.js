@@ -22,7 +22,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const AntiSpammer = async message => {
   _spamnya.default.log(message, 50);
 
-  if (_spamnya.default.tooQuick(3, 3000)) {
+  if (_spamnya.default.tooQuick(5, 3000)) {
     message.member.timeout((0, _ms.default)('5m'), 'Spam in Chat is not allowed').then(async _ => {
       (0, _subFunctions.makeWarn)(message.guild, message.member, 1, 'warn');
 

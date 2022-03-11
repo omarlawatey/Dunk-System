@@ -109,11 +109,11 @@ client.on('messageCreate', async message => {
   (0, _functions.AntiSpammer)(message);
 }); // Server Booster Detector
 
-client.on('guildMemberUpdate', async (oldState, newState) => {
+client.on('guildMemberUpdate', (oldState, newState) => {
   if (oldState?.user.bot) return;
   const oldStatus = oldState?.premiumSince;
   const newStatus = newState?.remiumSince;
-  const boostChannel = await client.channels.cache.get(_static.default.boostChannelId);
+  const boostChannel = client.channels.cache.get(_static.default.boostChannelId);
 
   if (!oldStatus && newStatus) {
     const embed = new MessageEmbed().setColor('#ff1493').setTitle('[![AnimatedBoost](https://emoji.gg/assets/emoji/3395-animatedboost.gif)](https://emoji.gg/emoji/3395-animatedboost) Server Boosted').setDescription(`${newState} Boosted The Server!!!`).addFields('Total Boosts', newState.guild.premiumSubscriptionCount, false);
@@ -145,7 +145,21 @@ client.on('interactionCreate', async interaction => {
 
   (0, _commands.commands)(interaction, client);
 }); // =========================================
-// Timer Watcher
+// Empty TempChannels Watcher
+
+setInterval(() => {
+  const guild = client.guilds.cache.get(serverId);
+  const tempChannelsCategory = guild.channels.cache.get(_static.default.tempChannels.tempCategoryId);
+  tempChannelsCategory.children.map(i => i).forEach(async channel => {
+    try {
+      if (!restrictedChannels.includes(channel.id)) {
+        channel.members.size === 0 ? await channel.delete().catch(err => console.log(err)) : '';
+      }
+    } catch (err) {
+      console.log('delete and close edit vc ' + err);
+    }
+  });
+}, 2000); // Timer Watcher
 
 setTimeout(async _ => {
   if (!client?.guilds?.cache?.get(serverId)) return;

@@ -45,7 +45,7 @@ const channelArranger = (arr, guild, categoryId, restrictedChannels) => {
       try {
         tempChannel.setName(`${uniqueValues[tempsIndex]}${tempIndex === 0 ? '' : ` ${tempIndex}`}`).catch(err => console.log(err));
       } catch (err) {
-        console.log(err);
+        console.log('channel rearanger ' + err);
       }
 
       allChannels.push(tempChannel);
