@@ -58,6 +58,9 @@ const serverInfo = {
       }, {
         id: '950092343950856202',
         deny: [_discord.Permissions.FLAGS.VIEW_CHANNEL]
+      }, {
+        id: '941366717622411345',
+        allow: [_discord.Permissions.FLAGS.VIEW_CHANNEL]
       }]
     }
   },
@@ -74,7 +77,7 @@ const serverInfo = {
     }]
   },
   boostChannelId: '950087083685478491',
-  linkBlockerIgnoreChannels: ['950086892160946246'],
+  linkBlockerIgnoreChannels: '950086892160946246',
   font: {
     Q: '𝑸',
     W: '𝑾',

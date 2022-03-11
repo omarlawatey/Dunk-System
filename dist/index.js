@@ -97,7 +97,7 @@ client.on('roleDelete', role => (0, _subFunctions.makeServerInfo)(role.guild, 'r
 
 client.on('messageCreate', message => {
   if (message.member.user.bot) return;
-  if (linkBlockerIgnoreChannels.includes(message.channel.id)) return;
+  if (message.channel.id === linkBlockerIgnoreChannels) return;
   (0, _functions.LinkBlocker)(message);
 }); // BadWord Watcher
 // client.on('messageCreate', async message => {
@@ -135,8 +135,8 @@ client.on('interactionCreate', async interaction => {
 
 setInterval(() => {
   const guild = client.guilds.cache.get(serverId);
-  const tempChannelsCategory = guild.channels.cache.get(_static.default.tempChannels.tempCategoryId);
-  tempChannelsCategory.children.map(i => i).forEach(async channel => {
+  const tempChannelsCategory = guild?.channels?.cache?.get(_static.default.tempChannels.tempCategoryId);
+  if (tempChannelsCategory) tempChannelsCategory.children.map(i => i).forEach(async channel => {
     try {
       if (!restrictedChannels.includes(channel.id)) {
         channel.members.size === 0 ? await channel.delete().catch(err => console.log(err)) : '';
