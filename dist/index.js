@@ -37,7 +37,8 @@ const {
     restrictedChannels,
     editChannelId
   },
-  logsChannelsId
+  logsChannelsId,
+  linkBlockerIgnoreChannels
 } = _static.default;
 const client = new _discord.default.Client({
   intents: [_discord.Intents.FLAGS.GUILDS, _discord.Intents.FLAGS.GUILD_MESSAGES, _discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS, _discord.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, _discord.Intents.FLAGS.GUILD_PRESENCES, _discord.Intents.FLAGS.GUILD_VOICE_STATES, _discord.Intents.FLAGS.GUILD_MEMBERS],
@@ -96,6 +97,7 @@ client.on('roleDelete', role => (0, _subFunctions.makeServerInfo)(role.guild, 'r
 
 client.on('messageCreate', message => {
   if (message.member.user.bot) return;
+  if (linkBlockerIgnoreChannels.includes(message.channel.id)) return;
   (0, _functions.LinkBlocker)(message);
 }); // BadWord Watcher
 // client.on('messageCreate', async message => {

@@ -74,6 +74,7 @@ const serverInfo = {
     }]
   },
   boostChannelId: '950087083685478491',
+  linkBlockerIgnoreChannels: ['950086892160946246'],
   font: {
     Q: '𝑸',
     W: '𝑾',
