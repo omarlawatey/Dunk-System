@@ -98,6 +98,7 @@ client.on('roleDelete', role => (0, _subFunctions.makeServerInfo)(role.guild, 'r
 client.on('messageCreate', message => {
   if (message.member.user.bot) return;
   if (message.channel.id === linkBlockerIgnoreChannels) return;
+  if (message.member.id === message.guild.ownerId) return;
   (0, _functions.LinkBlocker)(message);
 }); // BadWord Watcher
 // client.on('messageCreate', async message => {
