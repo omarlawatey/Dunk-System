@@ -114,7 +114,7 @@ client.on('messageCreate', async message => {
 
 client.on('guildMemberUpdate', (oldState, newState) => {
   if (oldState?.user.bot) return;
-  BoostDetector(oldState, newState);
+  (0, _functions.BoostDetector)(oldState, newState);
 }); // =========================================
 // slash Commands
 
