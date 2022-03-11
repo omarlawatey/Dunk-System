@@ -9,10 +9,10 @@ Object.defineProperty(exports, "AntiSpammer", {
     return _AntiSpammer.default;
   }
 });
-Object.defineProperty(exports, "BadWordWatcher", {
+Object.defineProperty(exports, "BoostDetector", {
   enumerable: true,
   get: function () {
-    return _BadWordWatcher.default;
+    return _BoostDetector.default;
   }
 });
 Object.defineProperty(exports, "LinkBlocker", {
@@ -72,8 +72,8 @@ var _ServerStatusUpdate = _interopRequireDefault(require("./ServerStatusUpdate.j
 
 var _LinkBlocker = _interopRequireDefault(require("./LinkBlocker.js"));
 
-var _BadWordWatcher = _interopRequireDefault(require("./BadWordWatcher.js"));
-
 var _AntiSpammer = _interopRequireDefault(require("./AntiSpammer.js"));
+
+var _BoostDetector = _interopRequireDefault(require("./BoostDetector.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

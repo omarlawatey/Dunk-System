@@ -3,11 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.unMuteEmbed = exports.makeliveServerStatus = exports.makeWarn = exports.makeServerInfo = exports.makeBadWord = exports.createChannel = exports.channelArranger = void 0;
+exports.welcomeImage = exports.unMuteEmbed = exports.makeliveServerStatus = exports.makeWarn = exports.makeServerInfo = exports.makeBadWord = exports.createChannel = exports.channelArranger = void 0;
 
 var _discord = require("discord.js");
 
 var _canvas = _interopRequireDefault(require("canvas"));
+
+var _jimp = _interopRequireDefault(require("jimp"));
 
 var _helpers = require("../assets/helpers");
 
@@ -26,6 +28,7 @@ const createChannel = (newState, activityName) => newState.guild.channels.create
   parent: newState.channel.parent.id
 }).then(vc => {
   newState.member.voice.setChannel(vc);
+  vc.permissionOverwrites.set([..._static.default.tempChannels.editChannelId.baseRoles]);
   newState.member.guild.channels.cache.get(_static.default.tempChannels.editChannelId.id).permissionOverwrites.edit(newState.member.id, {
     SEND_MESSAGES: true
   });
@@ -42,7 +45,7 @@ const channelArranger = (arr, guild, categoryId, restrictedChannels) => {
       try {
         tempChannel.setName(`${uniqueValues[tempsIndex]}${tempIndex === 0 ? '' : ` ${tempIndex}`}`).catch(err => console.log(err));
       } catch (err) {
-        console.log(err);
+        console.log('channel rearanger ' + err);
       }
 
       allChannels.push(tempChannel);
@@ -191,7 +194,7 @@ const makeliveServerStatus = async (guild, role) => {
 exports.makeliveServerStatus = makeliveServerStatus;
 
 const makeServerInfo = async (guild, type) => {
-  let infoChannel = guild.channels.cache.get(_static.default.serverInfoChannelId);
+  let infoChannel = await guild.channels.cache.get(_static.default.serverInfoChannelId);
   let returnedStatus = await _DataBase.ServerInfo.findOne({
     guildId: guild.id
   });
@@ -222,22 +225,12 @@ const makeServerInfo = async (guild, type) => {
     returnedStatus = await _DataBase.ServerInfo.findOne({
       guildId: guild.id
     });
-  } else if (type === 'members') {
+  } else if (type === 'members' || type === 'channels') {
     await _DataBase.ServerInfo.updateOne({
       guildId: guild.id
     }, {
       $set: {
-        serverMembersCount: guild.memberCount
-      }
-    }).then(_ => {});
-    returnedStatus = await _DataBase.ServerInfo.findOne({
-      guildId: guild.id
-    });
-  } else if (type === 'channels') {
-    await _DataBase.ServerInfo.updateOne({
-      guildId: guild.id
-    }, {
-      $set: {
+        serverMembersCount: guild.memberCount,
         serverChannelsCount: guild.channels.cache.size
       }
     }).then(_ => {});
@@ -257,14 +250,18 @@ const makeServerInfo = async (guild, type) => {
     });
   }
 
-  await infoChannel.bulkDelete(1).then(async _ => {
-    await infoChannel.send({
-      embeds: [new _discord.MessageEmbed().setThumbnail(guild.iconURL()).setColor('#0b0808').addField('اسم السيرفر🔠 :', returnedStatus.serverName, true).addField('ايدي السيرفر🆔️:', returnedStatus.guildId, true).addField('تاريخ الانشاء 📅: ', returnedStatus.serverCreatedDate, true).addField(' مملوك بواسطة 👑 : ', `<@${returnedStatus.serverOwnerId}>`, true).addField('الأعضاء👥: ', returnedStatus.serverMembersCount, true).addField(' المنطقة🌍: ', 'Europe', true).addField('  عدد الرومات🚪: ', returnedStatus.serverChannelsCount, true).addField('عدد الرولات 🔒: ', returnedStatus.serverRolesCount, true).setFooter({
-        text: guild.name,
-        iconURL: guild.iconURL()
-      })]
+  try {
+    await infoChannel.bulkDelete(5).then(async _ => {
+      await infoChannel.send({
+        embeds: [new _discord.MessageEmbed().setThumbnail(guild.iconURL()).setColor('#ff0000').addField('اسم السيرفر🔠 :', returnedStatus.serverName, true).addField('ايدي السيرفر🆔️:', returnedStatus.guildId, true).addField('تاريخ الانشاء 📅: ', returnedStatus.serverCreatedDate, true).addField(' مملوك بواسطة 👑 : ', `<@${returnedStatus.serverOwnerId}>`, true).addField('الأعضاء👥: ', returnedStatus.serverMembersCount, true).addField(' المنطقة🌍: ', 'Europe', true).addField('  عدد الرومات🚪: ', returnedStatus.serverChannelsCount, true).addField('عدد الرولات 🔒: ', returnedStatus.serverRolesCount, true).setFooter({
+          text: guild.name,
+          iconURL: guild.iconURL()
+        })]
+      });
     });
-  });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 exports.makeServerInfo = makeServerInfo;
@@ -319,3 +316,38 @@ const makeBadWord = async (guild, badword, type = 'add') => {
 };
 
 exports.makeBadWord = makeBadWord;
+
+const welcomeImage = async (member, link) => {
+  const canvas = _canvas.default.createCanvas(705, 344);
+
+  const ctx = canvas.getContext('2d');
+  const font = 'Manrope';
+  const fixedbkg = await _canvas.default.loadImage(link);
+  ctx.drawImage(fixedbkg, 0, 0, 705, 344);
+  ctx.strokeRect(0, 0, 705, 344);
+  let xname = member.user.username;
+  ctx.font = `bold 32px ${font}`;
+  ctx.fillStyle = '#FFFFFF';
+  ctx.textAlign = 'start';
+  ctx.strokeStyle = '#f5f5f5';
+  const name = xname;
+  xname.length > 16 ? xname.substring(0, 16).trim() + '...' : xname;
+  ctx.fillText(`${name}`, 348, 160);
+  ctx.strokeText(`${name}`, 348, 160);
+  ctx.font = `bold 32px ${font}`;
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillText(`#${member.user.discriminator}`, 348, 205);
+  let image = await _jimp.default.read(member.user.displayAvatarURL({
+    format: 'jpg',
+    dynamic: true
+  }));
+  image.resize(1024, 1024);
+  image.circle();
+  let raw = await image.getBufferAsync('image/png');
+  const avatar = await _canvas.default.loadImage(raw); // Draw a shape onto the main canvas
+
+  ctx.drawImage(avatar, 70, 98, 150, 150);
+  return canvas.toBuffer();
+};
+
+exports.welcomeImage = welcomeImage;

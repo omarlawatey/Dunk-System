@@ -26,7 +26,8 @@ const badword = DiscordJS => {
       description: 'Bad word',
       required: 'true',
       type: DiscordJS.Constants.ApplicationCommandOptionTypes.STRING
-    }]
+    }],
+    defaultPermission: false
   };
 };
 

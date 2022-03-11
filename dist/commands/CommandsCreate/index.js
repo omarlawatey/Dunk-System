@@ -3,18 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "badWordList", {
-  enumerable: true,
-  get: function () {
-    return _badWordList.default;
-  }
-});
-Object.defineProperty(exports, "badword", {
-  enumerable: true,
-  get: function () {
-    return _badword.default;
-  }
-});
 Object.defineProperty(exports, "ban", {
   enumerable: true,
   get: function () {
@@ -95,9 +83,5 @@ var _warn = _interopRequireDefault(require("./warn"));
 var _unwarn = _interopRequireDefault(require("./unwarn"));
 
 var _warnList = _interopRequireDefault(require("./warnList"));
-
-var _badWordList = _interopRequireDefault(require("./badWordList"));
-
-var _badword = _interopRequireDefault(require("./badword"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

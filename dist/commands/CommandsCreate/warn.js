@@ -31,7 +31,8 @@ const warn = DiscordJS => {
         name: '2 Warn',
         value: 2
       }]
-    }]
+    }],
+    defaultPermission: false
   };
 };
 

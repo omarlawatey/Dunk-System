@@ -14,6 +14,8 @@ var _subFunctions = require("./assets/subFunctions");
 
 var _commands = require("./commands");
 
+var _CrashHandler = _interopRequireDefault(require("./assets/CrashHandler"));
+
 var _functions = require("./functions/");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -29,24 +31,35 @@ _dotenv.default.config();
 // =========================================
 const {
   serverId,
-  welcomeChannelId,
+  welcome,
   tempChannels: {
     tempCategoryId,
     restrictedChannels,
     editChannelId
   },
-  logsChannelsId
+  logsChannelsId,
+  linkBlockerIgnoreChannels
 } = _static.default;
 const client = new _discord.default.Client({
   intents: [_discord.Intents.FLAGS.GUILDS, _discord.Intents.FLAGS.GUILD_MESSAGES, _discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS, _discord.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, _discord.Intents.FLAGS.GUILD_PRESENCES, _discord.Intents.FLAGS.GUILD_VOICE_STATES, _discord.Intents.FLAGS.GUILD_MEMBERS],
   partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 }); // =========================================
+// Error Handlers
+
+(0, _CrashHandler.default)(); // =========================================
 // Welcome To New Guild Members
 
 client.on('guildMemberAdd', member => {
-  if (member.user.bot) return;
+  if (member.user.bot) {
+    _static.default.welcome.botsRole.forEach(item => {
+      member.roles.add(item);
+    });
+
+    return;
+  }
+
   const guild = client.guilds.cache.get(serverId);
-  const welcomeChannel = guild.channels.cache.get(welcomeChannelId);
+  const welcomeChannel = guild.channels.cache.get(welcome.Id);
   (0, _functions.Welcome)(welcomeChannel, member);
 }); // Role Watcher
 
@@ -56,7 +69,7 @@ client.on('guildMemberUpdate', async (oldsState, newState) => {
 }); // Temporary Channels
 
 client.on('voiceStateUpdate', (oldState, newState) => {
-  if (newState.user.bot) return;
+  if (newState.member.user.bot) return;
   const guild = client.guilds.cache.get(serverId);
   (0, _functions.TempChannels)(oldState, newState, guild, tempCategoryId, restrictedChannels);
 });
@@ -73,26 +86,34 @@ client.on('messageCreate', async message => {
 }); // Server Status Update
 
 client.on('guildUpdate', (oldState, newState) => (0, _subFunctions.makeServerInfo)(newState, 'name'));
-client.on('guildMemberAdd', member => (0, _subFunctions.makeServerInfo)(member.guild, 'members'));
-client.on('guildMemberRemove', member => (0, _subFunctions.makeServerInfo)(member.guild, 'members'));
-client.on('channelCreate', channel => (0, _subFunctions.makeServerInfo)(channel.guild, 'channels'));
-client.on('channelDelete', channel => (0, _subFunctions.makeServerInfo)(channel.guild, 'channels'));
+client.on('guildMemberAdd', member => {
+  (0, _subFunctions.makeServerInfo)(member.guild, 'members');
+});
+client.on('guildMemberRemove', member => {
+  (0, _subFunctions.makeServerInfo)(member.guild, 'members');
+});
 client.on('roleCreate', role => (0, _subFunctions.makeServerInfo)(role.guild, 'roles'));
 client.on('roleDelete', role => (0, _subFunctions.makeServerInfo)(role.guild, 'roles')); // Link Blocker
 
 client.on('messageCreate', message => {
   if (message.member.user.bot) return;
+  if (message.channel.id === linkBlockerIgnoreChannels) return;
   (0, _functions.LinkBlocker)(message);
 }); // BadWord Watcher
-
-client.on('messageCreate', async message => {
-  if (message.member.user.bot) return;
-  (0, _functions.BadWordWatcher)(message);
-}); // Anti Spammer
+// client.on('messageCreate', async message => {
+//   if (message.member.user.bot) return;
+//   BadWordWatcher(message);
+// });
+// Anti Spammer
 
 client.on('messageCreate', async message => {
   if (message.member.user.bot) return;
   (0, _functions.AntiSpammer)(message);
+}); // Server Booster Detector
+
+client.on('guildMemberUpdate', (oldState, newState) => {
+  if (oldState?.user.bot) return;
+  BoostDetector(oldState, newState);
 }); // =========================================
 // slash Commands
 
@@ -110,7 +131,21 @@ client.on('interactionCreate', async interaction => {
 
   (0, _commands.commands)(interaction, client);
 }); // =========================================
-// Timer Watcher
+// Empty TempChannels Watcher
+
+setInterval(() => {
+  const guild = client.guilds.cache.get(serverId);
+  const tempChannelsCategory = guild?.channels?.cache?.get(_static.default.tempChannels.tempCategoryId);
+  if (tempChannelsCategory) tempChannelsCategory.children.map(i => i).forEach(async channel => {
+    try {
+      if (!restrictedChannels.includes(channel.id)) {
+        channel.members.size === 0 ? await channel.delete().catch(err => console.log(err)) : '';
+      }
+    } catch (err) {
+      console.log('delete and close edit vc ' + err);
+    }
+  });
+}, 2000); // Timer Watcher
 
 setTimeout(async _ => {
   if (!client?.guilds?.cache?.get(serverId)) return;
@@ -133,11 +168,16 @@ client.on('ready', async () => {
   console.log('The Bot Is Ready');
   const guild = client.guilds.cache.get(serverId);
   const editVc = guild.channels.cache.get(editChannelId.id);
-  await editVc.permissionOverwrites.set([...editChannelId.baseRoles, {
-    id: editChannelId.baseRoles[1].id,
-    allow: [...editChannelId.baseRoles[1].allow],
-    deny: [_discord.Permissions.FLAGS.SEND_MESSAGES]
-  }]);
+
+  try {
+    await editVc.permissionOverwrites.set([...editChannelId.baseRoles, {
+      id: editChannelId.baseRoles[1].id,
+      allow: [...editChannelId.baseRoles[1].allow],
+      deny: [_discord.Permissions.FLAGS.SEND_MESSAGES]
+    }]);
+  } catch (err) {
+    err;
+  }
 }); // =========================================
 
 client.login(process.env.TOKEN);

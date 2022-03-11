@@ -13,7 +13,7 @@ const LiveStatus = new _mongoose.Schema({
     required: true
   },
   roleId: {
-    type: _mongoose.SchemaTypes.String,
+    type: _mongoose.SchemaTypes.Array,
     required: true
   },
   channelId: {

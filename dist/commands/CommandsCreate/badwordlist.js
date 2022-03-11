@@ -8,7 +8,8 @@ exports.default = void 0;
 const badwordList = DiscordJS => {
   return {
     name: 'badwordlist',
-    description: 'badwordList command'
+    description: 'badwordList command',
+    defaultPermission: false
   };
 };
 

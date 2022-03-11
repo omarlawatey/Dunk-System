@@ -19,7 +19,8 @@ const unmute = DiscordJS => {
       description: 'unmute reason',
       required: 'true',
       type: DiscordJS.Constants.ApplicationCommandOptionTypes.STRING
-    }]
+    }],
+    defaultPermission: false
   };
 };
 

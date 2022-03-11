@@ -19,7 +19,8 @@ const kick = DiscordJS => {
       description: 'kick reason',
       required: 'true',
       type: DiscordJS.Constants.ApplicationCommandOptionTypes.STRING
-    }]
+    }],
+    defaultPermission: false
   };
 };
 

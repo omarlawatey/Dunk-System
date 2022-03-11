@@ -17,9 +17,8 @@ const commandsCreate = (commands, DiscordJS) => {
   commands?.create((0, _index.clear)(DiscordJS));
   commands?.create((0, _index.warn)(DiscordJS));
   commands?.create((0, _index.unwarn)(DiscordJS));
-  commands?.create((0, _index.warnList)(DiscordJS));
-  commands?.create((0, _index.badword)(DiscordJS));
-  commands?.create((0, _index.badWordList)(DiscordJS));
+  commands?.create((0, _index.warnList)(DiscordJS)); // commands?.create(badword(DiscordJS));
+  // commands?.create(badWordList(DiscordJS));
 };
 
 var _default = commandsCreate;
