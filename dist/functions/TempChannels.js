@@ -5,13 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _helpers = require("../assets/helpers");
-
 var _static = _interopRequireDefault(require("../assets/static"));
 
 var _subFunctions = require("../assets/subFunctions");
-
-var _discordTempChannels = require("discord-temp-channels");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
