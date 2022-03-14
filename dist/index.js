@@ -71,7 +71,7 @@ client.on('guildMemberUpdate', async (oldsState, newState) => {
 client.on('voiceStateUpdate', (oldState, newState) => {
   if (newState.member.user.bot) return;
   const guild = client.guilds.cache.get(serverId);
-  (0, _functions.TempChannels)(oldState, newState, guild, tempCategoryId, restrictedChannels);
+  (0, _functions.TempChannels)(oldState, newState, guild, restrictedChannels);
 });
 client.on('messageCreate', async message => {
   const {
@@ -83,22 +83,11 @@ client.on('messageCreate', async message => {
   const guild = client.guilds.cache.get(serverId);
   const user = guild.members.cache.get(message.author.id);
   (0, _functions.TempChannelsCommands)(user, message, id, baseRoles);
-}); // Server Status Update
-
-client.on('guildUpdate', (oldState, newState) => (0, _subFunctions.makeServerInfo)(newState, 'name'));
-client.on('guildMemberAdd', member => {
-  (0, _subFunctions.makeServerInfo)(member.guild, 'members');
-});
-client.on('guildMemberRemove', member => {
-  (0, _subFunctions.makeServerInfo)(member.guild, 'members');
-});
-client.on('roleCreate', role => (0, _subFunctions.makeServerInfo)(role.guild, 'roles'));
-client.on('roleDelete', role => (0, _subFunctions.makeServerInfo)(role.guild, 'roles')); // Link Blocker
+}); // Link Blocker
 
 client.on('messageCreate', message => {
   if (message.member.user.bot) return;
-  if (message.channel.id === linkBlockerIgnoreChannels) return;
-  if (message.member.id === message.guild.ownerId) return;
+  if (linkBlockerIgnoreChannels.includes(message.channel.id)) return;
   (0, _functions.LinkBlocker)(message);
 }); // BadWord Watcher
 // client.on('messageCreate', async message => {
@@ -134,18 +123,35 @@ client.on('interactionCreate', async interaction => {
 }); // =========================================
 // Empty TempChannels Watcher
 
-setInterval(() => {
-  const guild = client.guilds.cache.get(serverId);
-  const tempChannelsCategory = guild?.channels?.cache?.get(_static.default.tempChannels.tempCategoryId);
-  if (tempChannelsCategory) tempChannelsCategory.children.map(i => i).forEach(async channel => {
-    try {
-      if (!restrictedChannels.includes(channel.id)) {
-        channel.members.size === 0 ? await channel.delete().catch(err => console.log(err)) : '';
-      }
-    } catch (err) {
-      console.log('delete and close edit vc ' + err);
+setTimeout(() => {
+  setInterval(() => {
+    const guild = client.guilds.cache.get(serverId);
+    const tempChannelsCategory = guild?.channels?.cache?.get(_static.default.tempChannels.tempCategoryId);
+
+    if (tempChannelsCategory) {
+      try {
+        (0, _subFunctions.channelArranger)(guild.channels.cache.get(_static.default.tempChannels.tempCategoryId).children.filter(i => !restrictedChannels.includes(i.id)).map(({
+          name
+        }) => {
+          return name;
+        }), guild, _static.default.tempChannels.tempCategoryId, restrictedChannels);
+      } catch (err) {}
     }
-  });
+  }, 5000);
+  setInterval(() => {
+    const guild = client.guilds.cache.get(serverId);
+    const tempChannelsCategory = guild?.channels?.cache?.get(_static.default.tempChannels.tempCategoryId);
+
+    if (tempChannelsCategory) {
+      try {
+        guild.channels.cache.get(_static.default.tempChannels.tempCategoryId).children.map(i => i).forEach(element => {
+          if (element.members.size === 0 && !restrictedChannels.includes(element.id)) {
+            element ? element.delete().catch(err => err) : '';
+          }
+        });
+      } catch (error) {}
+    }
+  }, 3000);
 }, 2000); // Timer Watcher
 
 setTimeout(async _ => {
@@ -174,7 +180,7 @@ client.on('ready', async () => {
     await editVc.permissionOverwrites.set([...editChannelId.baseRoles, {
       id: editChannelId.baseRoles[1].id,
       allow: [...editChannelId.baseRoles[1].allow],
-      deny: [_discord.Permissions.FLAGS.SEND_MESSAGES]
+      deny: [_discord.Permissions.FLAGS.SEND_MESSAGES, ...editChannelId.baseRoles[1].deny]
     }]);
   } catch (err) {
     err;

@@ -8,76 +8,79 @@ exports.default = void 0;
 var _discord = require("discord.js");
 
 const serverInfo = {
-  serverId: '937480624602775572',
+  serverId: '949153972936122398',
   moderation: {
     adminstrator: [{
-      id: '941366466551357510',
+      id: '949153972973875289',
       type: 'ROLE',
       permission: true
     }, {
-      id: '941366581106196571',
+      id: '949153972973875288',
       type: 'ROLE',
       permission: true
     }],
     moderator: [{
-      id: '941366756176433235',
+      id: '949153972973875285',
       type: 'ROLE',
       permission: true
     }, {
-      id: '941366756411318343',
+      id: '949153972973875284',
       type: 'ROLE',
       permission: true
     }],
     general: [{
-      id: '941779425727479859',
+      id: '949153972948701236',
       type: 'ROLE',
       permission: true
     }]
   },
   welcome: {
-    Id: '941665272811630632',
-    autoRole: ['950092343950856202'],
-    botsRole: ['941783311104245810']
+    Id: '949153972986462282',
+    autoRole: ['949153972948701236'],
+    botsRole: ['949153972948701238']
   },
   roleUpadte: {
-    Id: '950509518406684723',
-    ignore: ['941779425727479859', '941783311104245810', '950092343950856202']
+    Id: '949153972986462283',
+    ignore: ['949153972948701236', '949153972948701238']
   },
-  rulesChannelId: '941633613538132008',
+  rulesChannelId: '949675193293479986',
   tempChannels: {
-    tempCategoryId: '950087399126470726',
-    restrictedChannels: ['950087448183070740', '950087475777384528'],
+    tempCategoryId: '949698545596923924',
+    restrictedChannels: ['949701621984690256', '952882192579694593'],
     editChannelId: {
-      id: '950087448183070740',
+      id: '949701621984690256',
       baseRoles: [{
-        id: '937480624602775572',
-        deny: [_discord.Permissions.FLAGS.VIEW_CHANNEL]
+        id: '949153972936122398',
+        deny: [_discord.Permissions.FLAGS.VIEW_CHANNEL, _discord.Permissions.FLAGS.CREATE_PRIVATE_THREADS, _discord.Permissions.FLAGS.CREATE_PUBLIC_THREADS, _discord.Permissions.FLAGS.SEND_MESSAGES_IN_THREADS]
       }, {
-        id: '941779425727479859',
-        allow: [_discord.Permissions.FLAGS.VIEW_CHANNEL]
-      }, {
-        id: '950092343950856202',
-        deny: [_discord.Permissions.FLAGS.VIEW_CHANNEL]
-      }, {
-        id: '941366717622411345',
-        allow: [_discord.Permissions.FLAGS.VIEW_CHANNEL]
-      }]
+        id: '949153972948701236',
+        allow: [_discord.Permissions.FLAGS.VIEW_CHANNEL],
+        deny: [_discord.Permissions.FLAGS.CREATE_PRIVATE_THREADS, _discord.Permissions.FLAGS.CREATE_PUBLIC_THREADS, _discord.Permissions.FLAGS.SEND_MESSAGES_IN_THREADS, _discord.Permissions.FLAGS.ATTACH_FILES, _discord.Permissions.FLAGS.ADD_REACTIONS]
+      } // {
+      //   id: '950092343950856202',
+      //   deny: [Permissions.FLAGS.VIEW_CHANNEL]
+      // },
+      // {
+      //   id: '941366717622411345',
+      //   allow: [Permissions.FLAGS.VIEW_CHANNEL]
+      // }
+      ]
     }
   },
-  logsChannelsId: '950087118431088640',
-  serverInfoChannelId: '950083911067795536',
+  logsChannelsId: '949688748831014972',
+  serverInfoChannelId: '949561183122378813',
   liveStatus: {
-    liveCategoryId: '950086188440633396',
+    liveCategoryId: '949153973338775613',
     Roles: [{
       name: 'members',
-      id: '941779425727479859'
+      id: '949153972948701236'
     }, {
       name: 'Bots',
-      id: '941783311104245810'
+      id: '949153972948701238'
     }]
   },
-  boostChannelId: '950087083685478491',
-  linkBlockerIgnoreChannels: '950086892160946246',
+  boostChannelId: '949688644858437642',
+  linkBlockerIgnoreChannels: ['949681510464749688'],
   font: {
     Q: '𝑸',
     W: '𝑾',

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.welcomeImage = exports.unMuteEmbed = exports.makeliveServerStatus = exports.makeWarn = exports.makeServerInfo = exports.makeBadWord = exports.createChannel = exports.channelArranger = void 0;
+exports.welcomeImage = exports.userActivitey = exports.unMuteEmbed = exports.makeliveServerStatus = exports.makeWarn = exports.makeServerInfo = exports.makeBadWord = exports.createChannel = exports.channelArranger = void 0;
 
 var _discord = require("discord.js");
 
@@ -28,10 +28,10 @@ const createChannel = (newState, activityName) => newState.guild.channels.create
   parent: newState.channel.parent.id
 }).then(vc => {
   newState.member.voice.setChannel(vc);
-  vc.permissionOverwrites.set([..._static.default.tempChannels.editChannelId.baseRoles]);
-  newState.member.guild.channels.cache.get(_static.default.tempChannels.editChannelId.id).permissionOverwrites.edit(newState.member.id, {
-    SEND_MESSAGES: true
-  });
+  vc.permissionOverwrites.set([..._static.default.tempChannels.editChannelId.baseRoles, {
+    id: newState.member.id,
+    allow: [_discord.Permissions.FLAGS.CONNECT]
+  }]);
 });
 
 exports.createChannel = createChannel;
@@ -40,15 +40,14 @@ const channelArranger = (arr, guild, categoryId, restrictedChannels) => {
   const uniqueValues = [...new Set((0, _helpers.findDuplicates)(arr))];
   const filterdChannels = uniqueValues.map(item => guild.channels.cache.filter(channel => channel.name.includes(item) && channel.parent.id === categoryId && !restrictedChannels.includes(channel.id)).map(i => i));
   filterdChannels.forEach((tempChannels, tempsIndex) => {
-    let allChannels = [];
+    // let allChannels = [];
     tempChannels.forEach((tempChannel, tempIndex) => {
       try {
-        tempChannel.setName(`${uniqueValues[tempsIndex]}${tempIndex === 0 ? '' : ` ${tempIndex}`}`).catch(err => console.log(err));
+        tempChannel ? tempChannel.setName(`${uniqueValues[tempsIndex]}${tempIndex === 0 ? '' : ` ${tempIndex}`}`) : '';
       } catch (err) {
         console.log('channel rearanger ' + err);
-      }
+      } // allChannels.push(tempChannel);
 
-      allChannels.push(tempChannel);
     }); // allChannels.forEach((tempChannel, tempIndex) => {
     //   try {
     //     tempChannel.setPosition(tempIndex + 1).catch(err => console.log(err));
@@ -60,6 +59,20 @@ const channelArranger = (arr, guild, categoryId, restrictedChannels) => {
 };
 
 exports.channelArranger = channelArranger;
+
+const userActivitey = newState => {
+  if (newState?.channel?.parent?.id === _static.default.tempChannels.tempCategoryId) {
+    if (_static.default.tempChannels.restrictedChannels.some(i => i === newState.channel.id)) {
+      const activities = newState?.member?.presence?.activities;
+      if (!activities || activities?.length === 0 || activities?.[0]?.name === 'Custom Status' && !activities?.[1]?.name) return (0, _helpers.fontGenerator)('Talking');else {
+        const activityName = activities?.[0]?.name === 'Custom Status' ? activities?.[1]?.name : activities?.[0]?.name;
+        return (0, _helpers.fontGenerator)(activityName);
+      }
+    }
+  }
+};
+
+exports.userActivitey = userActivitey;
 
 const unMuteEmbed = (guild, member, reason) => {
   guild.channels.cache.get(_static.default.logsChannelsId).send({
@@ -146,6 +159,7 @@ const makeWarn = async (guild, user, warnsAmount, type = 'create') => {
 exports.makeWarn = makeWarn;
 
 const makeliveServerStatus = async (guild, role) => {
+  if (!role && !guild) return;
   let returnedStatus = await _DataBase.LiveStatusSchema.findOne({
     guildId: guild.id,
     roleId: role.id

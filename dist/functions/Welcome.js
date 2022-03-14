@@ -13,19 +13,26 @@ var _static = _interopRequireDefault(require("../assets/static"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const RoleWatcher = async (welcomeChannel, member) => {
-  let data = await (0, _subFunctions.welcomeImage)(member, 'https://raw.githubusercontent.com/omarlawatey/Dunk-System/Develope/Images/WelcomeImage.png');
-  const attachment = new _discord.MessageAttachment(data, 'welcome-image.png');
-  await welcomeChannel.send({
+const Welcome = async (welcomeChannel, member) => {
+  let data = await (0, _subFunctions.welcomeImage)(member, 'https://github.com/omarlawatey/Dunk-System/blob/main/Images/WelcomeImage.png?raw=true');
+  const attachment = new _discord.MessageAttachment(data, 'welcome-image.png'); // const lastMessage = console.log(lastMessage);
+
+  if (await welcomeChannel.messages.fetch({
+    limit: 1
+  }).then(messages => {
+    let lastMessage = messages.first();
+    return !lastMessage?.files?.[0];
+  })) await welcomeChannel.send({
     files: [attachment]
   }).then(msg => {
-    (0, _subFunctions.makeWarn)(member.guild, member, 0, 'create');
     msg.channel.send({
       content: `> **Welcome** ${member}
-> **Make Sure Read:** <#${_static.default.rulesChannelId}>
-> **Total Member:** **${member.guild.memberCount}**
-> **& Have a Nice Time With US**`
+          > **Make Sure Read:** <#${_static.default.rulesChannelId}>
+          > **Total Member:** **${member.guild.memberCount}**
+          > **& Have a Nice Time With US**`
     });
+  }).then(msg => {
+    (0, _subFunctions.makeWarn)(member.guild, member, 0, 'create');
 
     _static.default.welcome.autoRole.forEach(item => {
       member.roles.add(item);
@@ -33,5 +40,5 @@ const RoleWatcher = async (welcomeChannel, member) => {
   });
 };
 
-var _default = RoleWatcher;
+var _default = Welcome;
 exports.default = _default;

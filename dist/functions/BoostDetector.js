@@ -17,14 +17,14 @@ const BoostDetector = (oldState, newState) => {
   const boostChannel = oldState?.guild.channels.cache.get(_static.default.boostChannelId);
 
   if (!oldStatus && newStatus) {
-    const embed = new _discord.MessageEmbed().setColor('#ff1493').setTitle('[![AnimatedBoost](https://emoji.gg/assets/emoji/3395-animatedboost.gif)](https://emoji.gg/emoji/3395-animatedboost) Server Boosted').setDescription(`${newState} Boosted The Server!!!`).addFields('Total Boosts', newState.guild.premiumSubscriptionCount, false);
+    const embed = new _discord.MessageEmbed().setColor('#ff1493').setTitle('Server Boosted').setDescription(`${newState} Boosted The Server!!!`).addFields('Total Boosts', newState.guild.premiumSubscriptionCount, false);
     boostChannel.send({
       embed: [embed]
     });
   }
 
   if (!newStatus && oldStatus) {
-    const embed = new _discord.MessageEmbed().setColor('#32174d').setTitle('[![blank_boost_grey](https://emoji.gg/assets/emoji/8913-blank-boost-grey.png)](https://emoji.gg/emoji/8913-blank-boost-grey) Server Unboosted').setDescription(`${newState} Unboosted The Server!!!`).addFields('Total Boosts', newState.guild.premiumSubscriptionCount, false);
+    const embed = new _discord.MessageEmbed().setColor('#32174d').setTitle('Server Unboosted').setDescription(`${newState} Unboosted The Server!!!`).addFields('Total Boosts', newState.guild.premiumSubscriptionCount, false);
     boostChannel.send({
       embed: [embed]
     });
