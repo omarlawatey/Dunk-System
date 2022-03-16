@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.welcomeImage = exports.userActivitey = exports.unMuteEmbed = exports.makeliveServerStatus = exports.makeWarn = exports.makeServerInfo = exports.makeBadWord = exports.createChannel = exports.channelArranger = void 0;
+exports.welcomeImage = exports.userActivitey = exports.unMuteEmbed = exports.makeliveServerStatus = exports.makeWarn = exports.makeTwitchStreamsData = exports.makeServerInfo = exports.makeBadWord = exports.createChannel = exports.channelArranger = void 0;
 
 var _discord = require("discord.js");
 
@@ -18,8 +18,6 @@ var _static = _interopRequireDefault(require("./static"));
 var _DataBase = require("../DataBase");
 
 var _ms = _interopRequireDefault(require("ms"));
-
-var _BadWordSchema = _interopRequireDefault(require("../DataBase/BadWordSchema"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -281,48 +279,48 @@ const makeServerInfo = async (guild, type) => {
 exports.makeServerInfo = makeServerInfo;
 
 const makeBadWord = async (guild, badword, type = 'add') => {
-  let returnedStatus = await _BadWordSchema.default.findOne({
+  let returnedStatus = await _DataBase.BadWordSchema.findOne({
     guildId: guild.id
   });
 
   if (returnedStatus === null) {
-    await _BadWordSchema.default.create({
+    await _DataBase.BadWordSchema.create({
       guildId: guild.id,
       BadWords: []
     });
-    returnedStatus = await _BadWordSchema.default.findOne({
+    returnedStatus = await _DataBase.BadWordSchema.findOne({
       guildId: guild.id
     });
   }
 
   if (type === 'add') {
-    await _BadWordSchema.default.updateOne({
+    await _DataBase.BadWordSchema.updateOne({
       guildId: guild.id
     }, {
       $set: {
         BadWords: [...new Set([...returnedStatus.BadWords, badword])]
       }
     }).then(_ => {});
-    returnedStatus = await _BadWordSchema.default.findOne({
+    returnedStatus = await _DataBase.BadWordSchema.findOne({
       guildId: guild.id
     });
   }
 
   if (type === 'remove') {
-    await _BadWordSchema.default.updateOne({
+    await _DataBase.BadWordSchema.updateOne({
       guildId: guild.id
     }, {
       $set: {
         BadWords: [...new Set([returnedStatus.BadWords.filter(i => i !== badword)])]
       }
     }).then(_ => {});
-    returnedStatus = await _BadWordSchema.default.findOne({
+    returnedStatus = await _DataBase.BadWordSchema.findOne({
       guildId: guild.id
     });
   }
 
   if (type === 'show') {
-    let list = await _BadWordSchema.default.findOne({
+    let list = await _DataBase.BadWordSchema.findOne({
       guildId: guild.id
     });
     return list.BadWords;
@@ -365,3 +363,51 @@ const welcomeImage = async (member, link) => {
 };
 
 exports.welcomeImage = welcomeImage;
+
+const makeTwitchStreamsData = async (guildId, channelUsername, userDiscordId, Data) => {
+  let TwitchInfo = await _DataBase.TwitchStreamInfo.findOne({
+    guildId,
+    channelUsername,
+    userDiscordId
+  });
+
+  if (TwitchInfo === null) {
+    await _DataBase.TwitchStreamInfo.create({
+      guildId,
+      channelUsername,
+      userDiscordId,
+      oldState: [undefined],
+      newState: [undefined]
+    });
+    TwitchInfo = await _DataBase.TwitchStreamInfo.findOne({
+      guildId,
+      channelUsername,
+      userDiscordId
+    });
+  }
+
+  if (TwitchInfo) {
+    const {
+      oldState,
+      newState,
+      userDiscordId
+    } = TwitchInfo;
+    await _DataBase.TwitchStreamInfo.updateOne({
+      guildId,
+      channelUsername,
+      userDiscordId
+    }, {
+      $set: {
+        oldState: newState,
+        newState: Data
+      }
+    }).then(_ => {});
+    return {
+      oldState: newState,
+      newState: Data,
+      userDiscordId
+    };
+  }
+};
+
+exports.makeTwitchStreamsData = makeTwitchStreamsData;

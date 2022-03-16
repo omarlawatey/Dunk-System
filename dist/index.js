@@ -104,7 +104,10 @@ client.on('messageCreate', async message => {
 client.on('guildMemberUpdate', (oldState, newState) => {
   if (oldState?.user.bot) return;
   (0, _functions.BoostDetector)(oldState, newState);
-}); // =========================================
+});
+setTimeout(() => {
+  (0, _functions.TwictchStreamDetector)(client, process.env.TWITCH_CLIENT_ID, process.env.TWITCH_CLIENT_SECRET);
+}, 2000); // =========================================
 // slash Commands
 
 client.on('ready', async () => {

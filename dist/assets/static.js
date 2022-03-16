@@ -81,6 +81,17 @@ const serverInfo = {
   },
   boostChannelId: '949688644858437642',
   linkBlockerIgnoreChannels: ['949681510464749688'],
+  TwitchApi: {
+    streamsNotifiactionChannelId: '949153973338775618',
+    liveRoleId: '949153972986462279',
+    streamers: [{
+      name: 'lucife_ae',
+      discordId: '556476958297554965'
+    }, {
+      name: 'omarlawatey',
+      discordId: '331867918730264577'
+    }]
+  },
   font: {
     Q: '𝑸',
     W: '𝑾',

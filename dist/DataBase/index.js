@@ -27,6 +27,12 @@ Object.defineProperty(exports, "ServerInfo", {
     return _ServerInfoSchema.default;
   }
 });
+Object.defineProperty(exports, "TwitchStreamInfo", {
+  enumerable: true,
+  get: function () {
+    return _TwitchStreamInfoSchema.default;
+  }
+});
 Object.defineProperty(exports, "WarnSchema", {
   enumerable: true,
   get: function () {
@@ -43,5 +49,7 @@ var _LiveStatusSchema = _interopRequireDefault(require("./LiveStatusSchema"));
 var _ServerInfoSchema = _interopRequireDefault(require("./ServerInfoSchema"));
 
 var _BadWordSchema = _interopRequireDefault(require("./BadWordSchema"));
+
+var _TwitchStreamInfoSchema = _interopRequireDefault(require("./TwitchStreamInfoSchema"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

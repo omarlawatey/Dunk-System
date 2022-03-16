@@ -51,6 +51,12 @@ Object.defineProperty(exports, "TimeWatcher", {
     return _TimeWatcher.default;
   }
 });
+Object.defineProperty(exports, "TwictchStreamDetector", {
+  enumerable: true,
+  get: function () {
+    return _TwictchStreamDetector.default;
+  }
+});
 Object.defineProperty(exports, "Welcome", {
   enumerable: true,
   get: function () {
@@ -75,5 +81,7 @@ var _LinkBlocker = _interopRequireDefault(require("./LinkBlocker.js"));
 var _AntiSpammer = _interopRequireDefault(require("./AntiSpammer.js"));
 
 var _BoostDetector = _interopRequireDefault(require("./BoostDetector.js"));
+
+var _TwictchStreamDetector = _interopRequireDefault(require("./TwictchStreamDetector.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
