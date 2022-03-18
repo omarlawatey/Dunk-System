@@ -114,7 +114,7 @@ __**Versions**__
     liveCategoryId: '952835995580129301',
     Roles: [{
       name: 'members',
-      id: '949153972948701236'
+      id: '952242871854063669'
     }, {
       name: 'streamer',
       id: '952245434703806484'
@@ -132,6 +132,9 @@ __**Versions**__
     }, {
       id: '952242871854063669',
       deny: [_discord.Permissions.FLAGS.CREATE_PRIVATE_THREADS, _discord.Permissions.FLAGS.CREATE_PUBLIC_THREADS, _discord.Permissions.FLAGS.SEND_MESSAGES_IN_THREADS, _discord.Permissions.FLAGS.CONNECT, _discord.Permissions.FLAGS.SEND_MESSAGES]
+    }, {
+      id: '953755887938449409',
+      allow: [_discord.Permissions.FLAGS.VIEW_CHANNEL]
     }],
     streamers: [{
       name: 'lucife_ae',
