@@ -12,7 +12,6 @@
     "node-twitch": "^0.4.5",
     "nodemon": "^2.0.15",
     "spamnya": "^1.1.1",
-    "yarn": "^1.22.17"
     "yarn": "^1.22.17",
     "youtube-notification": "^1.1.0"
   },
