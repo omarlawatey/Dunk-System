@@ -13,7 +13,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const BoostDetector = (oldState, newState) => {
   const oldStatus = oldState?.premiumSince;
-  const newStatus = newState?.remiumSince;
+  const newStatus = newState?.premiumSince;
   const boostChannel = oldState?.guild.channels.cache.get(_static.default.boostChannelId);
 
   if (!oldStatus && newStatus) {
