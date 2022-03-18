@@ -135,7 +135,7 @@ __**Versions**__
     }, {
       name: 'omarlawatey',
       discordId: "331867918730264577"
-      ]
+    }]
   },
   YouTubeApi: {
     newVideoNotifiactionChannelId: '949153973338775619',
