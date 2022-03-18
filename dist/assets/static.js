@@ -132,7 +132,10 @@ __**Versions**__
     streamers: [{
       name: 'lucife_ae',
       discordId: '556476958297554965'
-    }]
+    }, {
+      name: 'omarlawatey',
+      discordId: "331867918730264577"
+      ]
   },
   YouTubeApi: {
     newVideoNotifiactionChannelId: '949153973338775619',
