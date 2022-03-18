@@ -37,14 +37,34 @@ const serverInfo = {
   welcome: {
     Id: '949153972986462282',
     autoRole: ['949153972948701236'],
-    botsRole: ['949153972948701238']
+    botsRole: ['949153972948701238'],
+    welcomePrivateMessage: `• ━━━━━━• 𝑨𝒅𝒅𝒓𝒆𝒔𝒔 •━━━━━━•
+
+__**Java**__
+
+> **Server Address**\`:\`
+> **__mc.dunk-master.com__**
+
+__**BedRock**__
+
+> **Server Address**\`:\`
+> **__mc.dunk-master.com__**
+
+> **Server Port**\`:\`
+> __**25669**__
+
+__**Versions**__
+
+> **__1.17__** **|** **__1.18.1__**
+
+•━━━━━━━━━━━━━━━━━•`
   },
   roleUpadte: {
     Id: '949153972986462283',
     ignore: ['949153972948701236', '949153972948701238', '949153972986462279']
   },
   rulesChannelId: '949675193293479986',
-  tempChannels: {
+  tempChannels: [{
     tempCategoryId: '949698545596923924',
     restrictedChannels: ['949701621984690256', '952882192579694593'],
     editChannelId: {
@@ -66,7 +86,32 @@ const serverInfo = {
       // }
       ]
     }
-  },
+  }, {
+    tempCategoryId: '954249131822579753',
+    restrictedChannels: ['954249172339527720', '954262730821496862'],
+    editChannelId: {
+      id: '954249172339527720',
+      baseRoles: [{
+        id: '949153972936122398',
+        deny: [_discord.Permissions.FLAGS.VIEW_CHANNEL, _discord.Permissions.FLAGS.CREATE_PRIVATE_THREADS, _discord.Permissions.FLAGS.CREATE_PUBLIC_THREADS, _discord.Permissions.FLAGS.SEND_MESSAGES_IN_THREADS]
+      }, {
+        id: '949153972948701236',
+        allow: [],
+        deny: [_discord.Permissions.FLAGS.CREATE_PRIVATE_THREADS, _discord.Permissions.FLAGS.CREATE_PUBLIC_THREADS, _discord.Permissions.FLAGS.SEND_MESSAGES_IN_THREADS, _discord.Permissions.FLAGS.ATTACH_FILES, _discord.Permissions.FLAGS.ADD_REACTIONS, _discord.Permissions.FLAGS.VIEW_CHANNEL]
+      }, {
+        id: '949153972961304647',
+        allow: [_discord.Permissions.FLAGS.VIEW_CHANNEL]
+      } // {
+      //   id: '950092343950856202',
+      //   deny: [Permissions.FLAGS.VIEW_CHANNEL]
+      // },
+      // {
+      //   id: '941366717622411345',
+      //   allow: [Permissions.FLAGS.VIEW_CHANNEL]
+      // }
+      ]
+    }
+  }],
   logsChannelsId: '949688748831014972',
   serverInfoChannelId: '949561183122378813',
   liveStatus: {
@@ -87,10 +132,11 @@ const serverInfo = {
     streamers: [{
       name: 'lucife_ae',
       discordId: '556476958297554965'
-    }, {
-      name: 'omarlawatey',
-      discordId: '331867918730264577'
     }]
+  },
+  YouTubeApi: {
+    newVideoNotifiactionChannelId: '949153973338775619',
+    channelId: ['UCCLnQIRBkqnsRAqpp-6s91g', 'UCBazNt3il35vDU04U5Acm1w']
   },
   font: {
     Q: '𝑸',

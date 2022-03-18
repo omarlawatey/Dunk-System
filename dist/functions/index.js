@@ -63,6 +63,12 @@ Object.defineProperty(exports, "Welcome", {
     return _Welcome.default;
   }
 });
+Object.defineProperty(exports, "YouTubeVideosNotifier", {
+  enumerable: true,
+  get: function () {
+    return _YouTubeVideosNotifier.default;
+  }
+});
 
 var _Welcome = _interopRequireDefault(require("./Welcome.js"));
 
@@ -83,5 +89,7 @@ var _AntiSpammer = _interopRequireDefault(require("./AntiSpammer.js"));
 var _BoostDetector = _interopRequireDefault(require("./BoostDetector.js"));
 
 var _TwictchStreamDetector = _interopRequireDefault(require("./TwictchStreamDetector.js"));
+
+var _YouTubeVideosNotifier = _interopRequireDefault(require("./YouTubeVideosNotifier.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

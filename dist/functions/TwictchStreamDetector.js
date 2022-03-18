@@ -46,9 +46,13 @@ const TwictchStreamDetector = async (client, TWITCH_CLIENT_ID, TWITCH_CLIENT_SEC
           } = await (0, _subFunctions.makeTwitchStreamsData)(guild.id, name, discordId, [stremData]);
 
           if (!oldState[0] && newState[0]) {
-            const embed = new _discord.MessageEmbed().setColor('#6441a5').setTitle(stremData.title).setDescription(stremData.game_name).setImage('https://static-cdn.jtvnw.net/previews-ttv/live_user_omarlawatey.jpg').addField('\u200B', `[Watch Here](https://www.twitch.tv/${name})`, false).setTimestamp(stremData.started_at);
+            const embed = new _discord.MessageEmbed().setColor('#6441a5').setTitle(stremData.title).setDescription(stremData.game_name).setAuthor({
+              name: stremData.user_name,
+              iconURL: discordUser.user.avatarURL(),
+              url: `https://www.twitch.tv/${name}`
+            }).setThumbnail(discordUser.user.avatarURL()).setImage(stremData.getThumbnailUrl()).addField('\u200B', `[Watch Here](https://www.twitch.tv/${name})`, false).setTimestamp(stremData.started_at);
             notificationChannel.send({
-              content: `${discordUser} Is Live`,
+              content: `Hey @everyone, ${discordUser.displayName}, is now live! Go check it out!`,
               embeds: [embed]
             });
             discordUser.roles.add(liveRoleId);

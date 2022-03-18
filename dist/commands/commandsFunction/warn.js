@@ -42,6 +42,22 @@ const warn = interaction => {
       return;
     }
 
+    const commandUser = interaction.guild.members.cache.get(interaction.user.id);
+
+    if (commandUser.roles.highest.position < user.roles.highest.position) {
+      interaction.reply({
+        content: `${user} is higher than You`,
+        ephemeral: true
+      });
+      return;
+    } else if (commandUser.roles.highest.position === user.roles.highest.position) {
+      interaction.reply({
+        content: `${user} is the same role as You`,
+        ephemeral: true
+      });
+      return;
+    }
+
     const embed = new _discord.MessageEmbed().setColor('#ff0000').setTitle(`⚠ User Warned`).addField('Warn Info: ', `<@${interaction.user.id}> warned <@${user.id}>`, false).addField('Warns Amount: ', `${warnsAmount} Warns`, true).addField('Reason: ', reason, true).setFooter({
       text: interaction.guild.name,
       iconURL: interaction.guild.iconURL()

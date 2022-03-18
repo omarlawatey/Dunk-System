@@ -3,14 +3,18 @@
     "@discordjs/voice": "^0.8.0",
     "canvas": "^2.9.0",
     "canvas-senpai": "^2.0.3",
+    "discord-temp-channels": "^3.0.2",
     "discord.js": "^13.6.0",
     "dotenv": "^14.2.0",
+    "express": "^4.17.3",
     "jimp": "^0.16.1",
     "mongoose": "^6.2.4",
     "node-twitch": "^0.4.5",
     "nodemon": "^2.0.15",
     "spamnya": "^1.1.1",
     "yarn": "^1.22.17"
+    "yarn": "^1.22.17",
+    "youtube-notification": "^1.1.0"
   },
   "scripts": {
     "start": " node dist/index.js",

@@ -33,6 +33,27 @@ const unwarn = async interaction => {
     }
 
     user = interaction.guild.members.cache.get(user.id);
+    const commandUser = interaction.guild.members.cache.get(interaction.user.id);
+
+    if (commandUser.roles.highest.position < user.roles.highest.position) {
+      interaction.reply({
+        content: `${user} is higher than You`,
+        ephemeral: true
+      });
+      return;
+    } else if (commandUser.roles.highest.position === user.roles.highest.position) {
+      interaction.reply({
+        content: `${user} is the Same role as You`,
+        ephemeral: true
+      });
+      return;
+    } else if (commandUser.roles.highest.position === user.roles.highest.position) {
+      interaction.reply({
+        content: `${user} is the same role as You`,
+        ephemeral: true
+      });
+      return;
+    }
 
     if (user.user.bot) {
       interaction.reply({

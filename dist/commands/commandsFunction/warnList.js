@@ -5,13 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _discord = require("discord.js");
-
-var _static = _interopRequireDefault(require("../../assets/static"));
-
 var _subFunctions = require("../../assets/subFunctions");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const warnList = async interaction => {
   const {
@@ -40,6 +34,16 @@ const warnList = async interaction => {
     }
 
     user = interaction.guild.members.cache.get(user.id);
+    const commandUser = interaction.guild.members.cache.get(interaction.user.id);
+
+    if (commandUser.roles.highest.position <= user.roles.highest.position) {
+      interaction.reply({
+        content: `${user} is higher than You`,
+        ephemeral: true
+      });
+      return;
+    }
+
     const warns = await (0, _subFunctions.makeWarn)(interaction.guild, user, warnsAmount, 'warnlist');
     await interaction.reply({
       content: `<@${user.id}> has ${warns.warnsCount} warns`,

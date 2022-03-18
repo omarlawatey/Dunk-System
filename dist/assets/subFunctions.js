@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.welcomeImage = exports.userActivitey = exports.unMuteEmbed = exports.makeliveServerStatus = exports.makeWarn = exports.makeTwitchStreamsData = exports.makeServerInfo = exports.makeBadWord = exports.createChannel = exports.channelArranger = void 0;
+exports.welcomeImage = exports.userActivitey = exports.unMuteEmbed = exports.privateMessageServerData = exports.makeliveServerStatus = exports.makeWarn = exports.makeTwitchStreamsData = exports.makeServerInfo = exports.makeLastJoinedOne = exports.makeBadWord = exports.defaultBaseRoles = exports.createChannel = exports.channelArranger = void 0;
 
 var _discord = require("discord.js");
 
@@ -21,12 +21,38 @@ var _ms = _interopRequireDefault(require("ms"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const createChannel = (newState, activityName) => newState.guild.channels.create(activityName, {
+const defaultBaseRoles = client => {
+  const guild = client.guilds.cache.get(_static.default.serverId);
+
+  _static.default.tempChannels.forEach(async tempChannel => {
+    const editVc = guild.channels.cache.get(tempChannel.editChannelId.id);
+    const quickVc = guild.channels.cache.get(tempChannel.restrictedChannels[1]);
+
+    try {
+      await editVc.permissionOverwrites.set([...tempChannel.editChannelId.baseRoles, {
+        id: tempChannel.editChannelId.baseRoles[1].id,
+        allow: [...tempChannel.editChannelId.baseRoles[1].allow],
+        deny: [_discord.Permissions.FLAGS.SEND_MESSAGES, ...tempChannel.editChannelId.baseRoles[1].deny]
+      }]);
+      await quickVc.permissionOverwrites.set([...tempChannel.editChannelId.baseRoles, {
+        id: tempChannel.editChannelId.baseRoles[1].id,
+        allow: [...tempChannel.editChannelId.baseRoles[1].allow],
+        deny: [_discord.Permissions.FLAGS.SEND_MESSAGES, ...tempChannel.editChannelId.baseRoles[1].deny]
+      }]);
+    } catch (err) {
+      err;
+    }
+  });
+};
+
+exports.defaultBaseRoles = defaultBaseRoles;
+
+const createChannel = (newState, activityName, tempChannel) => newState.guild.channels.create(activityName, {
   type: 'GUILD_VOICE',
-  parent: newState.channel.parent.id
+  parent: newState?.channel?.parent?.id
 }).then(vc => {
   newState.member.voice.setChannel(vc);
-  vc.permissionOverwrites.set([..._static.default.tempChannels.editChannelId.baseRoles, {
+  vc.permissionOverwrites.set([...tempChannel.editChannelId.baseRoles, {
     id: newState.member.id,
     allow: [_discord.Permissions.FLAGS.CONNECT]
   }]);
@@ -36,7 +62,7 @@ exports.createChannel = createChannel;
 
 const channelArranger = (arr, guild, categoryId, restrictedChannels) => {
   const uniqueValues = [...new Set((0, _helpers.findDuplicates)(arr))];
-  const filterdChannels = uniqueValues.map(item => guild.channels.cache.filter(channel => channel.name.includes(item) && channel.parent.id === categoryId && !restrictedChannels.includes(channel.id)).map(i => i));
+  const filterdChannels = uniqueValues.map(item => guild.channels.cache.filter(channel => channel.name.includes(item) && channel?.parent?.id === categoryId && !restrictedChannels.includes(channel?.id)).map(i => i));
   filterdChannels.forEach((tempChannels, tempsIndex) => {
     // let allChannels = [];
     tempChannels.forEach((tempChannel, tempIndex) => {
@@ -59,14 +85,10 @@ const channelArranger = (arr, guild, categoryId, restrictedChannels) => {
 exports.channelArranger = channelArranger;
 
 const userActivitey = newState => {
-  if (newState?.channel?.parent?.id === _static.default.tempChannels.tempCategoryId) {
-    if (_static.default.tempChannels.restrictedChannels.some(i => i === newState.channel.id)) {
-      const activities = newState?.member?.presence?.activities;
-      if (!activities || activities?.length === 0 || activities?.[0]?.name === 'Custom Status' && !activities?.[1]?.name) return (0, _helpers.fontGenerator)('Talking');else {
-        const activityName = activities?.[0]?.name === 'Custom Status' ? activities?.[1]?.name : activities?.[0]?.name;
-        return (0, _helpers.fontGenerator)(activityName);
-      }
-    }
+  const activities = newState?.member?.presence?.activities;
+  if (!activities || activities?.length === 0 || activities?.[0]?.name === 'Custom Status' && !activities?.[1]?.name) return (0, _helpers.fontGenerator)('Talking');else {
+    const activityName = activities?.[0]?.name === 'Custom Status' ? activities?.[1]?.name : activities?.[0]?.name;
+    return (0, _helpers.fontGenerator)(activityName);
   }
 };
 
@@ -411,3 +433,44 @@ const makeTwitchStreamsData = async (guildId, channelUsername, userDiscordId, Da
 };
 
 exports.makeTwitchStreamsData = makeTwitchStreamsData;
+
+const privateMessageServerData = async author => {
+  const embed = new _discord.MessageEmbed().setColor('#ff0000').setDescription(_static.default.welcome.welcomePrivateMessage);
+  author.send({
+    embeds: [embed]
+  });
+};
+
+exports.privateMessageServerData = privateMessageServerData;
+
+const makeLastJoinedOne = async (guildId, lastMemberId) => {
+  let welcomeLastJoined = await _DataBase.WelcomeLastJoinedSchema.findOne({
+    guildId
+  });
+
+  if (welcomeLastJoined === null) {
+    await _DataBase.WelcomeLastJoinedSchema.create({
+      guildId,
+      lastJoinedCount: ['', '', lastMemberId]
+    });
+    welcomeLastJoined = await _DataBase.WelcomeLastJoinedSchema.findOne({
+      guildId
+    });
+  }
+
+  if (welcomeLastJoined) {
+    const {
+      lastJoinedCount
+    } = welcomeLastJoined;
+    await _DataBase.WelcomeLastJoinedSchema.updateOne({
+      guildId
+    }, {
+      $set: {
+        lastJoinedCount: lastJoinedCount.includes(lastMemberId) ? lastJoinedCount : [...lastJoinedCount, lastMemberId].slice(1)
+      }
+    }).then(_ => {});
+    return !lastJoinedCount.includes(lastMemberId);
+  }
+};
+
+exports.makeLastJoinedOne = makeLastJoinedOne;

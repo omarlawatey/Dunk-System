@@ -39,6 +39,12 @@ Object.defineProperty(exports, "WarnSchema", {
     return _WarnSchema.default;
   }
 });
+Object.defineProperty(exports, "WelcomeLastJoinedSchema", {
+  enumerable: true,
+  get: function () {
+    return _WelcomeLastJoinedSchema.default;
+  }
+});
 
 var _WarnSchema = _interopRequireDefault(require("./WarnSchema"));
 
@@ -51,5 +57,7 @@ var _ServerInfoSchema = _interopRequireDefault(require("./ServerInfoSchema"));
 var _BadWordSchema = _interopRequireDefault(require("./BadWordSchema"));
 
 var _TwitchStreamInfoSchema = _interopRequireDefault(require("./TwitchStreamInfoSchema"));
+
+var _WelcomeLastJoinedSchema = _interopRequireDefault(require("./WelcomeLastJoinedSchema"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

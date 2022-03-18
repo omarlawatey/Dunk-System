@@ -30,6 +30,26 @@ const unban = interaction => {
       return;
     }
 
+    const user = interaction.guild.members.cahce.get(userId);
+
+    if (user) {
+      const commandUser = interaction.guild.members.cache.get(interaction.user.id);
+
+      if (commandUser.roles.highest.position < user.roles.highest.position) {
+        interaction.reply({
+          content: `${user} is higher than You`,
+          ephemeral: true
+        });
+        return;
+      } else if (commandUser.roles.highest.position === user.roles.highest.position) {
+        interaction.reply({
+          content: `${user} is the same role as You`,
+          ephemeral: true
+        });
+        return;
+      }
+    }
+
     const embed = new _discord.MessageEmbed().setColor('#55ff55').setTitle(`❕ User unbanned`).addField('unban Info', `<@${interaction.user.id}> unbanned <@${userId}>`, true).addField('Reason: ', reason, false).setFooter({
       text: interaction.guild.name,
       iconURL: interaction.guild.iconURL()
