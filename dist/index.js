@@ -84,7 +84,7 @@ client.on('messageCreate', async message => {
       if (message.author.bot || message.channel.id !== id) return;
       const guild = client.guilds.cache.get(serverId);
       const user = guild.members.cache.get(message.author.id);
-      (0, _functions.TempChannelsCommands)(user, message, id, baseRoles);
+      (0, _functions.TempChannelsCommands)(user, message, id, baseRoles, tempChannel);
     }
   });
 }); // Link Blocker

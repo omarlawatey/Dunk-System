@@ -410,7 +410,6 @@ const makeTwitchStreamsData = async (guildId, channelUsername, userDiscordId, Da
 
   if (TwitchInfo) {
     const {
-      oldState,
       newState,
       userDiscordId
     } = TwitchInfo;

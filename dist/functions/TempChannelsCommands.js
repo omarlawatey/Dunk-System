@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _discord = require("discord.js");
 
-const TempChannelsCommands = (user, message, id, baseRoles) => {
+const TempChannelsCommands = (user, message, id, baseRoles, tempChannel) => {
   if (message.channel.id === id) {
     if (message.content.toLowerCase().split(' ')[0] === 'lock') {
       if (!user.voice.channel) return;
@@ -85,10 +85,16 @@ const TempChannelsCommands = (user, message, id, baseRoles) => {
             }
           };
         });
-        const roles = [{
-          id: baseRoles[1].id,
-          VIEW_CHANNEL: true
-        }, ...lockMembers];
+        const baseRolesEdit = tempChannel.editChannelId.baseRoles.map(role => {
+          return {
+            id: role.id,
+            deny: {
+              VIEW_CHANNEL: true,
+              CONNECT: true
+            }
+          };
+        });
+        const roles = [...baseRoles, ...lockMembers];
         roles.forEach(({
           id,
           VIEW_CHANNEL,
@@ -128,11 +134,16 @@ const TempChannelsCommands = (user, message, id, baseRoles) => {
             }
           };
         });
-        const roles = [{
-          id: baseRoles[1].id,
-          VIEW_CHANNEL: false,
-          CONNECT: false
-        }, ...lockMembers];
+        const baseRolesEdit = tempChannel.editChannelId.baseRoles.map(role => {
+          return {
+            id: role.id,
+            deny: {
+              VIEW_CHANNEL: true,
+              CONNECT: true
+            }
+          };
+        });
+        const roles = [...lockMembers, ...baseRolesEdit];
         roles.forEach(({
           id,
           VIEW_CHANNEL,
