@@ -37,7 +37,11 @@ const Welcome = async (welcomeChannel, member) => {
       member.roles.add(item);
     });
 
-    await (0, _subFunctions.privateMessageServerData)(member.user);
+    try {
+      await (0, _subFunctions.privateMessageServerData)(member.user);
+    } catch (err) {
+      console.log(err);
+    }
   });
 };
 

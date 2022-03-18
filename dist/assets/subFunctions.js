@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.welcomeImage = exports.userActivitey = exports.unMuteEmbed = exports.privateMessageServerData = exports.makeliveServerStatus = exports.makeWarn = exports.makeTwitchStreamsData = exports.makeServerInfo = exports.makeLastJoinedOne = exports.makeBadWord = exports.defaultBaseRoles = exports.createChannel = exports.channelArranger = void 0;
+exports.welcomeImage = exports.userActivitey = exports.unMuteEmbed = exports.twitchLiveStreamTempChannels = exports.privateMessageServerData = exports.makeliveServerStatus = exports.makeWarn = exports.makeTwitchStreamsData = exports.makeServerInfo = exports.makeLastJoinedOne = exports.makeBadWord = exports.defaultBaseRoles = exports.createChannel = exports.channelArranger = void 0;
 
 var _discord = require("discord.js");
 
@@ -473,3 +473,46 @@ const makeLastJoinedOne = async (guildId, lastMemberId) => {
 };
 
 exports.makeLastJoinedOne = makeLastJoinedOne;
+
+const twitchLiveStreamTempChannels = async (guild, categoryId, isLive, twitchUsername, discordId) => {
+  const memberId = _static.default.generalRoles.filter(({
+    name,
+    id
+  }) => {
+    if (name === 'members') {
+      return id;
+    }
+  });
+
+  if (isLive) await guild.channels.create(`${twitchUsername} Stream VC`, {
+    type: 'GUILD_VOICE',
+    parent: categoryId
+  }).then(async vc => {
+    const streamTextChannel = await guild.channels.create(`${twitchUsername} Stream`, {
+      type: 'GUILD_TEXT',
+      parent: categoryId
+    });
+    [vc, streamTextChannel].forEach(async streamChannel => {
+      await streamChannel.permissionOverwrites.set([..._static.default.TwitchApi.liveStreamChannelRoles, {
+        id: discordId,
+        allow: [_discord.Permissions.FLAGS.CREATE_PRIVATE_THREADS, _discord.Permissions.FLAGS.CREATE_PUBLIC_THREADS, _discord.Permissions.FLAGS.SEND_MESSAGES_IN_THREADS, _discord.Permissions.FLAGS.CONNECT, _discord.Permissions.FLAGS.SEND_MESSAGES]
+      }]);
+    });
+    const streamQueueVC = await guild.channels.create(`${twitchUsername} Queue`, {
+      type: 'GUILD_VOICE',
+      parent: categoryId
+    });
+    await streamQueueVC.permissionOverwrites.set([{
+      id: memberId[0].id,
+      allow: [_discord.Permissions.FLAGS.CONNECT]
+    }]);
+  });else if (!isLive) {
+    [`${twitchUsername}-stream`, `${twitchUsername} Stream VC`, `${twitchUsername} Queue`].forEach(async item => {
+      await guild.channels.cache.filter(i => i.name === item).map(i => i).forEach(async i => {
+        await i.delete();
+      });
+    });
+  }
+};
+
+exports.twitchLiveStreamTempChannels = twitchLiveStreamTempChannels;

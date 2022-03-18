@@ -58,10 +58,13 @@ const TwictchStreamDetector = async (client, TWITCH_CLIENT_ID, TWITCH_CLIENT_SEC
             notificationChannel.send({
               content: `Hey @everyone, ${discordUser.displayName}, is now live! Go check it out!`,
               embeds: [embed]
+            }).then(_ => {
+              (0, _subFunctions.twitchLiveStreamTempChannels)(guild, _static.default.TwitchApi.liveStreamCategoryId, true, name, discordId);
             });
             discordUser.roles.add(liveRoleId);
           } else if (oldState[0] && !newState[0]) {
             discordUser.roles.remove(liveRoleId);
+            (0, _subFunctions.twitchLiveStreamTempChannels)(guild, _static.default.TwitchApi.liveStreamCategoryId, false, name, discordId);
           }
         });
       });

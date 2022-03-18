@@ -9,6 +9,10 @@ var _discord = require("discord.js");
 
 const serverInfo = {
   serverId: '949153972936122398',
+  generalRoles: [{
+    name: 'members',
+    id: '949153972948701236'
+  }],
   moderation: {
     adminstrator: [{
       id: '949153972973875289',
@@ -55,7 +59,7 @@ __**BedRock**__
 
 __**Versions**__
 
-> **__1.17__** **|** **__1.18.1__**
+> **__1.17__** **|** **__1.18.2__**
 
 •━━━━━━━━━━━━━━━━━•`
   },
@@ -129,6 +133,14 @@ __**Versions**__
   TwitchApi: {
     streamsNotifiactionChannelId: '949153973338775618',
     liveRoleId: '949153972986462279',
+    liveStreamCategoryId: '954350429217624094',
+    liveStreamChannelRoles: [{
+      id: '949153972936122398',
+      deny: [_discord.Permissions.FLAGS.VIEW_CHANNEL, _discord.Permissions.FLAGS.CREATE_PRIVATE_THREADS, _discord.Permissions.FLAGS.CREATE_PUBLIC_THREADS, _discord.Permissions.FLAGS.SEND_MESSAGES_IN_THREADS]
+    }, {
+      id: '949153972948701236',
+      deny: [_discord.Permissions.FLAGS.CREATE_PRIVATE_THREADS, _discord.Permissions.FLAGS.CREATE_PUBLIC_THREADS, _discord.Permissions.FLAGS.SEND_MESSAGES_IN_THREADS, _discord.Permissions.FLAGS.CONNECT, _discord.Permissions.FLAGS.SEND_MESSAGES]
+    }],
     streamers: [{
       name: 'lucife_ae',
       discordId: '556476958297554965'
