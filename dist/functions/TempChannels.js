@@ -14,6 +14,7 @@ const TempChannels = async (oldState, newState, guild, tempChannel, restrictedCh
 
   if (newState?.channel?.id === tempChannel.restrictedChannels[1]) {
     editVc.permissionOverwrites.edit(newState.member.id, {
+      VIEW_CHANNEL: true,
       SEND_MESSAGES: true
     });
     (0, _subFunctions.createChannel)(newState, activity, tempChannel).then(_ => tempChannelVc.permissionOverwrites.edit(newState.member.id, {
@@ -40,6 +41,7 @@ const TempChannels = async (oldState, newState, guild, tempChannel, restrictedCh
 
   if (newState?.channel?.parent?.id === tempChannel.tempCategoryId && !restrictedChannels.includes(newState?.channel?.id)) {
     editVc.permissionOverwrites.edit(newState.member.id, {
+      VIEW_CHANNEL: true,
       SEND_MESSAGES: true
     });
   }

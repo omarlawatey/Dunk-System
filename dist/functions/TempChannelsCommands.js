@@ -85,17 +85,8 @@ const TempChannelsCommands = (user, message, id, baseRoles, tempChannel) => {
             }
           };
         });
-        const baseRolesEdit = tempChannel.editChannelId.baseRoles.map(role => {
-          return {
-            id: role.id,
-            deny: {
-              VIEW_CHANNEL: true,
-              CONNECT: true
-            }
-          };
-        });
-        const roles = [...baseRoles, ...lockMembers];
-        roles.forEach(({
+        vc.permissionOverwrites.set([...baseRoles]);
+        lockMembers.forEach(({
           id,
           VIEW_CHANNEL,
           CONNECT
@@ -128,19 +119,15 @@ const TempChannelsCommands = (user, message, id, baseRoles, tempChannel) => {
         const lockMembers = vcMembers.map(member => {
           return {
             id: member.id,
-            deny: {
-              VIEW_CHANNEL: true,
-              CONNECT: true
-            }
+            VIEW_CHANNEL: true,
+            CONNECT: true
           };
         });
         const baseRolesEdit = tempChannel.editChannelId.baseRoles.map(role => {
           return {
             id: role.id,
-            deny: {
-              VIEW_CHANNEL: true,
-              CONNECT: true
-            }
+            VIEW_CHANNEL: false,
+            CONNECT: false
           };
         });
         const roles = [...lockMembers, ...baseRolesEdit];
