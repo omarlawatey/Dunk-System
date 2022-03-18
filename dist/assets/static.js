@@ -84,7 +84,7 @@ __**Versions**__
         id: '950092343950856202',
         deny: [_discord.Permissions.FLAGS.VIEW_CHANNEL]
       }, {
-        id: '941366717622411345',
+        id: '941783311104245810',
         allow: [_discord.Permissions.FLAGS.VIEW_CHANNEL]
       }]
     }
@@ -103,7 +103,7 @@ __**Versions**__
         id: '950092343950856202',
         deny: [_discord.Permissions.FLAGS.VIEW_CHANNEL]
       }, {
-        id: '953755887938449409',
+        id: '941783311104245810',
         allow: [_discord.Permissions.FLAGS.VIEW_CHANNEL]
       }]
     }
@@ -133,8 +133,8 @@ __**Versions**__
       id: '952242871854063669',
       deny: [_discord.Permissions.FLAGS.CREATE_PRIVATE_THREADS, _discord.Permissions.FLAGS.CREATE_PUBLIC_THREADS, _discord.Permissions.FLAGS.SEND_MESSAGES_IN_THREADS, _discord.Permissions.FLAGS.CONNECT, _discord.Permissions.FLAGS.SEND_MESSAGES]
     }, {
-      id: '953755887938449409',
-      allow: [_discord.Permissions.FLAGS.VIEW_CHANNEL]
+      id: '941783311104245810',
+      allow: [_discord.Permissions.FLAGS.VIEW_CHANNEL, _discord.Permissions.FLAGS.CONNECT]
     }],
     streamers: [{
       name: 'lucife_ae',
