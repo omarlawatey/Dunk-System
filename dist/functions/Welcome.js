@@ -21,7 +21,7 @@ const Welcome = async (welcomeChannel, member) => {
   }).then(messages => {
     let lastMessage = messages.first();
     return !lastMessage?.files?.[0];
-  })) && (await (0, _subFunctions.makeLastJoinedOne)(member.guild.id, member.id))) await welcomeChannel.send({
+  })) && !(await (0, _subFunctions.makeLastJoinedOne)(member.guild.id, member.id))) await welcomeChannel.send({
     files: [attachment]
   }).then(msg => {
     msg.channel.send({

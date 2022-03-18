@@ -36,7 +36,7 @@ const warnList = async interaction => {
     user = interaction.guild.members.cache.get(user.id);
     const commandUser = interaction.guild.members.cache.get(interaction.user.id);
 
-    if (commandUser.roles.highest.position <= user.roles.highest.position) {
+    if (commandUser.roles.highest.position < user.roles.highest.position) {
       interaction.reply({
         content: `${user} is higher than You`,
         ephemeral: true

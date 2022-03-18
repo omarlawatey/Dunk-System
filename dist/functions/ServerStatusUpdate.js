@@ -20,7 +20,7 @@ const ServerStatusUpdate = guild => {
       name: 'notFound',
       id: '0'
     }));
-    await channel.setName(`『${liveUpdate.name.toLowerCase() === 'members' ? `👥${(0, _helpers.fontGenerator)(liveUpdate.name)}` : liveUpdate.name.toLowerCase() === 'bots' ? `🤖${(0, _helpers.fontGenerator)(liveUpdate.name)}` : (0, _helpers.fontGenerator)(liveUpdate.name)}』:${role.members.map(i => i.name).length}`);
+    await channel.setName(`『${liveUpdate.name.toLowerCase() === 'members' ? `👥${(0, _helpers.fontGenerator)(liveUpdate.name)}` : liveUpdate.name.toLowerCase() === 'streamer' ? `🎮${(0, _helpers.fontGenerator)(liveUpdate.name)}` : (0, _helpers.fontGenerator)(liveUpdate.name)}』:${role.members.map(i => i.name).length}`);
   });
 };
 

@@ -33,9 +33,7 @@ const TempChannels = async (oldState, newState, guild, tempChannel, restrictedCh
     editVc.permissionOverwrites.delete(oldState.member.id);
     oldState.channel.delete().then(async _ => (await tempChannelVc.permissionOverwrites.cache.get(oldState.member.id)) ? tempChannelVc.permissionOverwrites.delete(oldState.member.id) : '');
     setTimeout(() => {
-      tempChannelVc.permissionOverwrites.edit(newState.member.id, {
-        CONNECT: true
-      });
+      tempChannelVc.permissionOverwrites.delete(newState.member.id);
     }, 3000);
   }
 
