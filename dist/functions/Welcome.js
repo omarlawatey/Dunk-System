@@ -17,32 +17,35 @@ const Welcome = async (welcomeChannel, member) => {
   let data = await (0, _subFunctions.welcomeImage)(member, 'https://github.com/omarlawatey/Dunk-System/blob/main/Images/WelcomeImage.png?raw=true');
   const oldUser = await (0, _subFunctions.makeLastJoinedOne)(member.guild.id, member.id);
   const attachment = new _discord.MessageAttachment(data, 'welcome-image.png');
+
   if ((await welcomeChannel.messages.fetch({
     limit: 1
   }).then(messages => {
     let lastMessage = messages.first();
     return !lastMessage?.files?.[0];
-  })) && oldUser === 'notFound') await welcomeChannel.send({
-    files: [attachment]
-  }).then(msg => {
-    msg.channel.send({
-      content: `> **Welcome** ${member}
+  })) && oldUser === 'notFound') {
+    await welcomeChannel.send({
+      files: [attachment]
+    }).then(msg => {
+      msg.channel.send({
+        content: `> **Welcome** ${member}
           > **Make Sure Read:** <#${_static.default.rulesChannelId}>
           > **Total Member:** **${member.guild.memberCount}**
           > **& Have a Nice Time With US**`
-    });
-  }).then(async msg => {
-    (0, _subFunctions.makeWarn)(member.guild, member, 0, 'create');
+      });
+    }).then(async msg => {
+      (0, _subFunctions.makeWarn)(member.guild, member, 0, 'create');
 
-    _static.default.welcome.autoRole.forEach(item => {
-      member.roles.add(item);
+      try {
+        await (0, _subFunctions.privateMessageServerData)(member.user);
+      } catch (err) {
+        console.log(err);
+      }
     });
+  }
 
-    try {
-      await (0, _subFunctions.privateMessageServerData)(member.user);
-    } catch (err) {
-      console.log(err);
-    }
+  _static.default.welcome.autoRole.forEach(item => {
+    member.roles.add(item);
   });
 };
 
