@@ -19,14 +19,14 @@ const BoostDetector = (oldState, newState) => {
   if (!oldStatus && newStatus) {
     const embed = new _discord.MessageEmbed().setColor('#ff1493').setTitle('Server Boosted').setDescription(`${newState} Boosted The Server!!!`).addFields('Total Boosts', newState.guild.premiumSubscriptionCount, false);
     boostChannel.send({
-      embed: [embed]
+      embeds: [embed]
     });
   }
 
   if (!newStatus && oldStatus) {
     const embed = new _discord.MessageEmbed().setColor('#32174d').setTitle('Server Unboosted').setDescription(`${newState} Unboosted The Server!!!`).addFields('Total Boosts', newState.guild.premiumSubscriptionCount, false);
     boostChannel.send({
-      embed: [embed]
+      embeds: [embed]
     });
   }
 };
