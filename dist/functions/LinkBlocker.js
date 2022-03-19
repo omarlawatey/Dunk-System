@@ -21,43 +21,43 @@ const LinkBlocker = async message => {
     urls: /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.com))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))?/
   };
 
-  if ((0, _helpers.urlFinder)(message.content, links.discordInvites)) {
-    message.reply({
+  if ((0, _helpers.urlFinder)(message?.content, links?.discordInvites)) {
+    message?.reply({
       content: 'Server invites is not allowed in chat',
       ephemeral: true
-    }).then(msg => {
-      message.delete();
+    })?.then(msg => {
+      message?.delete();
       setTimeout(() => {
-        msg.delete();
+        msg?.delete();
       }, 5000);
     });
-    (0, _subFunctions.makeWarn)(message.guild, message.member, 2, 'warn');
-    const embed = new _discord.MessageEmbed().setColor('#ff0000').setTitle(`⚠ User Warned`).addField('Warn Info: ', `<@${message.member.user.id}> warned <@${message.member.user.id}>`, false).addField('Warns Amount: ', `2 Warns`, true).addField('Reason: ', 'Sent Server invite in chat', true).setFooter({
-      text: message.guild.name,
-      iconURL: message.guild.iconURL()
-    }).setThumbnail(message.member.user.avatarURL()).setTimestamp(Date.now());
-    await message.guild.channels.cache.get(_static.default.logsChannelsId).send({
+    (0, _subFunctions.makeWarn)(message?.guild, message?.member, 2, 'warn');
+    const embed = new _discord.MessageEmbed()?.setColor('#ff0000')?.setTitle(`⚠ User Warned`)?.addField('Warn Info: ', `<@947919979657973770> warned <@${message?.member?.user?.id}>`, false)?.addField('Warns Amount: ', `2 Warns`, true)?.addField('Reason: ', 'Sent Server invite in chat', true)?.setFooter({
+      text: message?.guild?.name,
+      iconURL: message?.guild?.iconURL()
+    })?.setThumbnail(message?.member?.user?.avatarURL())?.setTimestamp(Date?.now());
+    await message?.guild?.channels?.cache?.get(_static.default?.logsChannelsId)?.send({
       embeds: [embed]
     });
     return;
   }
 
-  if ((0, _helpers.urlFinder)(message.content, links.urls) && message.embeds.map(i => i.type)[0] !== 'gifv') {
-    message.reply({
+  if ((0, _helpers.urlFinder)(message?.content, links?.urls) && message?.embeds?.map(i => i?.type)[0] !== 'gifv') {
+    message?.reply({
       content: 'Links is not allowed in chat',
       ephemeral: true
-    }).then(msg => {
-      message.delete();
+    })?.then(msg => {
+      message?.delete();
       setTimeout(() => {
-        msg.delete();
+        msg?.delete();
       }, 5000);
     });
-    (0, _subFunctions.makeWarn)(message.guild, message.member, 1, 'warn');
-    const embed = new _discord.MessageEmbed().setColor('#ff0000').setTitle(`⚠ User Warned`).addField('Warn Info: ', `<@${message.member.user.id}> warned <@${message.member.user.id}>`, false).addField('Warns Amount: ', `1 Warns`, true).addField('Reason: ', 'Sent Link in chat', true).setFooter({
-      text: message.guild.name,
-      iconURL: message.guild.iconURL()
-    }).setThumbnail(message.member.user.avatarURL()).setTimestamp(Date.now());
-    await message.guild.channels.cache.get(_static.default.logsChannelsId).send({
+    (0, _subFunctions.makeWarn)(message?.guild, message?.member, 1, 'warn');
+    const embed = new _discord.MessageEmbed()?.setColor('#ff0000')?.setTitle(`⚠ User Warned`)?.addField('Warn Info: ', `<@947919979657973770> warned <@${message?.member?.user?.id}>`, false)?.addField('Warns Amount: ', `1 Warns`, true)?.addField('Reason: ', 'Sent Link in chat', true)?.setFooter({
+      text: message?.guild?.name,
+      iconURL: message?.guild?.iconURL()
+    })?.setThumbnail(message?.member?.user?.avatarURL())?.setTimestamp(Date?.now());
+    await message?.guild?.channels?.cache?.get(_static.default?.logsChannelsId)?.send({
       embeds: [embed]
     });
     return;
