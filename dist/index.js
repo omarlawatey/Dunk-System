@@ -90,7 +90,7 @@ client.on('messageCreate', async message => {
 }); // Link Blocker
 
 client.on('messageCreate', message => {
-  if (message.member.user.bot) return;
+  if (message.member && message.member.user.bot) return;
   if (linkBlockerIgnoreChannels.includes(message.channel.id)) return;
   (0, _functions.LinkBlocker)(message);
 }); // BadWord Watcher
