@@ -173,7 +173,7 @@ setTimeout(async _ => {
 setInterval(async () => {
   const guild = client.guilds.cache.get(serverId);
   (0, _functions.ServerStatusUpdate)(guild);
-}, (0, _ms.default)('10m')); // =========================================
+}, (0, _ms.default)('1m')); // =========================================
 // MongoseDB Server Connection
 
 _mongoose.default.connect(process.env.MONGODB_URI, {
