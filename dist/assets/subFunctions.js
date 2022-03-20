@@ -485,7 +485,7 @@ const twitchLiveStreamTempChannels = async (guild, categoryId, isLive, twitchUse
     }
   });
 
-  if (isLive) await guild.channels.create(`${twitchUsername} Stream VC`, {
+  if (isLive) return await guild.channels.create(`${twitchUsername} Stream VC`, {
     type: 'GUILD_VOICE',
     parent: categoryId
   }).then(async vc => {
@@ -513,6 +513,7 @@ const twitchLiveStreamTempChannels = async (guild, categoryId, isLive, twitchUse
       id: _static.default.TwitchApi.botsRole.id,
       allow: [..._static.default.TwitchApi.botsRole.allow]
     }]);
+    return streamQueueVC;
   });else if (!isLive) {
     [`${twitchUsername}-stream`, `${twitchUsername} Stream VC`, `${twitchUsername} Queue`].forEach(async item => {
       await guild.channels.cache.filter(i => i.name === item).map(i => i).forEach(async i => {
