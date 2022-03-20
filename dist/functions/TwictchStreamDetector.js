@@ -57,7 +57,7 @@ const TwictchStreamDetector = async (client, TWITCH_CLIENT_ID, TWITCH_CLIENT_SEC
             }).setThumbnail(discordUser.user.avatarURL()).setImage(streamThumbnail).addField('\u200B', `[Watch Here](https://www.twitch.tv/${name})`, false).setTimestamp(stremData.started_at);
             notificationChannel.send({
               content: `Hey @everyone, ${discordUser.displayName}, is now live! Go check it out!
-You can join ${discordUser.displayName} stream by waiting in the queue:  <#${await guild.channels.find(`${stremData.user_name} Queue`).id}>`,
+You can join ${discordUser.displayName} stream by waiting in the queue:  <#${await guild.channels.cache.find(`${stremData.user_name} Queue`).id}>`,
               embeds: [embed]
             }).then(_ => {
               (0, _subFunctions.twitchLiveStreamTempChannels)(guild, _static.default.TwitchApi.liveStreamCategoryId, true, name, discordId);
