@@ -455,6 +455,7 @@ const makeLastJoinedOne = async (guildId, lastMemberId) => {
     welcomeLastJoined = await _DataBase.WelcomeLastJoinedSchema.findOne({
       guildId
     });
+    return 'notFound';
   }
 
   if (welcomeLastJoined) {
@@ -467,8 +468,8 @@ const makeLastJoinedOne = async (guildId, lastMemberId) => {
       $set: {
         lastJoinedCount: lastJoinedCount.includes(lastMemberId) ? lastJoinedCount : [...lastJoinedCount, lastMemberId].slice(1)
       }
-    }).then(_ => {});
-    return !lastJoinedCount.includes(lastMemberId);
+    }).then(async _ => {});
+    return lastJoinedCount.includes(lastMemberId) ? 'found' : 'notFound';
   }
 };
 
@@ -496,6 +497,9 @@ const twitchLiveStreamTempChannels = async (guild, categoryId, isLive, twitchUse
       await streamChannel.permissionOverwrites.set([..._static.default.TwitchApi.liveStreamChannelRoles, {
         id: discordId,
         allow: [_discord.Permissions.FLAGS.CREATE_PRIVATE_THREADS, _discord.Permissions.FLAGS.CREATE_PUBLIC_THREADS, _discord.Permissions.FLAGS.SEND_MESSAGES_IN_THREADS, _discord.Permissions.FLAGS.CONNECT, _discord.Permissions.FLAGS.SEND_MESSAGES]
+      }, {
+        id: _static.default.TwitchApi.botsRole.id,
+        allow: [..._static.default.TwitchApi.botsRole.allow]
       }]);
     });
     const streamQueueVC = await guild.channels.create(`${twitchUsername} Queue`, {
@@ -505,6 +509,9 @@ const twitchLiveStreamTempChannels = async (guild, categoryId, isLive, twitchUse
     await streamQueueVC.permissionOverwrites.set([{
       id: memberId[0].id,
       allow: [_discord.Permissions.FLAGS.CONNECT]
+    }, {
+      id: _static.default.TwitchApi.botsRole.id,
+      allow: [..._static.default.TwitchApi.botsRole.allow]
     }]);
   });else if (!isLive) {
     [`${twitchUsername}-stream`, `${twitchUsername} Stream VC`, `${twitchUsername} Queue`].forEach(async item => {

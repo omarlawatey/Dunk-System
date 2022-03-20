@@ -126,15 +126,16 @@ __**Versions**__
     streamsNotifiactionChannelId: '938525786300907601',
     liveRoleId: '952584235384995900',
     liveStreamCategoryId: '954373241651232858',
+    botsRole: {
+      id: '941783311104245810',
+      allow: [_discord.Permissions.FLAGS.VIEW_CHANNEL, _discord.Permissions.FLAGS.CONNECT]
+    },
     liveStreamChannelRoles: [{
       id: '937480624602775572',
       deny: [_discord.Permissions.FLAGS.VIEW_CHANNEL, _discord.Permissions.FLAGS.CREATE_PRIVATE_THREADS, _discord.Permissions.FLAGS.CREATE_PUBLIC_THREADS, _discord.Permissions.FLAGS.SEND_MESSAGES_IN_THREADS]
     }, {
       id: '952242871854063669',
       deny: [_discord.Permissions.FLAGS.CREATE_PRIVATE_THREADS, _discord.Permissions.FLAGS.CREATE_PUBLIC_THREADS, _discord.Permissions.FLAGS.SEND_MESSAGES_IN_THREADS, _discord.Permissions.FLAGS.CONNECT, _discord.Permissions.FLAGS.SEND_MESSAGES]
-    }, {
-      id: '941783311104245810',
-      allow: [_discord.Permissions.FLAGS.VIEW_CHANNEL, _discord.Permissions.FLAGS.CONNECT]
     }],
     streamers: [{
       name: 'lucife_ae',
@@ -142,6 +143,9 @@ __**Versions**__
     }, {
       name: 'omarlawatey',
       discordId: '331867918730264577'
+    }, {
+      name: 'bystitch1',
+      discordId: '317296666635927552'
     }]
   },
   // YouTubeApi: {

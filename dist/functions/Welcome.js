@@ -18,7 +18,7 @@ const Welcome = async (welcomeChannel, member) => {
   const oldUser = await (0, _subFunctions.makeLastJoinedOne)(member.guild.id, member.id);
   const attachment = new _discord.MessageAttachment(data, 'welcome-image.png');
 
-  
+  if (oldUser === 'notFound') {
     await welcomeChannel.send({
       files: [attachment]
     }).then(msg => {
@@ -37,7 +37,7 @@ const Welcome = async (welcomeChannel, member) => {
         console.log(err);
       }
     });
-  
+  }
 
   _static.default.welcome.autoRole.forEach(item => {
     member.roles.add(item);
