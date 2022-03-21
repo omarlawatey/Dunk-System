@@ -485,11 +485,11 @@ const twitchLiveStreamTempChannels = async (guild, categoryId, isLive, twitchUse
     }
   });
 
-  if (isLive) return await guild.channels.create(`${twitchUsername} Stream VC`, {
+  if (isLive) return await guild.channels.create((0, _helpers.fontGenerator)(`${twitchUsername} Stream VC`), {
     type: 'GUILD_VOICE',
     parent: categoryId
   }).then(async vc => {
-    const streamTextChannel = await guild.channels.create(`${twitchUsername} Stream`, {
+    const streamTextChannel = await guild.channels.create((0, _helpers.fontGenerator)(`${twitchUsername} Stream`), {
       type: 'GUILD_TEXT',
       parent: categoryId
     });
@@ -502,7 +502,7 @@ const twitchLiveStreamTempChannels = async (guild, categoryId, isLive, twitchUse
         allow: [..._static.default.TwitchApi.botsRole.allow]
       }]);
     });
-    const streamQueueVC = await guild.channels.create(`${twitchUsername} Queue`, {
+    const streamQueueVC = await guild.channels.create((0, _helpers.fontGenerator)(`${twitchUsername} Queue`), {
       type: 'GUILD_VOICE',
       parent: categoryId
     });
@@ -515,7 +515,7 @@ const twitchLiveStreamTempChannels = async (guild, categoryId, isLive, twitchUse
     }]);
     return streamQueueVC;
   });else if (!isLive) {
-    [`${twitchUsername}-stream`, `${twitchUsername} Stream VC`, `${twitchUsername} Queue`].forEach(async item => {
+    [(0, _helpers.fontGenerator)(`${twitchUsername}-stream`), (0, _helpers.fontGenerator)(`${twitchUsername} Stream VC`), (0, _helpers.fontGenerator)(`${twitchUsername} Queue`)].forEach(async item => {
       await guild.channels.cache.filter(i => i.name === item).map(i => i).forEach(async i => {
         await i.delete();
       });
