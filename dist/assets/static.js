@@ -121,7 +121,7 @@ __**Versions**__
       name: '『👥』members',
       id: '952242871854063669'
     }, {
-      name: '『🎮』streamers:',
+      name: '『🎮』streamers',
       id: '952245434703806484'
     }, {
       name: '『🔮』boosters',
