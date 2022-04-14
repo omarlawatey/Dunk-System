@@ -42,7 +42,7 @@ const client = new _discord.default.Client({
   intents: [_discord.Intents.FLAGS.GUILDS, _discord.Intents.FLAGS.GUILD_MESSAGES, _discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS, _discord.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, _discord.Intents.FLAGS.GUILD_PRESENCES, _discord.Intents.FLAGS.GUILD_VOICE_STATES, _discord.Intents.FLAGS.GUILD_MEMBERS],
   partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 }); // =========================================
-// Error Handlers
+// Handlers
 
 (0, _CrashHandler.default)(); // =========================================
 // Welcome To New Guild Members
@@ -183,11 +183,24 @@ _mongoose.default.connect(process.env.MONGODB_URI, {
 
 
 client.on('ready', () => {
-  (0, _subFunctions.defaultBaseRoles)(client); // Server();
-  // console.log(
-  //   'Watching ' + serverInfo.YouTubeApi.channelId.length + ' Channels'
-  // );
+  (0, _subFunctions.defaultBaseRoles)(client); // Bot Activity
 
+  const arrOfStatus = [{
+    name: 'New Functions 😄',
+    type: 'WATCHING'
+  }, {
+    name: `Minecraft Server Addres: mc.dunk-master.com`,
+    type: 'PLAYING'
+  }];
+  let i = 0;
+  setInterval(() => {
+    if (i === arrOfStatus.length) i = 0;
+    const status = arrOfStatus[i];
+    client.user.setActivity(status.name, {
+      type: status.type
+    });
+    i++;
+  }, 5000);
   console.log('The Bot Is Ready');
 }); // =========================================
 
