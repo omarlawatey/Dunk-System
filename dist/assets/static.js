@@ -118,11 +118,14 @@ __**Versions**__
   liveStatus: {
     liveCategoryId: '952835995580129301',
     Roles: [{
-      name: 'members',
+      name: '『👥』members',
       id: '952242871854063669'
     }, {
-      name: 'streamer',
+      name: '『🎮』streamers:',
       id: '952245434703806484'
+    }, {
+      name: '『🔮』boosters',
+      id: '944987462084751391'
     }]
   },
   boostChannelId: '950087083685478491',
