@@ -22,7 +22,7 @@ const LinkBlocker = async message => {
     urls: /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.com))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))?/
   };
 
-  if ((0, _helpers.urlFinder)(message?.content, links?.discordInvites) && message?.embeds?.map(i => i?.type)[0] !== 'gifv') {
+  if (!message?.content.includes('gif') && (0, _helpers.urlFinder)(message?.content, links?.discordInvites) && message?.embeds?.map(i => i?.type)[0] !== 'gifv') {
     message?.reply({
       content: 'Server invites is not allowed in chat',
       ephemeral: true

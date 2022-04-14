@@ -22,6 +22,10 @@ const serverInfo = {
       id: '941366581106196571',
       type: 'ROLE',
       permission: true
+    }, {
+      id: '960633351427981332',
+      type: 'ROLE',
+      permission: true
     }],
     moderator: [{
       id: '941366756411318343',
