@@ -14,6 +14,7 @@ var _subFunctions = require("../assets/subFunctions");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const BadWordWatcher = async message => {
+  if (checkServerManager(message.member)) return;
   const badwordsList = await (0, _subFunctions.makeBadWord)(message.guild, '', 'show');
 
   if (message.content.split(' ').some(i => badwordsList.includes(i))) {

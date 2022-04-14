@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.welcomeImage = exports.userActivitey = exports.unMuteEmbed = exports.twitchLiveStreamTempChannels = exports.privateMessageServerData = exports.makeliveServerStatus = exports.makeWarn = exports.makeTwitchStreamsData = exports.makeServerInfo = exports.makeLastJoinedOne = exports.makeBadWord = exports.defaultBaseRoles = exports.createChannel = exports.channelArranger = void 0;
+exports.welcomeImage = exports.userActivitey = exports.unMuteEmbed = exports.twitchLiveStreamTempChannels = exports.privateMessageServerData = exports.makeliveServerStatus = exports.makeWarn = exports.makeTwitchStreamsData = exports.makeServerInfo = exports.makeLastJoinedOne = exports.makeBadWord = exports.defaultBaseRoles = exports.createChannel = exports.checkServerManager = exports.channelArranger = void 0;
 
 var _discord = require("discord.js");
 
@@ -524,3 +524,7 @@ const twitchLiveStreamTempChannels = async (guild, categoryId, isLive, twitchUse
 };
 
 exports.twitchLiveStreamTempChannels = twitchLiveStreamTempChannels;
+
+const checkServerManager = member => member.guild.members.cache.get(member.id).roles.highest.position >= member.guild.roles.cache.get(_static.default.lowestMangmentRole).position;
+
+exports.checkServerManager = checkServerManager;

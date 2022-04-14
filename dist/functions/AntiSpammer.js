@@ -20,6 +20,8 @@ var _DataBase = require("../DataBase");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const AntiSpammer = async message => {
+  if ((0, _subFunctions.checkServerManager)(message.member)) return;
+
   _spamnya.default.log(message, 50);
 
   if (_spamnya.default.tooQuick(5, 3000)) {

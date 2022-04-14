@@ -38,6 +38,7 @@ const serverInfo = {
       permission: true
     }]
   },
+  lowestMangmentRole: '960633351427981332',
   welcome: {
     Id: '941665272811630632',
     autoRole: ['952242871854063669'],
