@@ -86,9 +86,9 @@ exports.channelArranger = channelArranger;
 
 const userActivitey = newState => {
   const activities = newState?.member?.presence?.activities;
-  if (!activities || activities?.length === 0 || activities?.[0]?.name === 'Custom Status' && !activities?.[1]?.name) return (0, _helpers.fontGenerator)('Talking');else {
+  if (!activities || activities?.length === 0 || activities?.[0]?.name === 'Custom Status' && !activities?.[1]?.name) return `『🗨️』${(0, _helpers.fontGenerator)('Talking')}`;else {
     const activityName = activities?.[0]?.name === 'Custom Status' ? activities?.[1]?.name : activities?.[0]?.name;
-    return (0, _helpers.fontGenerator)(activityName);
+    return `『🔊』${(0, _helpers.fontGenerator)(activityName)}`;
   }
 };
 
