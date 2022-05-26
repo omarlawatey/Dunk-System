@@ -1,0 +1,22 @@
+{
+  "user": {
+    "guildId": "",
+    "userId": "",
+    "warns": "",
+    "twitchChannelId": "",
+    "twitchOldState": [],
+    "twitchNewState": [],
+    "isMuted": false
+  },
+  "guild": {
+    "guildId": "",
+    "badWords": [],
+    "liveStatus": [
+      {
+        "roleId": "",
+        "channelId": ""
+      }
+    ],
+    "lastJoinedMembers": []
+  }
+}

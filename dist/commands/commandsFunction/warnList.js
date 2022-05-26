@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _subFunctions = require("../../assets/subFunctions");
 
-const warnList = async interaction => {
+const warnList = async (serverInfo, interaction) => {
   const {
     commandName,
     options
@@ -44,9 +44,11 @@ const warnList = async interaction => {
       return;
     }
 
-    const warns = await (0, _subFunctions.makeWarn)(interaction.guild, user, warnsAmount, 'warnlist');
+    const warns = await (0, _subFunctions.UserData)(interaction.guild, user, {
+      type: 'warnList'
+    });
     await interaction.reply({
-      content: `<@${user.id}> has ${warns.warnsCount} warns`,
+      content: `<@${user.id}> has ${warns} warns`,
       ephemeral: true
     });
   }

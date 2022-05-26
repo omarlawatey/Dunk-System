@@ -7,13 +7,9 @@ exports.default = void 0;
 
 var _discord = require("discord.js");
 
-var _static = _interopRequireDefault(require("../../assets/static"));
-
 var _subFunctions = require("../../assets/subFunctions");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const unwarn = async interaction => {
+const unwarn = async (serverInfo, interaction) => {
   const {
     commandName,
     options
@@ -67,23 +63,43 @@ const unwarn = async interaction => {
       text: interaction.guild.name,
       iconURL: interaction.guild.iconURL()
     }).setThumbnail(user.user.avatarURL()).setTimestamp(Date.now());
+    const userOldWarnsData = await (0, _subFunctions.UserData)(interaction.guild, user, {
+      type: 'getData',
+      getDataFilter: {
+        guildId: interaction.guild.id,
+        userId: user?.id
+      }
+    });
 
-    if (await (0, _subFunctions.makeWarn)(interaction.guild, user, warnsAmount, 'unwarn')) {
+    if ((await userOldWarnsData[0].warns) === 0) {
       interaction.reply({
-        content: await (0, _subFunctions.makeWarn)(interaction.guild, user, warnsAmount, 'unwarn'),
+        content: `<@${user.id}> has no warns`,
         ephemeral: true
       });
-    } else {
-      await (0, _subFunctions.makeWarn)(interaction.guild, user, warnsAmount, 'unwarn').then(_ => {
-        interaction.reply({
-          content: `<@${user.id}> is unwarned`,
-          ephemeral: true
-        });
-        interaction.guild.channels.cache.get(_static.default.logsChannelsId).send({
-          embeds: [embed]
-        });
+      return;
+    }
+
+    if ((await userOldWarnsData[0].warns) - warnsAmount < 0) {
+      (0, _subFunctions.UserData)(interaction.guild, user, {
+        warnsAmount: await userOldWarnsData[0].warns,
+        type: 'unwarn'
       });
     }
+
+    if ((await userOldWarnsData[0].warns) - warnsAmount > 0) {
+      (0, _subFunctions.UserData)(interaction.guild, user, {
+        warnsAmount,
+        type: 'unwarn'
+      });
+    }
+
+    interaction.reply({
+      content: `<@${user.id}> is unwarned`,
+      ephemeral: true
+    });
+    interaction.guild.channels.cache.get(serverInfo.logsChannelsId).send({
+      embeds: [embed]
+    });
   }
 };
 

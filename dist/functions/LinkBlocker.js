@@ -9,14 +9,10 @@ var _discord = require("discord.js");
 
 var _helpers = require("../assets/helpers");
 
-var _static = _interopRequireDefault(require("../assets/static"));
-
 var _subFunctions = require("../assets/subFunctions");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const LinkBlocker = async message => {
-  if (checkServerManager(message.member)) return;
+const LinkBlocker = async (serverInfo, message) => {
+  if ((0, _subFunctions.checkServerManager)(message.member)) return;
   const links = {
     discordInvites: /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li|club)|discordapp\.com\/invite|discord\.com\/invite)\/.+[a-z]/gi,
     urls: /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.com))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))?/
@@ -32,12 +28,15 @@ const LinkBlocker = async message => {
         msg?.delete();
       }, 5000);
     });
-    (0, _subFunctions.makeWarn)(message?.guild, message?.member, 2, 'warn');
-    const embed = new _discord.MessageEmbed()?.setColor('#ff0000')?.setTitle(`⚠ User Warned`)?.addField('Warn Info: ', `<@947919979657973770> warned <@${message?.member?.user?.id}>`, false)?.addField('Warns Amount: ', `2 Warns`, true)?.addField('Reason: ', 'Sent Server invite in chat', true)?.setFooter({
+    (0, _subFunctions.UserData)(message.guild, message.member, {
+      type: 'warn',
+      warnsAmount: 2
+    });
+    const embed = new _discord.MessageEmbed()?.setColor('#ff0000')?.setTitle(`⚠ User Warned`)?.addField('Warn Info: ', `<@${message.client.application.id}> warned <@${message?.member?.user?.id}>`, false)?.addField('Warns Amount: ', `2 Warns`, true)?.addField('Reason: ', 'Sent Server invite in chat', true)?.setFooter({
       text: message?.guild?.name,
       iconURL: message?.guild?.iconURL()
     })?.setThumbnail(message?.member?.user?.avatarURL())?.setTimestamp(Date?.now());
-    await message?.guild?.channels?.cache?.get(_static.default?.logsChannelsId)?.send({
+    await message?.guild?.channels?.cache?.get(serverInfo?.logsChannelsId)?.send({
       embeds: [embed]
     });
     return;
@@ -53,12 +52,16 @@ const LinkBlocker = async message => {
         msg?.delete();
       }, 5000);
     });
-    (0, _subFunctions.makeWarn)(message?.guild, message?.member, 1, 'warn');
-    const embed = new _discord.MessageEmbed()?.setColor('#ff0000')?.setTitle(`⚠ User Warned`)?.addField('Warn Info: ', `<@947919979657973770> warned <@${message?.member?.user?.id}>`, false)?.addField('Warns Amount: ', `1 Warns`, true)?.addField('Reason: ', 'Sent Link in chat', true)?.setFooter({
+    (0, _subFunctions.UserData)(message.guild, message.member, {
+      type: 'warn',
+      warnsAmount: 1
+    }); // makeWarn(message?.guild, message?.member, 1, 'warn');
+
+    const embed = new _discord.MessageEmbed()?.setColor('#ff0000')?.setTitle(`⚠ User Warned`)?.addField('Warn Info: ', `<@${message.client.application.id}> warned <@${message?.member?.user?.id}>`, false)?.addField('Warns Amount: ', `1 Warns`, true)?.addField('Reason: ', 'Sent Link in chat', true)?.setFooter({
       text: message?.guild?.name,
       iconURL: message?.guild?.iconURL()
     })?.setThumbnail(message?.member?.user?.avatarURL())?.setTimestamp(Date?.now());
-    await message?.guild?.channels?.cache?.get(_static.default?.logsChannelsId)?.send({
+    await message?.guild?.channels?.cache?.get(serverInfo?.logsChannelsId)?.send({
       embeds: [embed]
     });
     return;

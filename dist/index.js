@@ -8,7 +8,7 @@ var _mongoose = _interopRequireDefault(require("mongoose"));
 
 var _ms = _interopRequireDefault(require("ms"));
 
-var _static = _interopRequireDefault(require("./assets/static"));
+var _static = require("./assets/static");
 
 var _subFunctions = require("./assets/subFunctions");
 
@@ -37,7 +37,7 @@ const {
   tempChannels,
   logsChannelsId,
   linkBlockerIgnoreChannels
-} = _static.default;
+} = _static.serverInfo;
 const client = new _discord.default.Client({
   intents: [_discord.Intents.FLAGS.GUILDS, _discord.Intents.FLAGS.GUILD_MESSAGES, _discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS, _discord.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, _discord.Intents.FLAGS.GUILD_PRESENCES, _discord.Intents.FLAGS.GUILD_VOICE_STATES, _discord.Intents.FLAGS.GUILD_MEMBERS],
   partials: ['MESSAGE', 'CHANNEL', 'REACTION']
@@ -48,41 +48,45 @@ const client = new _discord.default.Client({
 // Welcome To New Guild Members
 
 client.on('guildMemberAdd', member => {
+  const server = (0, _static.selectServer)(member.guild.id);
+
   if (member.user.bot) {
-    _static.default.welcome.botsRole.forEach(item => {
+    server.welcome.botsRole.forEach(item => {
       member.roles.add(item);
     });
-
     return;
   }
 
-  const guild = client.guilds.cache.get(serverId);
-  const welcomeChannel = guild.channels.cache.get(welcome.Id);
-  (0, _functions.Welcome)(welcomeChannel, member);
+  const guild = client.guilds.cache.get(server.serverId);
+  const welcomeChannel = guild.channels.cache.get(server.welcome.Id);
+  (0, _functions.Welcome)(server, welcomeChannel, member);
 }); // Role Watcher
 
 client.on('guildMemberUpdate', async (oldsState, newState) => {
   if (newState.user.bot) return;
-  (0, _functions.RoleWatcher)(oldsState, newState);
+  const server = (0, _static.selectServer)(newState.guild.id || oldsState.guild.id);
+  (0, _functions.RoleWatcher)(server, oldsState, newState);
 }); // Temporary Channels
 
 client.on('voiceStateUpdate', (oldState, newState) => {
   if (newState.member.user.bot) return;
-  const guild = client.guilds.cache.get(serverId);
-  tempChannels.forEach(tempChannel => {
+  const server = (0, _static.selectServer)(newState.guild.id || oldState.guild.id);
+  const guild = client.guilds.cache.get(server.serverId);
+  server.tempChannels.forEach(tempChannel => {
     if (oldState?.channel?.parent?.id === tempChannel.tempCategoryId || newState?.channel?.parent?.id === tempChannel.tempCategoryId) (0, _functions.TempChannels)(oldState, newState, guild, tempChannel, tempChannel.restrictedChannels);
   });
 });
 client.on('messageCreate', async message => {
-  tempChannels.forEach(tempChannel => {
-    if (message.channel.parent.id === tempChannel.tempCategoryId) {
+  const server = (0, _static.selectServer)(message.guild.id);
+  server.tempChannels.forEach(tempChannel => {
+    if (message?.channel?.parent?.id === tempChannel.tempCategoryId) {
       const {
         id,
         baseRoles
       } = tempChannel.editChannelId;
       if (message.channel?.parent?.id !== tempChannel.tempCategoryId) return;
       if (message.author.bot || message.channel.id !== id) return;
-      const guild = client.guilds.cache.get(serverId);
+      const guild = client.guilds.cache.get(server.serverId);
       const user = guild.members.cache.get(message.author.id);
       (0, _functions.TempChannelsCommands)(user, message, id, baseRoles, tempChannel);
     }
@@ -91,23 +95,27 @@ client.on('messageCreate', async message => {
 
 client.on('messageCreate', message => {
   if (message?.member?.user?.bot) return;
-  if (linkBlockerIgnoreChannels?.includes(message.channel.id)) return;
-  (0, _functions.LinkBlocker)(message);
+  const server = (0, _static.selectServer)(message.guild.id);
+  if (server.linkBlockerIgnoreChannels?.includes(message.channel.id)) return;
+  (0, _functions.LinkBlocker)(server, message);
 }); // BadWord Watcher
-// client.on('messageCreate', async message => {
-//   if (message.member.user.bot) return;
-//   BadWordWatcher(message);
-// });
-// Anti Spammer
 
 client.on('messageCreate', async message => {
   if (message.member.user.bot) return;
-  (0, _functions.AntiSpammer)(message);
+  const server = (0, _static.selectServer)(message.guild.id);
+  (0, _functions.BadWordWatcher)(server, message);
+}); // Anti Spammer
+
+client.on('messageCreate', async message => {
+  if (message.member.user.bot) return;
+  const server = (0, _static.selectServer)(message.guild.id);
+  (0, _functions.AntiSpammer)(server, message);
 }); // Server Booster Detector
 
 client.on('guildMemberUpdate', (oldState, newState) => {
   if (oldState?.user.bot) return;
-  (0, _functions.BoostDetector)(oldState, newState);
+  const server = (0, _static.selectServer)(oldState?.guild?.id || newState?.guild?.id);
+  (0, _functions.BoostDetector)(server, oldState, newState);
 });
 setTimeout(() => {
   (0, _functions.TwictchStreamDetector)(client, process.env.TWITCH_CLIENT_ID, process.env.TWITCH_CLIENT_SECRET); // YouTubeVideosNotifier(client);
@@ -115,65 +123,75 @@ setTimeout(() => {
 // slash Commands
 
 client.on('ready', async () => {
-  const guild = client.guilds.cache.get(serverId);
-  let commands = guild?.commands; // Command Creation
+  _static.serverInfo.forEach(async server => {
+    const guild = client.guilds.cache.get(server.serverId);
+    let commands = guild?.commands; // Command Creation
 
-  (0, _commands.commandsCreate)(commands, _discord.default); // Commands Permissions
+    (0, _commands.commandsCreate)(commands, _discord.default); // Commands Permissions
 
-  if (!client.application?.owner) await client.application?.fetch();
-  await (0, _commands.commandsPermissions)(guild);
+    if (!client.application?.owner) await client.application?.fetch();
+    await (0, _commands.commandsPermissions)(guild);
+  });
 });
 client.on('interactionCreate', async interaction => {
   if (!interaction.isCommand()) return; // Commands Function
 
-  (0, _commands.commands)(interaction, client);
+  (0, _commands.commands)(interaction);
 }); // =========================================
 // Empty TempChannels Watcher
 
 setTimeout(() => {
   setInterval(() => {
-    const guild = client.guilds.cache.get(serverId);
-    tempChannels.forEach(async tempChannel => {
-      const tempChannelsCategory = guild?.channels?.cache?.get(tempChannel.tempCategoryId);
+    _static.serverInfo.forEach(server => {
+      const guild = client.guilds.cache.get(server.serverId);
+      server.tempChannels.forEach(async tempChannel => {
+        const tempChannelsCategory = guild?.channels?.cache?.get(tempChannel.tempCategoryId);
 
-      if (tempChannelsCategory) {
-        try {
-          (0, _subFunctions.channelArranger)(guild.channels.cache.get(tempChannel.tempCategoryId).children.filter(i => !tempChannel.restrictedChannels.includes(i.id)).map(({
-            name
-          }) => {
-            return name;
-          }), guild, tempChannel.tempCategoryId, tempChannel.restrictedChannels);
-        } catch (err) {}
-      }
+        if (tempChannelsCategory) {
+          try {
+            (0, _subFunctions.channelArranger)(guild.channels.cache.get(tempChannel.tempCategoryId).children.filter(i => !tempChannel.restrictedChannels.includes(i.id)).map(({
+              name
+            }) => {
+              return name;
+            }), guild, tempChannel.tempCategoryId, tempChannel.restrictedChannels);
+          } catch (err) {}
+        }
+      });
     });
   }, 5000);
   setInterval(() => {
-    const guild = client.guilds.cache.get(serverId);
-    tempChannels.forEach(tempChannel => {
-      const tempChannelsCategory = guild?.channels?.cache?.get(tempChannel.tempCategoryId);
+    _static.serverInfo.forEach(server => {
+      const guild = client.guilds.cache.get(server.serverId);
+      server.tempChannels.forEach(tempChannel => {
+        const tempChannelsCategory = guild?.channels?.cache?.get(tempChannel.tempCategoryId);
 
-      if (tempChannelsCategory) {
-        try {
-          guild.channels.cache.get(tempChannel.tempCategoryId).children.map(i => i).forEach(element => {
-            if (element.members.size === 0 && !tempChannel.restrictedChannels.includes(element.id)) {
-              element ? element.delete().catch(err => err) : '';
-            }
-          });
-        } catch (error) {}
-      }
+        if (tempChannelsCategory) {
+          try {
+            guild.channels.cache.get(tempChannel.tempCategoryId).children.map(i => i).forEach(element => {
+              if (element.members.size === 0 && !tempChannel.restrictedChannels.includes(element.id)) {
+                element ? element.delete().catch(err => err) : '';
+              }
+            });
+          } catch (error) {}
+        }
+      });
     });
   }, 3000);
 }, 2000); // Timer Watcher
 
 setTimeout(async _ => {
-  if (!client?.guilds?.cache?.get(serverId)) return;
-  (0, _functions.TimeWatcher)(client, serverId, logsChannelsId);
+  _static.serverInfo.forEach(server => {
+    if (!client?.guilds?.cache?.get(server.serverId)) return;
+    (0, _functions.TimeWatcher)(client, server.serverId, server.logsChannelsId);
+  });
 }, 2000); // Server Status Update
 
 setInterval(async () => {
-  const guild = client.guilds.cache.get(serverId);
-  (0, _functions.ServerStatusUpdate)(guild);
-}, (0, _ms.default)('1m')); // =========================================
+  _static.serverInfo.forEach(server => {
+    const guild = client.guilds.cache.get(server.serverId);
+    (0, _functions.ServerStatusUpdate)(server, guild);
+  });
+}, (0, _ms.default)('10s')); // =========================================
 // MongoseDB Server Connection
 
 _mongoose.default.connect(process.env.MONGODB_URI, {
@@ -183,7 +201,8 @@ _mongoose.default.connect(process.env.MONGODB_URI, {
 
 
 client.on('ready', () => {
-  (0, _subFunctions.defaultBaseRoles)(client); // Bot Activity
+  _static.serverInfo.forEach(server => (0, _subFunctions.defaultBaseRoles)(server, client)); // Bot Activity
+
 
   const arrOfStatus = [{
     name: 'New Functions 😄',

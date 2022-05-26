@@ -5,27 +5,33 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _static = require("../assets/static");
+
 var _subFunctions = require("../assets/subFunctions");
 
-var _DataBase = require("../DataBase");
-
-const TimeWatcher = async (client, serverId, logsChannelsId) => {
+const TimeWatcher = async (client, serverId) => {
   const guild = client.guilds.cache.get(serverId);
   setInterval(async () => {
-    let mutedMembers = await _DataBase.MutedSchema.find({
-      guildId: serverId
+    let mutedMembers = await (0, _subFunctions.UserData)(guild, {
+      id: '0'
+    }, {
+      type: 'getData',
+      getDataFilter: {
+        guildId: guild.id,
+        isMuted: true
+      }
     });
     mutedMembers.forEach(async ({
-      memberId
+      userId: memberId
     }) => {
       const member = guild.members.cache.get(memberId);
 
-      if (Date.now() - member.communicationDisabledUntilTimestamp >= 0) {
-        await _DataBase.MutedSchema.deleteOne({
-          guildId: serverId,
-          memberId: member.id
+      if (Date.now() - member?.communicationDisabledUntilTimestamp >= 0) {
+        await (0, _subFunctions.UserData)(guild, member, {
+          type: 'unmute'
         });
-        (0, _subFunctions.unMuteEmbed)(guild, member, 'Mute time ended');
+        const server = (0, _static.selectServer)(serverId);
+        (0, _subFunctions.unMuteEmbed)(server, guild, member, 'Mute time ended');
         return;
       }
     });

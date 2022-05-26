@@ -7,15 +7,7 @@ exports.default = void 0;
 
 var _discord = require("discord.js");
 
-var _ms = _interopRequireDefault(require("ms"));
-
-var _static = _interopRequireDefault(require("../../assets/static"));
-
-var _DataBase = require("../../DataBase");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const kick = interaction => {
+const kick = (serverInfo, interaction) => {
   const {
     commandName,
     options
@@ -58,7 +50,7 @@ const kick = interaction => {
       return;
     }
 
-    const embed = new _discord.MessageEmbed().setColor('#ff8888').setTitle(`🔈 User Kicked`).addField('Mute Info: ', `<@${interaction.user.id}> Kicked <@${user.id}>`, true).addField('Reason: ', reason, false).setFooter({
+    const embed = new _discord.MessageEmbed().setColor('#ff8888').setTitle(`🔈 User Kicked`).addField('Kick Info: ', `<@${interaction.user.id}> Kicked <@${user.id}>`, true).addField('Reason: ', reason, false).setFooter({
       text: interaction.guild.name,
       iconURL: interaction.guild.iconURL()
     }).setThumbnail(user.user.avatarURL()).setTimestamp(Date.now());
@@ -69,7 +61,7 @@ const kick = interaction => {
         content: `<@${user.id}> is kicked`,
         ephemeral: true
       });
-      interaction.guild.channels.cache.get(_static.default.logsChannelsId).send({
+      interaction.guild.channels.cache.get(serverInfo.logsChannelsId).send({
         embeds: [embed]
       });
     });

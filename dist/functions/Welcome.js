@@ -9,13 +9,27 @@ var _discord = require("discord.js");
 
 var _subFunctions = require("../assets/subFunctions");
 
-var _static = _interopRequireDefault(require("../assets/static"));
+var _DataBase = require("../DataBase");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const Welcome = async (welcomeChannel, member) => {
+const Welcome = async (serverInfo, welcomeChannel, member) => {
   let data = await (0, _subFunctions.welcomeImage)(member, 'https://github.com/omarlawatey/Dunk-System/blob/main/Images/WelcomeImage.png?raw=true');
-  const oldUser = await (0, _subFunctions.makeLastJoinedOne)(member.guild.id, member.id);
+
+  if ((await (0, _subFunctions.UserData)(member.guild, member, {
+    type: 'getData',
+    getDataFilter: {
+      memberId: member.id
+    }
+  })) === null) {
+    await (0, _subFunctions.UserData)(member.guild, member, {
+      type: 'create',
+      warnsAmount: 0
+    });
+  }
+
+  const oldUser = await (0, _subFunctions.GuildData)(member.guild, {
+    type: 'lastJoinedMembers',
+    LastJoinedMemberId: member.id
+  }).then(req => req.lastJoinedMembers.includes(member.id) ? 'found' : 'notFound');
   const attachment = new _discord.MessageAttachment(data, 'welcome-image.png');
 
   if (oldUser === 'notFound') {
@@ -24,22 +38,24 @@ const Welcome = async (welcomeChannel, member) => {
     }).then(msg => {
       msg.channel.send({
         content: `> **Welcome** ${member}
-          > **Make Sure Read:** <#${_static.default.rulesChannelId}>
+          > **Make Sure Read:** <#${serverInfo.rulesChannelId}>
           > **Total Member:** **${member.guild.memberCount}**
           > **& Have a Nice Time With US**`
       });
     }).then(async msg => {
-      (0, _subFunctions.makeWarn)(member.guild, member, 0, 'create');
+      (0, _DataBase.UserSchema)(member.guild, member, {
+        type: 'create'
+      });
 
       try {
-        await (0, _subFunctions.privateMessageServerData)(member.user);
+        await (0, _subFunctions.privateMessageServerData)(serverInfo, member.user);
       } catch (err) {
         console.log(err);
       }
     });
   }
 
-  _static.default.welcome.autoRole.forEach(item => {
+  serverInfo.welcome.autoRole.forEach(item => {
     member.roles.add(item);
   });
 };

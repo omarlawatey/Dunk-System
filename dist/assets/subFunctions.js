@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.welcomeImage = exports.userActivitey = exports.unMuteEmbed = exports.twitchLiveStreamTempChannels = exports.privateMessageServerData = exports.makeliveServerStatus = exports.makeWarn = exports.makeTwitchStreamsData = exports.makeServerInfo = exports.makeLastJoinedOne = exports.makeBadWord = exports.defaultBaseRoles = exports.createChannel = exports.checkServerManager = exports.channelArranger = void 0;
+exports.welcomeImage = exports.warnMember = exports.userActivitey = exports.unMuteEmbed = exports.twitchLiveStreamTempChannels = exports.privateMessageServerData = exports.defaultBaseRoles = exports.createChannel = exports.checkServerManager = exports.checkLiveStatus = exports.channelArranger = exports.UserData = exports.GuildData = void 0;
 
 var _discord = require("discord.js");
 
@@ -13,7 +13,7 @@ var _jimp = _interopRequireDefault(require("jimp"));
 
 var _helpers = require("../assets/helpers");
 
-var _static = _interopRequireDefault(require("./static"));
+var _static = require("./static");
 
 var _DataBase = require("../DataBase");
 
@@ -21,10 +21,9 @@ var _ms = _interopRequireDefault(require("ms"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const defaultBaseRoles = client => {
-  const guild = client.guilds.cache.get(_static.default.serverId);
-
-  _static.default.tempChannels.forEach(async tempChannel => {
+const defaultBaseRoles = async (serverInfo, client) => {
+  const guild = await client.guilds.cache.get(serverInfo.serverId);
+  serverInfo.tempChannels.forEach(async tempChannel => {
     const editVc = guild.channels.cache.get(tempChannel.editChannelId.id);
     const quickVc = guild.channels.cache.get(tempChannel.restrictedChannels[1]);
 
@@ -76,7 +75,6 @@ const channelArranger = (arr, guild, categoryId, restrictedChannels) => {
     //   try {
     //     tempChannel.setPosition(tempIndex + 1).catch(err => console.log(err));
     //   } catch (err) {
-    //     console.log(err);
     //   }
     // });
   });
@@ -86,270 +84,24 @@ exports.channelArranger = channelArranger;
 
 const userActivitey = newState => {
   const activities = newState?.member?.presence?.activities;
-  if (!activities || activities?.length === 0 || activities?.[0]?.name === 'Custom Status' && !activities?.[1]?.name) return `『🗨️』${(0, _helpers.fontGenerator)('Talking')}`;else {
+  if (!activities || activities?.length === 0 || activities?.[0]?.name === 'Custom Status' && !activities?.[1]?.name) return `『🗨️』${(0, _helpers.fontGenerator)((0, _static.selectServer)(newState.guild.id), 'Talking')}`;else {
     const activityName = activities?.[0]?.name === 'Custom Status' ? activities?.[1]?.name : activities?.[0]?.name;
-    return `『🔊』${(0, _helpers.fontGenerator)(activityName)}`;
+    return `『🔊』${(0, _helpers.fontGenerator)((0, _static.selectServer)(newState.guild.id), activityName)}`;
   }
 };
 
 exports.userActivitey = userActivitey;
 
-const unMuteEmbed = (guild, member, reason) => {
-  guild.channels.cache.get(_static.default.logsChannelsId).send({
-    embeds: [new _discord.MessageEmbed().setColor('#0099ff').setTitle(`🔈 User Unmuted`).addField('Unmute Info: ', `Unmuted <@${member.id}>`, true).addField('Reason: ', reason, false).setFooter({
+const unMuteEmbed = (serverInfo, guild, member, reason) => {
+  guild.channels.cache.get(serverInfo.logsChannelsId).send({
+    embeds: [new _discord.MessageEmbed().setColor('#0099ff').setTitle(`🔈 User Unmuted`).addField('Unmute Info: ', `Unmuted <@${member?.id}>`, true).addField('Reason: ', reason, false).setFooter({
       text: guild.name,
       iconURL: guild.iconURL()
-    }).setThumbnail(member.user.avatarURL()).setTimestamp(Date.now())]
+    }).setThumbnail(member?.user.avatarURL()).setTimestamp(Date.now())]
   });
 };
 
 exports.unMuteEmbed = unMuteEmbed;
-
-const makeWarn = async (guild, user, warnsAmount, type = 'create') => {
-  let returnedWarns = await _DataBase.WarnSchema.findOne({
-    guildId: guild.id,
-    memberId: user.id
-  });
-
-  if (type === 'create' || returnedWarns === null) {
-    await _DataBase.WarnSchema.create({
-      guildId: guild.id,
-      memberId: user.id,
-      warnsCount: 0
-    });
-    returnedWarns = await _DataBase.WarnSchema.findOne({
-      guildId: guild.id,
-      memberId: user.id
-    });
-  }
-
-  if (type === 'warn') await _DataBase.WarnSchema.updateOne({
-    guildId: guild.id,
-    memberId: user.id
-  }, {
-    $set: {
-      warnsCount: (await returnedWarns.warnsCount) + warnsAmount
-    }
-  }).then(async _ => {});else if (type === 'unwarn') {
-    if (returnedWarns.warnsCount === 0) return "User don't have warns";else if (returnedWarns.warnsCount === 1 && warnsAmount > 1) return 'User has only 1 warn';
-    await _DataBase.WarnSchema.updateOne({
-      guildId: guild.id,
-      memberId: user.id
-    }, {
-      $set: {
-        warnsCount: (await returnedWarns.warnsCount) - warnsAmount
-      }
-    }).then(_ => {});
-  } else if (type === 'warnlist') return await _DataBase.WarnSchema.findOne({
-    guildId: guild.id,
-    memberId: user.id
-  });
-  await _DataBase.WarnSchema.findOne({
-    guildId: guild.id,
-    memberId: user.id
-  }).then(async req => {
-    await _DataBase.WarnSchema.updateOne({
-      guildId: guild.id,
-      memberId: user.id
-    }, {
-      $set: {
-        warnsCount: (await req.warnsCount) >= 5 ? 0 : await req.warnsCount
-      }
-    }).then(_ => {});
-    const embed = new _discord.MessageEmbed().setColor('#ff0000').setTitle(`⚠ User Muted`).addField('Warn Info: ', `<@${user.id}> was Muted For 2Days`, false).addField('Warns Amount: ', `${req.warnsCount} Warns`, true).addField('Reason: ', `<@${user.id}> was Warned ${req.warnsCount === 5 ? '5' : 'more than 5'} Times`, true).setFooter({
-      text: guild.name,
-      iconURL: guild.iconURL()
-    }).setThumbnail(user.user.avatarURL()).setTimestamp(Date.now());
-    if ((await req.warnsCount) >= 5) user.timeout((0, _ms.default)('2d'), 'Got 5 Warns').then(async _ => {
-      (0, _DataBase.MutedSchema)({
-        guildId: await guild.id,
-        memberId: await user.id
-      });
-      await _DataBase.MutedSchema.create({
-        guildId: await guild.id,
-        memberId: await user.id
-      });
-      guild.channels.cache.get(_static.default.logsChannelsId).send({
-        embeds: [embed]
-      });
-    });
-  });
-};
-
-exports.makeWarn = makeWarn;
-
-const makeliveServerStatus = async (guild, role) => {
-  if (!role && !guild) return;
-  let returnedStatus = await _DataBase.LiveStatusSchema.findOne({
-    guildId: guild.id,
-    roleId: role.id
-  });
-
-  if (returnedStatus === null) {
-    await guild.channels.create(`${role.name}: `, {
-      type: 'GUILD_VOICE',
-      parent: _static.default.liveStatus.liveCategoryId
-    }).then(async channel => {
-      await _DataBase.LiveStatusSchema.create({
-        guildId: guild.id,
-        roleId: role.id,
-        channelId: channel.id
-      });
-      returnedStatus = await _DataBase.LiveStatusSchema.findOne({
-        guildId: guild.id,
-        roleId: role.id,
-        channelId: channel.id
-      });
-    });
-  } else if (!guild.channels.cache.get(returnedStatus.channelId)) {
-    await guild.channels.create(`${role.name}: `, {
-      type: 'GUILD_VOICE',
-      parent: _static.default.liveStatus.liveCategoryId
-    }).then(async channel => {
-      await _DataBase.LiveStatusSchema.updateOne({
-        guildId: guild.id,
-        roleId: role.id
-      }, {
-        $set: {
-          channelId: channel.id
-        }
-      });
-      returnedStatus = await _DataBase.LiveStatusSchema.findOne({
-        guildId: guild.id,
-        roleId: role.id,
-        channelId: channel.id
-      });
-    });
-  }
-
-  return returnedStatus.channelId;
-};
-
-exports.makeliveServerStatus = makeliveServerStatus;
-
-const makeServerInfo = async (guild, type) => {
-  let infoChannel = await guild.channels.cache.get(_static.default.serverInfoChannelId);
-  let returnedStatus = await _DataBase.ServerInfo.findOne({
-    guildId: guild.id
-  });
-
-  if (returnedStatus === null) {
-    await _DataBase.ServerInfo.create({
-      guildId: guild.id,
-      serverName: guild.name,
-      serverOwnerId: guild.ownerId,
-      serverCreatedDate: guild.createdAt.getDate() + '/' + guild.createdAt.getMonth() + '/' + guild.createdAt.getFullYear(),
-      serverMembersCount: guild.memberCount,
-      serverChannelsCount: guild.channels.cache.size,
-      serverRolesCount: guild.roles.cache.size
-    });
-    returnedStatus = await _DataBase.ServerInfo.findOne({
-      guildId: guild.id
-    });
-  }
-
-  if (type === 'name') {
-    await _DataBase.ServerInfo.updateOne({
-      guildId: guild.id
-    }, {
-      $set: {
-        serverName: guild.name
-      }
-    }).then(_ => {});
-    returnedStatus = await _DataBase.ServerInfo.findOne({
-      guildId: guild.id
-    });
-  } else if (type === 'members' || type === 'channels') {
-    await _DataBase.ServerInfo.updateOne({
-      guildId: guild.id
-    }, {
-      $set: {
-        serverMembersCount: guild.memberCount,
-        serverChannelsCount: guild.channels.cache.size
-      }
-    }).then(_ => {});
-    returnedStatus = await _DataBase.ServerInfo.findOne({
-      guildId: guild.id
-    });
-  } else if (type === 'roles') {
-    await _DataBase.ServerInfo.updateOne({
-      guildId: guild.id
-    }, {
-      $set: {
-        serverRolesCount: guild.roles.cache.size
-      }
-    }).then(_ => {});
-    returnedStatus = await _DataBase.ServerInfo.findOne({
-      guildId: guild.id
-    });
-  }
-
-  try {
-    await infoChannel.bulkDelete(5).then(async _ => {
-      await infoChannel.send({
-        embeds: [new _discord.MessageEmbed().setThumbnail(guild.iconURL()).setColor('#ff0000').addField('اسم السيرفر🔠 :', returnedStatus.serverName, true).addField('ايدي السيرفر🆔️:', returnedStatus.guildId, true).addField('تاريخ الانشاء 📅: ', returnedStatus.serverCreatedDate, true).addField(' مملوك بواسطة 👑 : ', `<@${returnedStatus.serverOwnerId}>`, true).addField('الأعضاء👥: ', returnedStatus.serverMembersCount, true).addField(' المنطقة🌍: ', 'Europe', true).addField('  عدد الرومات🚪: ', returnedStatus.serverChannelsCount, true).addField('عدد الرولات 🔒: ', returnedStatus.serverRolesCount, true).setFooter({
-          text: guild.name,
-          iconURL: guild.iconURL()
-        })]
-      });
-    });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-exports.makeServerInfo = makeServerInfo;
-
-const makeBadWord = async (guild, badword, type = 'add') => {
-  let returnedStatus = await _DataBase.BadWordSchema.findOne({
-    guildId: guild.id
-  });
-
-  if (returnedStatus === null) {
-    await _DataBase.BadWordSchema.create({
-      guildId: guild.id,
-      BadWords: []
-    });
-    returnedStatus = await _DataBase.BadWordSchema.findOne({
-      guildId: guild.id
-    });
-  }
-
-  if (type === 'add') {
-    await _DataBase.BadWordSchema.updateOne({
-      guildId: guild.id
-    }, {
-      $set: {
-        BadWords: [...new Set([...returnedStatus.BadWords, badword])]
-      }
-    }).then(_ => {});
-    returnedStatus = await _DataBase.BadWordSchema.findOne({
-      guildId: guild.id
-    });
-  }
-
-  if (type === 'remove') {
-    await _DataBase.BadWordSchema.updateOne({
-      guildId: guild.id
-    }, {
-      $set: {
-        BadWords: [...new Set([returnedStatus.BadWords.filter(i => i !== badword)])]
-      }
-    }).then(_ => {});
-    returnedStatus = await _DataBase.BadWordSchema.findOne({
-      guildId: guild.id
-    });
-  }
-
-  if (type === 'show') {
-    let list = await _DataBase.BadWordSchema.findOne({
-      guildId: guild.id
-    });
-    return list.BadWords;
-  }
-};
-
-exports.makeBadWord = makeBadWord;
 
 const welcomeImage = async (member, link) => {
   const canvas = _canvas.default.createCanvas(705, 344);
@@ -386,55 +138,8 @@ const welcomeImage = async (member, link) => {
 
 exports.welcomeImage = welcomeImage;
 
-const makeTwitchStreamsData = async (guildId, channelUsername, userDiscordId, Data) => {
-  let TwitchInfo = await _DataBase.TwitchStreamInfo.findOne({
-    guildId,
-    channelUsername,
-    userDiscordId
-  });
-
-  if (TwitchInfo === null) {
-    await _DataBase.TwitchStreamInfo.create({
-      guildId,
-      channelUsername,
-      userDiscordId,
-      oldState: [undefined],
-      newState: [undefined]
-    });
-    TwitchInfo = await _DataBase.TwitchStreamInfo.findOne({
-      guildId,
-      channelUsername,
-      userDiscordId
-    });
-  }
-
-  if (TwitchInfo) {
-    const {
-      newState,
-      userDiscordId
-    } = TwitchInfo;
-    await _DataBase.TwitchStreamInfo.updateOne({
-      guildId,
-      channelUsername,
-      userDiscordId
-    }, {
-      $set: {
-        oldState: newState,
-        newState: Data
-      }
-    }).then(_ => {});
-    return {
-      oldState: newState,
-      newState: Data,
-      userDiscordId
-    };
-  }
-};
-
-exports.makeTwitchStreamsData = makeTwitchStreamsData;
-
-const privateMessageServerData = async author => {
-  const embed = new _discord.MessageEmbed().setColor('#ff0000').setDescription(_static.default.welcome.welcomePrivateMessage);
+const privateMessageServerData = async (serverInfo, author) => {
+  const embed = new _discord.MessageEmbed().setColor('#ff0000').setDescription(serverInfo.welcome.welcomePrivateMessage);
   author.send({
     embeds: [embed]
   });
@@ -442,41 +147,8 @@ const privateMessageServerData = async author => {
 
 exports.privateMessageServerData = privateMessageServerData;
 
-const makeLastJoinedOne = async (guildId, lastMemberId) => {
-  let welcomeLastJoined = await _DataBase.WelcomeLastJoinedSchema.findOne({
-    guildId
-  });
-
-  if (welcomeLastJoined === null) {
-    await _DataBase.WelcomeLastJoinedSchema.create({
-      guildId,
-      lastJoinedCount: ['', '', lastMemberId]
-    });
-    welcomeLastJoined = await _DataBase.WelcomeLastJoinedSchema.findOne({
-      guildId
-    });
-    return 'notFound';
-  }
-
-  if (welcomeLastJoined) {
-    const {
-      lastJoinedCount
-    } = welcomeLastJoined;
-    await _DataBase.WelcomeLastJoinedSchema.updateOne({
-      guildId
-    }, {
-      $set: {
-        lastJoinedCount: lastJoinedCount.includes(lastMemberId) ? lastJoinedCount : [...lastJoinedCount, lastMemberId].slice(1)
-      }
-    }).then(async _ => {});
-    return lastJoinedCount.includes(lastMemberId) ? 'found' : 'notFound';
-  }
-};
-
-exports.makeLastJoinedOne = makeLastJoinedOne;
-
-const twitchLiveStreamTempChannels = async (guild, categoryId, isLive, twitchUsername, discordId) => {
-  const memberId = _static.default.generalRoles.filter(({
+const twitchLiveStreamTempChannels = async (serverInfo, guild, categoryId, isLive, twitchUsername, discordId) => {
+  const memberId = serverInfo.generalRoles.filter(({
     name,
     id
   }) => {
@@ -484,25 +156,24 @@ const twitchLiveStreamTempChannels = async (guild, categoryId, isLive, twitchUse
       return id;
     }
   });
-
-  if (isLive) return await guild.channels.create((0, _helpers.fontGenerator)(`${twitchUsername} Stream VC`), {
+  if (isLive) return await guild.channels.create((0, _helpers.fontGenerator)(serverInfo, `${twitchUsername} Stream VC`), {
     type: 'GUILD_VOICE',
     parent: categoryId
   }).then(async vc => {
-    const streamTextChannel = await guild.channels.create((0, _helpers.fontGenerator)(`${twitchUsername} Stream`), {
+    const streamTextChannel = await guild.channels.create((0, _helpers.fontGenerator)(serverInfo, `${twitchUsername} Stream`), {
       type: 'GUILD_TEXT',
       parent: categoryId
     });
     [vc, streamTextChannel].forEach(async streamChannel => {
-      await streamChannel.permissionOverwrites.set([..._static.default.TwitchApi.liveStreamChannelRoles, {
+      await streamChannel.permissionOverwrites.set([...serverInfo.TwitchApi.liveStreamChannelRoles, {
         id: discordId,
         allow: [_discord.Permissions.FLAGS.CREATE_PRIVATE_THREADS, _discord.Permissions.FLAGS.CREATE_PUBLIC_THREADS, _discord.Permissions.FLAGS.SEND_MESSAGES_IN_THREADS, _discord.Permissions.FLAGS.CONNECT, _discord.Permissions.FLAGS.SEND_MESSAGES]
       }, {
-        id: _static.default.TwitchApi.botsRole.id,
-        allow: [..._static.default.TwitchApi.botsRole.allow]
+        id: serverInfo.TwitchApi.botsRole.id,
+        allow: [...serverInfo.TwitchApi.botsRole.allow]
       }]);
     });
-    const streamQueueVC = await guild.channels.create((0, _helpers.fontGenerator)(`${twitchUsername} Queue`), {
+    const streamQueueVC = await guild.channels.create((0, _helpers.fontGenerator)(serverInfo, `${twitchUsername} Queue`), {
       type: 'GUILD_VOICE',
       parent: categoryId
     });
@@ -510,12 +181,12 @@ const twitchLiveStreamTempChannels = async (guild, categoryId, isLive, twitchUse
       id: memberId[0].id,
       allow: [_discord.Permissions.FLAGS.CONNECT]
     }, {
-      id: _static.default.TwitchApi.botsRole.id,
-      allow: [..._static.default.TwitchApi.botsRole.allow]
+      id: serverInfo.TwitchApi.botsRole.id,
+      allow: [...serverInfo.TwitchApi.botsRole.allow]
     }]);
     return streamQueueVC;
   });else if (!isLive) {
-    [(0, _helpers.fontGenerator)(`${twitchUsername}-stream`), (0, _helpers.fontGenerator)(`${twitchUsername} Stream VC`), (0, _helpers.fontGenerator)(`${twitchUsername} Queue`)].forEach(async item => {
+    [(0, _helpers.fontGenerator)(serverInfo, `${twitchUsername}-stream`), (0, _helpers.fontGenerator)(serverInfo, `${twitchUsername} Stream VC`), (0, _helpers.fontGenerator)(serverInfo, `${twitchUsername} Queue`)].forEach(async item => {
       await guild.channels.cache.filter(i => i.name === item).map(i => i).forEach(async i => {
         await i.delete();
       });
@@ -525,6 +196,298 @@ const twitchLiveStreamTempChannels = async (guild, categoryId, isLive, twitchUse
 
 exports.twitchLiveStreamTempChannels = twitchLiveStreamTempChannels;
 
-const checkServerManager = member => member.guild.members.cache.get(member.id).roles.highest.position >= member.guild.roles.cache.get(_static.default.lowestMangmentRole).position;
+const checkServerManager = member => member.guild.members.cache.get(member.id).roles.highest.position >= member.guild.roles.cache.get((0, _static.selectServer)(member.guild.id).lowestMangmentRole).position;
 
 exports.checkServerManager = checkServerManager;
+
+const UserData = async (guild, user, data = {
+  type: 'create',
+  warnsAmount: 0,
+  twitchNewData: [undefined],
+  twitchChannelId: '',
+  getDataFilter: {
+    guildId: guild.id
+  }
+}) => {
+  const {
+    twitchNewData,
+    type,
+    warnsAmount,
+    twitchChannelId,
+    getDataFilter
+  } = data;
+  let userOldData = await _DataBase.UserSchema.findOne({
+    guildId: guild.id,
+    userId: user?.id
+  });
+
+  if (type === 'create' || userOldData === null) {
+    await _DataBase.UserSchema.create({
+      guildId: guild.id,
+      userId: user?.id,
+      warns: 0,
+      twitchChannelId: '0',
+      twitchOldState: [undefined],
+      twitchNewState: twitchNewData,
+      isMuted: false
+    });
+    userOldData = await _DataBase.UserSchema.findOne({
+      guildId: guild.id,
+      userId: user?.id
+    });
+  }
+
+  if (type === 'warn') {
+    await _DataBase.UserSchema.updateOne({
+      guildId: guild.id,
+      userId: user?.id
+    }, {
+      $set: {
+        warns: (await userOldData.warns) + warnsAmount >= 5 ? 0 : (await userOldData.warns) + warnsAmount
+      }
+    }).then(_ => {});
+  }
+
+  if (type === 'unwarn') {
+    await _DataBase.UserSchema.updateOne({
+      guildId: guild.id,
+      userId: user?.id
+    }, {
+      $set: {
+        warns: (await userOldData.warns) - warnsAmount
+      }
+    }).then(_ => {});
+  }
+
+  if (type === 'warnList') return await userOldData.warns;
+
+  if (type === 'twitch') {
+    await _DataBase.UserSchema.updateOne({
+      guildId: guild.id,
+      userId: user?.id
+    }, {
+      $set: {
+        twitchChannelId,
+        twitchOldState: await userOldData.twitchNewState,
+        twitchNewState: twitchNewData
+      }
+    }).then(_ => {});
+  }
+
+  if (type === 'mute') {
+    await _DataBase.UserSchema.updateOne({
+      guildId: guild.id,
+      userId: user?.id
+    }, {
+      $set: {
+        isMuted: true
+      }
+    }).then(_ => {});
+  }
+
+  if (type === 'unmute') {
+    await _DataBase.UserSchema.updateOne({
+      guildId: guild.id,
+      userId: user?.id
+    }, {
+      $set: {
+        isMuted: false
+      }
+    }).then(_ => {});
+  }
+
+  if (type === 'getData') {
+    return await _DataBase.UserSchema.find(getDataFilter);
+  }
+
+  return await _DataBase.UserSchema.findOne({
+    guildId: guild.id,
+    userId: user?.id
+  });
+};
+
+exports.UserData = UserData;
+
+const GuildData = async (guild, data = {
+  type: 'create',
+  badWord: '',
+  liveStatus: {},
+  LastJoinedMemberId: ''
+}) => {
+  const {
+    type,
+    badWord,
+    liveStatus,
+    LastJoinedMemberId
+  } = data;
+  let guildOldData = await _DataBase.GuildSchema.findOne({
+    guildId: guild.id
+  });
+
+  if (type === 'create' || guildOldData === null) {
+    await _DataBase.GuildSchema.create({
+      guildId: guild.id,
+      badWords: [],
+      liveStatus: [],
+      lastJoinedMembers: ['', '', '']
+    });
+    guildOldData = await _DataBase.GuildSchema.findOne({
+      guildId: guild.id
+    });
+  }
+
+  if (type === 'badWordAdd') {
+    await _DataBase.GuildSchema.updateOne({
+      guildId: guild.id
+    }, {
+      $set: {
+        badWords: [...new Set([...guildOldData.badWords, badWord])]
+      }
+    }).then(_ => {});
+  }
+
+  if (type === 'badWordRemove') {
+    await _DataBase.GuildSchema.updateOne({
+      guildId: guild.id
+    }, {
+      $set: {
+        badWords: [...new Set([guildOldData.badWords.filter(i => i !== badWord)])]
+      }
+    }).then(_ => {});
+  }
+
+  if (type === 'badWordShow') return await guildOldData.badWords;
+
+  if (type === 'liveStatusUpdate') {
+    const oldLiveStatusChannel = await guildOldData.liveStatus.filter(liveState => liveState.roleId === liveStatus.roleId);
+
+    if (oldLiveStatusChannel.length === 0) {
+      await _DataBase.GuildSchema.updateOne({
+        guildId: guild.id
+      }, {
+        $set: {
+          liveStatus: [...(await guildOldData.liveStatus), {
+            roleId: liveStatus.roleId,
+            channelId: liveStatus.channelId
+          }]
+        }
+      }).then(_ => {});
+    }
+
+    if (oldLiveStatusChannel.length > 0) {
+      await _DataBase.GuildSchema.updateOne({
+        guildId: guild.id
+      }, {
+        $set: {
+          liveStatus: [...(await guildOldData.liveStatus.filter(liveState => liveState.roleId !== liveStatus.roleId)), {
+            roleId: liveStatus.roleId,
+            channelId: liveStatus.channelId
+          }]
+        }
+      }).then(_ => {});
+    }
+  }
+
+  if (type === 'lastJoinedMembers') {
+    await _DataBase.GuildSchema.updateOne({
+      guildId: guild.id
+    }, {
+      $set: {
+        lastJoinedMembers: (await guildOldData.lastJoinedMembers.includes(LastJoinedMemberId)) ? await guildOldData.lastJoinedMembers : [...(await guildOldData.lastJoinedMembers), LastJoinedMemberId].slice(1)
+      }
+    }).then(_ => {});
+    return guildOldData;
+  }
+
+  return await _DataBase.GuildSchema.findOne({
+    guildId: guild.id
+  });
+};
+
+exports.GuildData = GuildData;
+
+const warnMember = async (serverInfo, guild, user, warnsAmount) => {
+  const userOldWarnsData = await UserData(guild, user, {
+    type: 'getData',
+    getDataFilter: {
+      guildId: guild.id,
+      userId: user.id
+    }
+  });
+  const embed = new _discord.MessageEmbed().setColor('#ff0000').setTitle(`⚠ User Muted`).addField('Warn Info: ', `<@${user.id}> was Muted For 2Days`, false).addField('Warns Amount: ', `${userOldWarnsData.warns} Warns`, true).addField('Reason: ', `<@${user.id}> was Warned ${userOldWarnsData.warns === 5 ? '5' : 'more than 5'} Times`, true).setFooter({
+    text: guild.name,
+    iconURL: guild.iconURL()
+  }).setThumbnail(user.user.avatarURL()).setTimestamp(Date.now());
+
+  if ((await userOldWarnsData[0].warns) + warnsAmount < 5) {
+    UserData(guild, user, {
+      warnsAmount,
+      type: 'warn'
+    });
+  }
+
+  if ((await userOldWarnsData[0].warns) + warnsAmount >= 5) {
+    UserData(guild, user, {
+      warnsAmount,
+      type: 'warn'
+    }).then(async _ => {
+      user.timeout((0, _ms.default)('2d'), 'Got 5 Warns').then(async _ => {
+        UserData(guild, user, {
+          type: 'mute'
+        });
+      });
+      guild.channels.cache.get(serverInfo.logsChannelsId).send({
+        embeds: [embed]
+      });
+    });
+  }
+};
+
+exports.warnMember = warnMember;
+
+const checkLiveStatus = async (serverInfo, guild, role) => {
+  const guildOldData = await GuildData(guild, {
+    type: 'getData'
+  });
+  const guildOldLiveStatusChannels = guildOldData.liveStatus.filter(liveState => liveState.roleId === role.id);
+  let channelId;
+  if (guildOldLiveStatusChannels.length === 0) await guild.channels.create(`${role.name}: `, {
+    type: 'GUILD_VOICE',
+    parent: serverInfo.liveStatus.liveCategoryId
+  }).then(async channel => {
+    await GuildData(guild, {
+      type: 'liveStatusUpdate',
+      liveStatus: {
+        roleId: role.id,
+        channelId: channel.id
+      }
+    });
+    channelId = await channel.id;
+  });
+
+  if (guildOldLiveStatusChannels.length > 0) {
+    if (await guild.channels.cache.get(guildOldLiveStatusChannels[0].channelId)) {
+      channelId = guildOldLiveStatusChannels[0].channelId;
+    }
+
+    if (!(await guild.channels.cache.get(guildOldLiveStatusChannels[0].channelId))) {
+      await guild.channels.create(`${role.name}: `, {
+        type: 'GUILD_VOICE',
+        parent: serverInfo.liveStatus.liveCategoryId
+      }).then(async channel => {
+        await GuildData(guild, {
+          type: 'liveStatusUpdate',
+          liveStatus: {
+            roleId: role.id,
+            channelId: channel.id
+          }
+        });
+        channelId = await channel.id;
+      });
+    }
+  }
+
+  return channelId;
+};
+
+exports.checkLiveStatus = checkLiveStatus;

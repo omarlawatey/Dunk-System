@@ -1,27 +1,37 @@
 {
   "dependencies": {
-    "@discordjs/voice": "^0.8.0",
-    "canvas": "^2.9.0",
-    "canvas-senpai": "^2.0.3",
-    "discord-temp-channels": "^3.0.2",
+    "@babel/helper-explode-assignable-expression": "^7.16.7",
+    "@babel/helper-member-expression-to-functions": "^7.17.7",
+    "@babel/plugin-transform-parameters": "^7.16.7",
+    "babel": "^6.23.0",
+    "canvas": "^2.9.1",
     "discord.js": "^13.6.0",
     "dotenv": "^14.2.0",
     "express": "^4.17.3",
+    "form-data": "^4.0.0",
+    "gifwrap": "^0.10.1",
+    "import-lazy": "^4.0.0",
+    "is-extglob": "^2.1.1",
     "jimp": "^0.16.1",
     "mongoose": "^6.2.4",
     "node-twitch": "^0.4.5",
     "nodemon": "^2.0.15",
+    "semver": "^7.3.7",
     "spamnya": "^1.1.1",
-    "yarn": "^1.22.17",
     "youtube-notification": "^1.1.0"
   },
   "scripts": {
-    "start": " node dist/index.js",
+    "start": "node dist/index.js",
     "build": "",
     "dev": "nodemon --ignore dist && npm start ",
     "lint": "eslint"
   },
   "engines": {
     "node": "16.14.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.8",
+    "@babel/core": "^7.16.7",
+    "@babel/preset-env": "^7.16.8"
   }
 }

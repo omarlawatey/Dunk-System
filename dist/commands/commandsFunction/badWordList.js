@@ -13,11 +13,13 @@ const badWordList = async interaction => {
   } = interaction;
 
   if (commandName === 'badwordlist') {
-    let list = await (0, _subFunctions.makeBadWord)(interaction.guild, '', 'show');
+    let list = await (0, _subFunctions.GuildData)(interaction.guild, {
+      type: 'badWordShow'
+    });
     await interaction.reply({
-      content: await list.map((item, index) => {
+      content: list.length ? list.map((item, index) => {
         return `${index + 1}) ${item}`;
-      }).join('\n'),
+      }).join('\n') : 'There is no Bad words',
       ephemeral: true
     });
   }

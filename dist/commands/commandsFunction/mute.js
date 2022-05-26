@@ -1,25 +1,22 @@
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports.default = void 0;
 
-var _discord = require("discord.js");
+var _discord = require('discord.js');
 
-var _ms = _interopRequireDefault(require("ms"));
+var _ms = _interopRequireDefault(require('ms'));
 
-var _static = _interopRequireDefault(require("../../assets/static"));
+var _subFunctions = require('../../assets/subFunctions');
 
-var _DataBase = require("../../DataBase");
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const mute = interaction => {
-  const {
-    commandName,
-    options
-  } = interaction;
+const mute = (serverInfo, interaction) => {
+  const { commandName, options } = interaction;
 
   if (commandName === 'mute') {
     let user = options.getString('user') || 0;
@@ -65,20 +62,27 @@ const mute = interaction => {
       return;
     }
 
-    const embed = new _discord.MessageEmbed().setColor('#ff0000').setTitle(`🔈 User Muted`).addField('Mute Info', `<@${interaction.user.id}> Muted <@${user.id}>`, true).addField('Mute Time', time, true).addField('Reason: ', reason, false).setFooter({
-      text: interaction.guild.name,
-      iconURL: interaction.guild.iconURL()
-    }).setThumbnail(user.user.avatarURL()).setTimestamp(Date.now());
+    const embed = new _discord.MessageEmbed()
+      .setColor('#ff0000')
+      .setTitle(`🔈 User Muted`)
+      .addField('Mute Info', `<@${interaction.user.id}> Muted <@${user.id}>`, true)
+      .addField('Mute Time', time, true)
+      .addField('Reason: ', reason, false)
+      .setFooter({
+        text: interaction.guild.name,
+        iconURL: interaction.guild.iconURL()
+      })
+      .setThumbnail(user.user.avatarURL())
+      .setTimestamp(Date.now());
     user.timeout((0, _ms.default)(time), reason).then(async _ => {
       interaction.reply({
         content: `<@${user.id}> is muted for ${time}`,
         ephemeral: true
       });
-      await _DataBase.MutedSchema.create({
-        guildId: await interaction.guild.id,
-        memberId: await user.id
+      await (0, _subFunctions.UserData)(interaction.guild, user, {
+        type: 'mute'
       });
-      interaction.guild.channels.cache.get(_static.default.logsChannelsId).send({
+      interaction.guild.channels.cache.get(serverInfo.logsChannelsId).send({
         embeds: [embed]
       });
     });

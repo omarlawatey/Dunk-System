@@ -7,11 +7,7 @@ exports.default = void 0;
 
 var _discord = require("discord.js");
 
-var _static = _interopRequireDefault(require("../../assets/static"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const role = async interaction => {
+const role = async (serverInfo, interaction) => {
   const {
     commandName,
     options
@@ -86,7 +82,7 @@ const role = async interaction => {
       ephemeral: true
     });
     const embed = type === 'remove' ? new _discord.MessageEmbed().setColor('000000').setTitle(`Role has been removed`).addField('Promoted user', `<@${user.id}>`, false).addField('Given role', `<@&${role.id}>`, false).addField('Promotion giver', `<@${interaction.user.id}>`, false).addField('Promotion reason', reason, false) : new _discord.MessageEmbed().setColor('#0099ff').setTitle(`Role has been added`).addField('Promoted user', `<@${user.id}>`, false).addField('Given role', `<@&${role.id}>`, false).addField('Promotion giver', `<@${interaction.user.id}>`, false);
-    await interaction.guild.channels.cache.get(_static.default.roleUpadte.Id).send({
+    await interaction.guild.channels.cache.get(serverInfo.roleUpadte.Id).send({
       embeds: [embed]
     });
   }

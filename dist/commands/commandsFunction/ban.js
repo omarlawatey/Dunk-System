@@ -7,11 +7,7 @@ exports.default = void 0;
 
 var _discord = require("discord.js");
 
-var _static = _interopRequireDefault(require("../../assets/static"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const ban = interaction => {
+const ban = (serverInfo, interaction) => {
   const {
     commandName,
     options
@@ -59,7 +55,7 @@ const ban = interaction => {
         content: `<@${user.id}> is Banned`,
         ephemeral: true
       });
-      interaction.guild.channels.cache.get(_static.default.logsChannelsId).send({
+      interaction.guild.channels.cache.get(serverInfo.logsChannelsId).send({
         embeds: [embed]
       });
     });

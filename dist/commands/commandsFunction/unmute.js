@@ -1,23 +1,14 @@
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports.default = void 0;
 
-var _static = _interopRequireDefault(require("../../assets/static"));
+var _subFunctions = require('../../assets/subFunctions');
 
-var _subFunctions = require("../../assets/subFunctions");
-
-var _DataBase = require("../../DataBase");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const unMuted = interaction => {
-  const {
-    commandName,
-    options
-  } = interaction;
+const unMuted = (serverInfo, interaction) => {
+  const { commandName, options } = interaction;
 
   if (commandName === 'unmute') {
     let user = options.getString('user') || 0;
@@ -66,15 +57,15 @@ const unMuted = interaction => {
     }
 
     user.timeout(0, reason).then(async _ => {
-      await _DataBase.MutedSchema.deleteOne({
-        guildId: _static.default.serverId,
-        memberId: user.id
+      (0, _subFunctions.UserData)(interaction.guild, user, {
+        type: 'unmute'
       });
+
       interaction.reply({
         content: `<@${user.id}> is unmuted. Reason: ${reason}`,
         ephemeral: true
       });
-      (0, _subFunctions.unMuteEmbed)(interaction.guild, user, reason);
+      (0, _subFunctions.unMuteEmbed)(serverInfo, interaction.guild, user, reason);
     });
   }
 };

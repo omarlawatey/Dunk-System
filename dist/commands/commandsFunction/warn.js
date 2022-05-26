@@ -7,13 +7,9 @@ exports.default = void 0;
 
 var _discord = require("discord.js");
 
-var _static = _interopRequireDefault(require("../../assets/static"));
-
 var _subFunctions = require("../../assets/subFunctions");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const warn = interaction => {
+const warn = async (serverInfo, interaction) => {
   const {
     commandName,
     options
@@ -62,14 +58,13 @@ const warn = interaction => {
       text: interaction.guild.name,
       iconURL: interaction.guild.iconURL()
     }).setThumbnail(user.user.avatarURL()).setTimestamp(Date.now());
-    (0, _subFunctions.makeWarn)(interaction.guild, user, warnsAmount, 'warn').then(_ => {
-      interaction.reply({
-        content: `<@${user.id}> is warned`,
-        ephemeral: true
-      });
-      interaction.guild.channels.cache.get(_static.default.logsChannelsId).send({
-        embeds: [embed]
-      });
+    await (0, _subFunctions.warnMember)(serverInfo, interaction.guild, user, warnsAmount);
+    interaction.reply({
+      content: `<@${user.id}> is warned`,
+      ephemeral: true
+    });
+    interaction.guild.channels.cache.get(serverInfo.logsChannelsId).send({
+      embeds: [embed]
     });
   }
 };

@@ -3,61 +3,21 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "BadWord", {
+Object.defineProperty(exports, "GuildSchema", {
   enumerable: true,
   get: function () {
-    return _BadWordSchema.default;
+    return _GuildSchema.default;
   }
 });
-Object.defineProperty(exports, "LiveStatusSchema", {
+Object.defineProperty(exports, "UserSchema", {
   enumerable: true,
   get: function () {
-    return _LiveStatusSchema.default;
-  }
-});
-Object.defineProperty(exports, "MutedSchema", {
-  enumerable: true,
-  get: function () {
-    return _MutedSchema.default;
-  }
-});
-Object.defineProperty(exports, "ServerInfo", {
-  enumerable: true,
-  get: function () {
-    return _ServerInfoSchema.default;
-  }
-});
-Object.defineProperty(exports, "TwitchStreamInfo", {
-  enumerable: true,
-  get: function () {
-    return _TwitchStreamInfoSchema.default;
-  }
-});
-Object.defineProperty(exports, "WarnSchema", {
-  enumerable: true,
-  get: function () {
-    return _WarnSchema.default;
-  }
-});
-Object.defineProperty(exports, "WelcomeLastJoinedSchema", {
-  enumerable: true,
-  get: function () {
-    return _WelcomeLastJoinedSchema.default;
+    return _UserSchema.default;
   }
 });
 
-var _WarnSchema = _interopRequireDefault(require("./WarnSchema"));
+var _UserSchema = _interopRequireDefault(require("./UserSchema"));
 
-var _MutedSchema = _interopRequireDefault(require("./MutedSchema"));
-
-var _LiveStatusSchema = _interopRequireDefault(require("./LiveStatusSchema"));
-
-var _ServerInfoSchema = _interopRequireDefault(require("./ServerInfoSchema"));
-
-var _BadWordSchema = _interopRequireDefault(require("./BadWordSchema"));
-
-var _TwitchStreamInfoSchema = _interopRequireDefault(require("./TwitchStreamInfoSchema"));
-
-var _WelcomeLastJoinedSchema = _interopRequireDefault(require("./WelcomeLastJoinedSchema"));
+var _GuildSchema = _interopRequireDefault(require("./GuildSchema"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
