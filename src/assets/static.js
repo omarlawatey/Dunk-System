@@ -1,6 +1,6 @@
 import { Permissions } from 'discord.js';
 
-const testMode = true;
+const testMode = false;
 
 export const serverInfo = !testMode
   ? [
