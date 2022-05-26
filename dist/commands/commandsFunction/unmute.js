@@ -1,14 +1,17 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _subFunctions = require('../../assets/subFunctions');
+var _subFunctions = require("../../assets/subFunctions");
 
 const unMuted = (serverInfo, interaction) => {
-  const { commandName, options } = interaction;
+  const {
+    commandName,
+    options
+  } = interaction;
 
   if (commandName === 'unmute') {
     let user = options.getString('user') || 0;
@@ -60,7 +63,6 @@ const unMuted = (serverInfo, interaction) => {
       (0, _subFunctions.UserData)(interaction.guild, user, {
         type: 'unmute'
       });
-
       interaction.reply({
         content: `<@${user.id}> is unmuted. Reason: ${reason}`,
         ephemeral: true

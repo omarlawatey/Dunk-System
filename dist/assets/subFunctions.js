@@ -24,8 +24,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const defaultBaseRoles = async (serverInfo, client) => {
   const guild = await client.guilds.cache.get(serverInfo.serverId);
   serverInfo.tempChannels.forEach(async tempChannel => {
-    const editVc = guild.channels.cache.get(tempChannel.editChannelId.id);
-    const quickVc = guild.channels.cache.get(tempChannel.restrictedChannels[1]);
+    const editVc = guild?.channels.cache.get(tempChannel.editChannelId.id);
+    const quickVc = guild?.channels.cache.get(tempChannel.restrictedChannels[1]);
 
     try {
       await editVc.permissionOverwrites.set([...tempChannel.editChannelId.baseRoles, {
@@ -46,7 +46,7 @@ const defaultBaseRoles = async (serverInfo, client) => {
 
 exports.defaultBaseRoles = defaultBaseRoles;
 
-const createChannel = (newState, activityName, tempChannel) => newState.guild.channels.create(activityName, {
+const createChannel = (newState, activityName, tempChannel) => newState.guild?.channels.create(activityName, {
   type: 'GUILD_VOICE',
   parent: newState?.channel?.parent?.id
 }).then(vc => {
@@ -61,7 +61,7 @@ exports.createChannel = createChannel;
 
 const channelArranger = (arr, guild, categoryId, restrictedChannels) => {
   const uniqueValues = [...new Set((0, _helpers.findDuplicates)(arr))];
-  const filterdChannels = uniqueValues.map(item => guild.channels.cache.filter(channel => channel.name.includes(item) && channel?.parent?.id === categoryId && !restrictedChannels.includes(channel?.id)).map(i => i));
+  const filterdChannels = uniqueValues.map(item => guild?.channels.cache.filter(channel => channel.name.includes(item) && channel?.parent?.id === categoryId && !restrictedChannels.includes(channel?.id)).map(i => i));
   filterdChannels.forEach((tempChannels, tempsIndex) => {
     // let allChannels = [];
     tempChannels.forEach((tempChannel, tempIndex) => {
@@ -93,7 +93,7 @@ const userActivitey = newState => {
 exports.userActivitey = userActivitey;
 
 const unMuteEmbed = (serverInfo, guild, member, reason) => {
-  guild.channels.cache.get(serverInfo.logsChannelsId).send({
+  guild?.channels.cache.get(serverInfo.logsChannelsId).send({
     embeds: [new _discord.MessageEmbed().setColor('#0099ff').setTitle(`🔈 User Unmuted`).addField('Unmute Info: ', `Unmuted <@${member?.id}>`, true).addField('Reason: ', reason, false).setFooter({
       text: guild.name,
       iconURL: guild.iconURL()

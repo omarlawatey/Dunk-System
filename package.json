@@ -21,9 +21,9 @@
     "youtube-notification": "^1.1.0"
   },
   "scripts": {
-    "start": "node dist/index.js",
-    "build": "",
-    "dev": "nodemon --ignore dist && npm start ",
+    "start": "npm run build && node dist/index.js",
+    "build": "node ./dist/index.js",
+    "dev": "nodemon --ignore dist && babel --plugins @babel/plugin-transform-modules-commonjs ./src -d dist && node dist/index.js",
     "lint": "eslint"
   },
   "engines": {
@@ -32,6 +32,7 @@
   "devDependencies": {
     "@babel/cli": "^7.16.8",
     "@babel/core": "^7.16.7",
+    "@babel/plugin-transform-modules-commonjs": "^7.18.2",
     "@babel/preset-env": "^7.16.8"
   }
 }

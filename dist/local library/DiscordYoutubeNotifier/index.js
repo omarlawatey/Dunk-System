@@ -1,3 +1,5 @@
+"use strict";
+
 const config = require('./config.json'),
       Discord = require('discord.js'),
       Parser = require('rss-parser'),

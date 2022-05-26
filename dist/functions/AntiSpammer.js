@@ -1,21 +1,19 @@
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _spamnya = _interopRequireDefault(require('spamnya'));
+var _spamnya = _interopRequireDefault(require("spamnya"));
 
-var _subFunctions = require('../assets/subFunctions');
+var _subFunctions = require("../assets/subFunctions");
 
-var _ms = _interopRequireDefault(require('ms'));
+var _ms = _interopRequireDefault(require("ms"));
 
-var _discord = require('discord.js');
+var _discord = require("discord.js");
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const AntiSpammer = async (serverInfo, message) => {
   if ((0, _subFunctions.checkServerManager)(message.member)) return;
@@ -28,58 +26,32 @@ const AntiSpammer = async (serverInfo, message) => {
         type: 'warn',
         warnsAmount: 1
       });
-
-      if (
-        await _DataBase.MutedSchema.findOne({
-          guildId: await message.guild.id,
-          memberId: await message.member.id
-        })
-      ) {
-        return;
-      }
-
       (0, _subFunctions.UserData)(message.guild, message.member, {
         type: 'mute'
       });
-
-      const embed = new _discord.MessageEmbed()
-        .setColor('#ff0000')
-        .setTitle(`⚠ User Warned`)
-        .addField('Warn Info: ', `<@${message.member.user.id}> is warned`, false)
-        .addField('Warns Amount: ', `1 Warns`, true)
-        .addField('Reason: ', 'Spamed in chat', true)
-        .setFooter({
-          text: message.guild.name,
-          iconURL: message.guild.iconURL()
-        })
-        .setThumbnail(message.member.avatarURL())
-        .setTimestamp(Date.now());
+      const embed = new _discord.MessageEmbed().setColor('#ff0000').setTitle(`⚠ User Warned`).addField('Warn Info: ', `<@${message.member.user.id}> is warned`, false).addField('Warns Amount: ', `1 Warns`, true).addField('Reason: ', 'Spamed in chat', true).setFooter({
+        text: message.guild.name,
+        iconURL: message.guild.iconURL()
+      }).setThumbnail(message.member.avatarURL()).setTimestamp(Date.now());
       message.guild.channels.cache.get(serverInfo.logsChannelsId).send({
         embeds: [embed]
       });
     });
 
     try {
-      await message.channel.messages
-        .fetch({
-          limit: 100
-        })
-        .then(async messages => {
-          messages = await messages
-            .filter(m => m.author.id === message.member.id)
-            .map(i => i)
-            .slice(0, 5);
-          message.channel.bulkDelete(messages).catch(error => console.log(error.stack));
-          message
-            .reply({
-              content: `${message.member} Spamed In chat`
-            })
-            .then(msg => {
-              setTimeout(() => {
-                msg.delete();
-              }, 5000);
-            });
+      await message.channel.messages.fetch({
+        limit: 100
+      }).then(async messages => {
+        messages = await messages.filter(m => m.author.id === message.member.id).map(i => i).slice(0, 5);
+        message.channel.bulkDelete(messages).catch(error => console.log(error.stack));
+        message.reply({
+          content: `${message.member} Spamed In chat`
+        }).then(msg => {
+          setTimeout(() => {
+            msg.delete();
+          }, 5000);
         });
+      });
     } catch (err) {
       err;
     }

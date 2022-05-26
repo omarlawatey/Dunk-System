@@ -10,8 +10,8 @@ export const defaultBaseRoles = async (serverInfo, client) => {
   const guild = await client.guilds.cache.get(serverInfo.serverId);
 
   serverInfo.tempChannels.forEach(async tempChannel => {
-    const editVc = guild.channels.cache.get(tempChannel.editChannelId.id);
-    const quickVc = guild.channels.cache.get(tempChannel.restrictedChannels[1]);
+    const editVc = guild?.channels.cache.get(tempChannel.editChannelId.id);
+    const quickVc = guild?.channels.cache.get(tempChannel.restrictedChannels[1]);
 
     try {
       await editVc.permissionOverwrites.set([
@@ -38,7 +38,7 @@ export const defaultBaseRoles = async (serverInfo, client) => {
 };
 
 export const createChannel = (newState, activityName, tempChannel) =>
-  newState.guild.channels
+  newState.guild?.channels
     .create(activityName, {
       type: 'GUILD_VOICE',
       parent: newState?.channel?.parent?.id
@@ -58,7 +58,7 @@ export const channelArranger = (arr, guild, categoryId, restrictedChannels) => {
   const uniqueValues = [...new Set(findDuplicates(arr))];
 
   const filterdChannels = uniqueValues.map(item =>
-    guild.channels.cache
+    guild?.channels.cache
       .filter(
         channel =>
           channel.name.includes(item) && channel?.parent?.id === categoryId && !restrictedChannels.includes(channel?.id)
@@ -98,7 +98,7 @@ export const userActivitey = newState => {
 };
 
 export const unMuteEmbed = (serverInfo, guild, member, reason) => {
-  guild.channels.cache.get(serverInfo.logsChannelsId).send({
+  guild?.channels.cache.get(serverInfo.logsChannelsId).send({
     embeds: [
       new MessageEmbed()
         .setColor('#0099ff')
