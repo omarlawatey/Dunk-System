@@ -21,9 +21,10 @@
     "youtube-notification": "^1.1.0"
   },
   "scripts": {
-    "start": "npm run build && node dist/index.js",
+    "start": "node ./dist/index.js",
     "build": "node ./dist/index.js",
-    "dev": "nodemon --ignore dist && babel --plugins @babel/plugin-transform-modules-commonjs ./src -d dist && node dist/index.js",
+    "dev": "",
+    "test": "nodemon --ignore dist && babel --plugins @babel/plugin-transform-modules-commonjs ./src -d dist && node dist/index.js",
     "lint": "eslint"
   },
   "engines": {
