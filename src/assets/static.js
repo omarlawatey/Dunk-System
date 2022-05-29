@@ -7,44 +7,6 @@ export const serverInfo = !testMode
       {
         serverId: '937480624602775572',
         generalRoles: [{ name: 'members', id: '952242871854063669' }],
-        // moderation: {
-        //   adminstrator: [
-        //     {
-        //       id: '949153972973875289',
-        //       type: 'ROLE',
-        //       permission: true
-        //     },
-        //     {
-        //       id: '949153972973875288',
-        //       type: 'ROLE',
-        //       permission: true
-        //     },
-        //     {
-        //       id: '949153972973875283',
-        //       type: 'ROLE',
-        //       permission: true
-        //     }
-        //   ],
-        //   moderator: [
-        //     {
-        //       id: '949153972973875285',
-        //       type: 'ROLE',
-        //       permission: true
-        //     },
-        //     {
-        //       id: '949153972973875284',
-        //       type: 'ROLE',
-        //       permission: true
-        //     }
-        //   ],
-        //   general: [
-        //     {
-        //       id: '949153972948701236',
-        //       type: 'ROLE',
-        //       permission: true
-        //     }
-        //   ]
-        // },
         lowestMangmentRole: '960633351427981332',
         welcome: {
           Id: '941665272811630632',
@@ -130,7 +92,6 @@ __**Versions**__
           }
         ],
         logsChannelsId: '950087058020528149',
-        // serverInfoChannelId: '949561183122378813',
         liveStatus: {
           liveCategoryId: '952835995580129301',
           Roles: [
