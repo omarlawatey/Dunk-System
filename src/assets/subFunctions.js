@@ -403,7 +403,7 @@ export const GuildData = async (
       },
       {
         $set: {
-          badWords: [...new Set([guildOldData.badWords.filter(i => i !== badWord)])]
+          badWords: [...new Set([...guildOldData.badWords.filter(i => i !== badWord)])]
         }
       }
     ).then(_ => {});
