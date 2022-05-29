@@ -16,8 +16,8 @@
     "youtube-notification": "^1.1.0"
   },
   "scripts": {
-    "start": "babel src -d dist && node ./dist",
-    "build": "babel src -d dist && node ./dist",
+    "start": "node ./dist",
+    "build": "babel src -d dist",
     "dev": "nodemon --exec babel-node ./src",
     "lint": "eslint"
   },
