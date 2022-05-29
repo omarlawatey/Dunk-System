@@ -484,8 +484,12 @@ export const warnMember = async (serverInfo, guild, user, warnsAmount) => {
     .setColor('#ff0000')
     .setTitle(`⚠ User Muted`)
     .addField('Warn Info: ', `<@${user.id}> was Muted For 2Days`, false)
-    .addField('Warns Amount: ', `${userOldWarnsData.warns} Warns`, true)
-    .addField('Reason: ', `<@${user.id}> was Warned ${userOldWarnsData.warns === 5 ? '5' : 'more than 5'} Times`, true)
+    .addField('Warns Amount: ', `${await userOldWarnsData.warns} Warns`, true)
+    .addField(
+      'Reason: ',
+      `<@${user.id}> was Warned ${(await userOldWarnsData.warns) === 5 ? '5' : 'more than 5'} Times`,
+      true
+    )
     .setFooter({
       text: guild.name,
       iconURL: guild.iconURL()

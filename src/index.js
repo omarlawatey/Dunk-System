@@ -28,8 +28,6 @@ import Server from './Servers/Server';
 
 // =========================================
 
-const { serverId, welcome, tempChannels, logsChannelsId, linkBlockerIgnoreChannels } = serverInfo;
-
 const client = new DiscordJS.Client({
   intents: [
     Intents.FLAGS.GUILDS,
@@ -111,7 +109,7 @@ client.on('messageCreate', message => {
   if (message?.member?.user?.bot) return;
 
   const server = selectServer(message.guild.id);
-  if (server.linkBlockerIgnoreChannels?.includes(message.channel.id)) return;
+  if (!server.linkBlockerChannels?.includes(message.channel.id)) return;
 
   LinkBlocker(server, message);
 });
