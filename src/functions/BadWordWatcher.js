@@ -16,9 +16,9 @@ const BadWordWatcher = async (serverInfo, message) => {
       const embed = new MessageEmbed()
         .setColor('#ff0000')
         .setTitle(`⚠ User Warned`)
-        .addField('Warn Info: ', `<@${message.member.user.id}> warned <@${message.member.user.id}>`, false)
+        .addField('Warn Info: ', `<@${message.client.application.id}> warned <@${message.member.user.id}>`, false)
         .addField('Warns Amount: ', `2 Warns`, true)
-        .addField('Reason: ', 'Sent Server invite in chat', true)
+        .addField('Reason: ', 'Swear In Chat', true)
         .setFooter({
           text: message.guild.name,
           iconURL: message.guild.iconURL()
