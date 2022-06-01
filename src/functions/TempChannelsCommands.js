@@ -1,6 +1,8 @@
 import { Permissions } from 'discord.js';
+import { fontGenerator } from '../assets/helpers';
+import { selectServer } from '../assets/static';
 
-const TempChannelsCommands = (user, message, id, baseRoles, tempChannel) => {
+const TempChannelsCommands = async (user, message, id, baseRoles, tempChannel) => {
   if (message.channel.id === id) {
     if (message.content.toLowerCase().split(' ')[0] === 'lock') {
       if (!user.voice.channel) return;
@@ -166,20 +168,25 @@ const TempChannelsCommands = (user, message, id, baseRoles, tempChannel) => {
       }
     }
 
-    if (message.content.toLowerCase().split(' ')[0] === 'rn') {
-      if (!user.voice.channel) return;
-      let vc = user.voice.channel;
-      const newName = [
-        '『🧩』',
-        message.content
-          .toLowerCase()
-          .split(' ')
-          .filter((i, index) => index !== 0)
-          .join(' ')
-      ].join(' ');
-
-      vc.setName(newName);
-    }
+    // Rename not working cause of the discord limit
+    // if (message.content.toLowerCase().split(' ')[0] === 'rn') {
+    //   if (!user.voice.channel) return;
+    //   let vc = user.voice.channel;
+    //   const newName = fontGenerator(
+    //     selectServer(message.guild.id),
+    //     [
+    //       '『🧩』',
+    //       message.content
+    //         .toLowerCase()
+    //         .split(' ')
+    //         .filter((_, index) => index !== 0)
+    //         .join(' ')
+    //     ].join(' ')
+    //   );
+    //   try {
+    //     await vc.setName(newName);
+    //   } catch (err) {}
+    // }
 
     setTimeout(() => {
       message.delete();
