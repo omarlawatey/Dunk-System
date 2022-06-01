@@ -6,8 +6,8 @@ import ms from 'ms';
 // =========================================
 // Local Files
 DotEnv.config();
-import { selectServer, serverInfo } from './assets/static';
-import { channelArranger, defaultBaseRoles } from './assets/subFunctions';
+import { selectServer, serverInfo, testMode } from './assets/static';
+import { channelArranger, createChannel, defaultBaseRoles } from './assets/subFunctions';
 import { commands, commandsCreate, commandsPermissions } from './commands';
 import CrashHandler from './assets/CrashHandler';
 import {
@@ -24,7 +24,7 @@ import {
   TwictchStreamDetector,
   YouTubeVideosNotifier
 } from './functions/';
-import Server from './Servers/Server';
+// import Server from './Servers/Server';
 
 // =========================================
 
@@ -181,21 +181,24 @@ setTimeout(() => {
       server.tempChannels.forEach(async tempChannel => {
         const tempChannelsCategory = guild?.channels?.cache?.get(tempChannel.tempCategoryId);
 
-        if (tempChannelsCategory) {
-          try {
-            channelArranger(
-              guild.channels.cache
-                .get(tempChannel.tempCategoryId)
-                .children.filter(i => !tempChannel.restrictedChannels.includes(i.id))
-                .map(({ name }) => {
-                  return name;
-                }),
-              guild,
-              tempChannel.tempCategoryId,
-              tempChannel.restrictedChannels
-            );
-          } catch (err) {}
-        }
+        if (!tempChannelsCategory) return;
+
+        try {
+          channelArranger(
+            guild.channels.cache
+              .get(tempChannel.tempCategoryId)
+              .children.filter(i => !tempChannel.restrictedChannels.includes(i.id))
+              .map(({ name }) => {
+                return name;
+              }),
+            guild,
+            tempChannel.tempCategoryId,
+            tempChannel.restrictedChannels
+          );
+
+          const makeVc = guild.channels.cache.get(tempChannel.restrictedChannels[1]).members.map(i => i);
+          makeVc.forEach(member => member.voice.setChannel(null));
+        } catch (err) {}
       });
     });
   }, 5000);
@@ -278,6 +281,7 @@ client.on('ready', () => {
     i++;
   }, 5000);
 
+  console.log(`Test Mode is set to ${testMode}`);
   console.log('The Bot Is Ready');
 });
 

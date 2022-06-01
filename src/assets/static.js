@@ -1,6 +1,6 @@
 import { Permissions } from 'discord.js';
 
-const testMode = false;
+export const testMode = false;
 
 export const serverInfo = !testMode
   ? [
@@ -34,7 +34,7 @@ __**Versions**__
 •━━━━━━━━━━━━━━━━━•`
         },
         roleUpadte: {
-          Id: '950087058020528149',
+          Id: '981359676560130079',
           ignore: [
             '950092343950856202',
             '953755887938449409',
@@ -91,7 +91,7 @@ __**Versions**__
             }
           }
         ],
-        logsChannelsId: '950087058020528149',
+        logsChannelsId: '981359676560130079',
         liveStatus: {
           liveCategoryId: '952835995580129301',
           Roles: [
@@ -100,7 +100,7 @@ __**Versions**__
             { name: '『🔮』boosters', id: '944987462084751391' }
           ]
         },
-        boostChannelId: '950087058020528149',
+        boostChannelId: '981359676560130079',
         linkBlockerChannels: [
           '941633472764715058',
           '941383631157461002',
@@ -150,10 +150,6 @@ __**Versions**__
             {
               name: 'abu_mosah',
               discordId: '275641232125067264'
-            },
-            {
-              name: 'omarlawatey',
-              discordId: '331867918730264577'
             }
           ]
         },

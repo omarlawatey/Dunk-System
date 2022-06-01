@@ -27,6 +27,7 @@ const LinkBlocker = async (serverInfo, message) => {
           msg?.delete();
         }, 5000);
       });
+
     UserData(message.guild, message.member, {
       type: 'warn',
       warnsAmount: 2
@@ -70,7 +71,6 @@ const LinkBlocker = async (serverInfo, message) => {
       warnsAmount: 1
     });
 
-    // makeWarn(message?.guild, message?.member, 1, 'warn');
     const embed = new MessageEmbed()
       ?.setColor('#ff0000')
       ?.setTitle(`⚠ User Warned`)
