@@ -27,12 +27,8 @@ const TempChannelsCommands = (user, message, id, baseRoles, tempChannel) => {
       if (message.content.toLowerCase().split(' ').length >= 2) {
         if (!message.mentions.users || !message.mentions.roles) return;
         let perAddTo = [
-          ...(message.mentions.users
-            ? message.mentions.users.map(i => i).filter(i => i)
-            : []),
-          ...(message.mentions.roles
-            ? message.mentions.roles.map(i => i).filter(i => i)
-            : [])
+          ...(message.mentions.users ? message.mentions.users.map(i => i).filter(i => i) : []),
+          ...(message.mentions.roles ? message.mentions.roles.map(i => i).filter(i => i) : [])
         ];
 
         perAddTo.forEach(item => {
@@ -67,12 +63,8 @@ const TempChannelsCommands = (user, message, id, baseRoles, tempChannel) => {
       if (message.content.toLowerCase().split(' ').length >= 2) {
         if (!message.mentions.users || !message.mentions.roles) return;
         let perAddTo = [
-          ...(message.mentions.users
-            ? message.mentions.users.map(i => i).filter(i => i)
-            : []),
-          ...(message.mentions.roles
-            ? message.mentions.roles.map(i => i).filter(i => i)
-            : [])
+          ...(message.mentions.users ? message.mentions.users.map(i => i).filter(i => i) : []),
+          ...(message.mentions.roles ? message.mentions.roles.map(i => i).filter(i => i) : [])
         ];
 
         perAddTo.forEach(item => {
@@ -113,12 +105,8 @@ const TempChannelsCommands = (user, message, id, baseRoles, tempChannel) => {
       if (message.content.toLowerCase().split(' ').length >= 2) {
         if (!message.mentions.users || !message.mentions.roles) return;
         let perAddTo = [
-          ...(message.mentions.users
-            ? message.mentions.users.map(i => i).filter(i => i)
-            : []),
-          ...(message.mentions.roles
-            ? message.mentions.roles.map(i => i).filter(i => i)
-            : [])
+          ...(message.mentions.users ? message.mentions.users.map(i => i).filter(i => i) : []),
+          ...(message.mentions.roles ? message.mentions.roles.map(i => i).filter(i => i) : [])
         ];
 
         perAddTo.forEach(item => {
@@ -165,12 +153,8 @@ const TempChannelsCommands = (user, message, id, baseRoles, tempChannel) => {
       if (message.content.toLowerCase().split(' ').length >= 2) {
         if (!message.mentions.users || !message.mentions.roles) return;
         let perAddTo = [
-          ...(message.mentions.users
-            ? message.mentions.users.map(i => i).filter(i => i)
-            : []),
-          ...(message.mentions.roles
-            ? message.mentions.roles.map(i => i).filter(i => i)
-            : [])
+          ...(message.mentions.users ? message.mentions.users.map(i => i).filter(i => i) : []),
+          ...(message.mentions.roles ? message.mentions.roles.map(i => i).filter(i => i) : [])
         ];
 
         perAddTo.forEach(item => {
@@ -180,6 +164,21 @@ const TempChannelsCommands = (user, message, id, baseRoles, tempChannel) => {
           });
         });
       }
+    }
+
+    if (message.content.toLowerCase().split(' ')[0] === 'rn') {
+      if (!user.voice.channel) return;
+      let vc = user.voice.channel;
+      const newName = [
+        '『🧩』',
+        message.content
+          .toLowerCase()
+          .split(' ')
+          .filter((i, index) => index !== 0)
+          .join(' ')
+      ].join(' ');
+
+      vc.setName(newName);
     }
 
     setTimeout(() => {
