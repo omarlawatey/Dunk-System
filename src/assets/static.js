@@ -8,6 +8,13 @@ export const serverInfo = !testMode
         serverId: '937480624602775572',
         generalRoles: [{ name: 'members', id: '952242871854063669' }],
         lowestMangmentRole: '960633351427981332',
+        managementRoles: [{}],
+        autoResponse: [
+          {
+            command: 'ip',
+            response: 'mc.dunk-master.com'
+          }
+        ],
         welcome: {
           Id: '941665272811630632',
           autoRole: ['952242871854063669'],
@@ -257,6 +264,12 @@ __**Versions**__
         //   ]
         // },
         lowestMangmentRole: '968319288257708092',
+        autoResponse: [
+          {
+            command: 'ip',
+            response: 'mc.dunk-master.com'
+          }
+        ],
         welcome: {
           Id: '968266429424078900',
           autoRole: ['968320047028256798'],
@@ -473,6 +486,12 @@ __**Versions**__
 
 •━━━━━━━━━━━━━━━━━•`
         },
+        autoResponse: [
+          {
+            command: 'ip',
+            response: 'mc.dunk-master.com'
+          }
+        ],
         roleUpadte: {
           Id: '949153972986462285',
           ignore: [
@@ -592,18 +611,6 @@ __**Versions**__
             }
           ],
           streamers: [
-            {
-              name: 'luciferae_',
-              discordId: '556476958297554965'
-            },
-            {
-              name: 'bystitch1',
-              discordId: '317296666635927552'
-            },
-            {
-              name: 'abu_mosah',
-              discordId: '275641232125067264'
-            },
             {
               name: 'omarlawatey',
               discordId: '331867918730264577'

@@ -22,8 +22,9 @@ import {
   AntiSpammer,
   BoostDetector,
   TwictchStreamDetector,
-  YouTubeVideosNotifier
-} from './functions/';
+  YouTubeVideosNotifier,
+  autoResponder
+} from './functions';
 // import Server from './Servers/Server';
 
 // =========================================
@@ -139,6 +140,15 @@ client.on('guildMemberUpdate', (oldState, newState) => {
   const server = selectServer(oldState?.guild?.id || newState?.guild?.id);
 
   BoostDetector(server, oldState, newState);
+});
+
+// AutoResponder
+client.on('messageCreate', message => {
+  if (message.author.bot) return;
+
+  const server = selectServer(message.guild.id);
+
+  autoResponder(server, message);
 });
 
 setTimeout(() => {

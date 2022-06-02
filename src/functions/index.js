@@ -10,3 +10,4 @@ export { default as AntiSpammer } from './AntiSpammer.js';
 export { default as BoostDetector } from './BoostDetector.js';
 export { default as TwictchStreamDetector } from './TwictchStreamDetector.js';
 export { default as YouTubeVideosNotifier } from './YouTubeVideosNotifier.js';
+export { default as autoResponder } from './autoResponder.js';
