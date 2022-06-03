@@ -12,7 +12,7 @@ export const serverInfo = !testMode
         autoResponse: [
           {
             command: 'ip',
-            response: 'mc.dunk-master.com'
+            response: 'mc.dunk-master.com:25589'
           }
         ],
         welcome: {
