@@ -7,8 +7,8 @@ import ms from 'ms';
 // Local Files
 DotEnv.config();
 import { selectServer, serverInfo, testMode } from './assets/static';
-import { channelArranger, createChannel, defaultBaseRoles } from './assets/subFunctions';
-import { commands, commandsCreate, commandsPermissions } from './commands';
+import { channelArranger, defaultBaseRoles } from './assets/subFunctions';
+import { commands, commandsCreate } from './commands';
 import CrashHandler from './assets/CrashHandler';
 import {
   Welcome,
@@ -167,10 +167,6 @@ client.on('ready', async () => {
 
     // Command Creation
     commandsCreate(commands, DiscordJS);
-
-    // Commands Permissions
-    if (!client.application?.owner) await client.application?.fetch();
-    await commandsPermissions(guild);
   });
 });
 client.on('interactionCreate', async interaction => {
