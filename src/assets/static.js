@@ -118,7 +118,7 @@ __**Versions**__
         ],
         TwitchApi: {
           streamsNotifiactionChannelId: '938525786300907601',
-          liveRoleId: '952584235384995900',
+          liveRoleId: '982532551270875146',
           liveStreamCategoryId: '954373241651232858',
           botsRole: {
             id: '941783311104245810',
