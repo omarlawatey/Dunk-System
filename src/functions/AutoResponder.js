@@ -1,4 +1,4 @@
-const autoResponder = ({ autoResponse }, message) => {
+const AutoResponder = ({ autoResponse }, message) => {
   autoResponse.forEach(item => {
     if (message.content.toLowerCase() === item.command)
       message.reply({
@@ -7,4 +7,4 @@ const autoResponder = ({ autoResponse }, message) => {
   });
 };
 
-export default autoResponder;
+export default AutoResponder;
