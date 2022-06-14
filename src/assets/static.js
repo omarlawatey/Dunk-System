@@ -8,7 +8,6 @@ export const serverInfo = !testMode
         serverId: '937480624602775572',
         generalRoles: [{ name: 'members', id: '952242871854063669' }],
         lowestMangmentRole: '960633351427981332',
-        managementRoles: [{}],
         autoResponse: [
           {
             command: 'ip',
@@ -363,8 +362,7 @@ __**Versions**__
           '968317616290680852',
           '968318162863018004',
           '968315380550488094',
-          '968315984433795102',
-          ''
+          '968315984433795102'
         ],
         TwitchApi: {
           streamsNotifiactionChannelId: '968317616290680852',

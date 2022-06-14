@@ -17,6 +17,8 @@ const Events = client => {
   messageCreate(client);
   ready(client);
   voiceStateUpdate(client);
+
+  // DataBase Setups
   MongoDB();
 
   // Timed Actions

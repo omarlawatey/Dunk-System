@@ -67,22 +67,13 @@ export const channelArranger = (arr, guild, categoryId, restrictedChannels) => {
   );
 
   filterdChannels.forEach((tempChannels, tempsIndex) => {
-    // let allChannels = [];
     tempChannels.forEach((tempChannel, tempIndex) => {
       try {
         tempChannel ? tempChannel.setName(`${uniqueValues[tempsIndex]}${tempIndex === 0 ? '' : ` ${tempIndex}`}`) : '';
       } catch (err) {
         console.log('channel rearanger ' + err);
       }
-      // allChannels.push(tempChannel);
     });
-
-    // allChannels.forEach((tempChannel, tempIndex) => {
-    //   try {
-    //     tempChannel.setPosition(tempIndex + 1).catch(err => console.log(err));
-    //   } catch (err) {
-    //   }
-    // });
   });
 };
 
