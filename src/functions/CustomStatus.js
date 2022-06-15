@@ -1,11 +1,11 @@
 const CustomStatus = client => {
   const arrOfStatus = [
     {
-      name: 'New Functions 😄',
-      type: 'WATCHING'
+      name: `Ip: mc.dunk-master.com:25589`,
+      type: 'PLAYING'
     },
     {
-      name: `Minecraft Server Addres: mc.dunk-master.com`,
+      name: '1.16.5 -> 1.18.2',
       type: 'PLAYING'
     }
   ];
@@ -16,7 +16,7 @@ const CustomStatus = client => {
     const status = arrOfStatus[i];
     client.user.setActivity(status.name, { type: status.type });
     i++;
-  }, 5000);
+  }, 3000);
 };
 
 export default CustomStatus;
