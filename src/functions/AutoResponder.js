@@ -1,15 +1,14 @@
 const AutoResponder = ({ autoResponse }, message) => {
-  autoResponse.forEach(item => {
+  autoResponse.forEach(async item => {
     {
       if (message.content.toLowerCase() === item.command)
         if (item.hasOwnProperty('responseFunction')) {
-          item.responseFunction(message);
+          await item.responseFunction(message);
           return;
-        }
-
-      message.reply({
-        content: item.response
-      });
+        } else
+          message.reply({
+            content: item.response
+          });
     }
   });
 };

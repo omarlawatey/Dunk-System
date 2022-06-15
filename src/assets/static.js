@@ -13,13 +13,13 @@ export const serverInfo = !testMode
           {
             command: 'ip',
             response: `
-            ip: mc.dunk-master.com:25589
-            version: 1.16.5 -> 1.18.2`
+ip: mc.dunk-master.com:25589
+version: 1.16.5 -> 1.18.2`
           },
           {
             command: 'helpme',
-            responseFunction: message => {
-              selectServer(message.server.id).moderationChannel.send({
+            responseFunction: async message => {
+              await message.guild.channels.cache.get(selectServer(message.guild.id).moderationChannel).send({
                 content: `> <@${message.member.id}\>
 > Requested help at <#${message.channel.id}>
 @here
@@ -499,10 +499,24 @@ __**Versions**__
 
 •━━━━━━━━━━━━━━━━━•`
         },
+        moderationChannel: '949675193293479987',
         autoResponse: [
           {
             command: 'ip',
-            response: 'mc.dunk-master.com'
+            response: `
+ip: mc.dunk-master.com:25589
+version: 1.16.5 -> 1.18.2`
+          },
+          {
+            command: 'helpme',
+            responseFunction: async message => {
+              await message.guild.channels.cache.get(selectServer(message.guild.id).moderationChannel).send({
+                content: `> <@${message.member.id}\>
+> Requested help at <#${message.channel.id}>
+@here
+`
+              });
+            }
           }
         ],
         roleUpadte: {
