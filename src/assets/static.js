@@ -8,10 +8,24 @@ export const serverInfo = !testMode
         serverId: '937480624602775572',
         generalRoles: [{ name: 'members', id: '952242871854063669' }],
         lowestMangmentRole: '960633351427981332',
+        moderationChannel: '941773618268995624',
         autoResponse: [
           {
             command: 'ip',
-            response: 'mc.dunk-master.com:25589'
+            response: `
+            ip: mc.dunk-master.com:25589
+            version: 1.16.5 -> 1.18.2`
+          },
+          {
+            command: 'helpme',
+            responseFunction: message => {
+              selectServer(message.server.id).moderationChannel.send({
+                content: `> <@${message.member.id}\>
+> Requested help at <#${message.channel.id}>
+@here
+`
+              });
+            }
           }
         ],
         welcome: {
