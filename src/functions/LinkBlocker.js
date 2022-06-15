@@ -3,8 +3,8 @@ import { urlFinder } from '../assets/helpers';
 import { checkServerManager, UserData } from '../assets/subFunctions';
 
 const LinkBlocker = async (serverInfo, message) => {
+  if (!serverInfo.linkBlockerChannels.includes(message.channel.id)) return;
   if (checkServerManager(message.member)) return;
-  if (serverInfo.linkBlockerChannels.includes(message.channel.id)) return;
 
   const links = {
     discordInvites:
