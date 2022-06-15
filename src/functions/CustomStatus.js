@@ -1,7 +1,7 @@
 const CustomStatus = client => {
   const arrOfStatus = [
     {
-      name: `Ip: mc.dunk-master.com:25589`,
+      name: `mc.dunk-master.com:25589`,
       type: 'PLAYING'
     },
     {
