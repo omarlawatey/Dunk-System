@@ -1,5 +1,4 @@
 import { selectServer } from '../../assets/static';
-import { Welcome } from '../../functions';
 
 const guildMemberAdd = client => {
   client.on('guildMemberAdd', member => {
@@ -14,11 +13,6 @@ const guildMemberAdd = client => {
 
       return;
     }
-
-    // welcome Message Function
-    const guild = client.guilds.cache.get(server.serverId);
-    const welcomeChannel = guild.channels.cache.get(server.welcome.Id);
-    Welcome(server, welcomeChannel, member);
   });
 };
 

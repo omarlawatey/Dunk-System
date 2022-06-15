@@ -1,10 +1,12 @@
 import { selectServer } from '../../assets/static';
 
-import { RoleWatcher, BoostDetector } from '../../functions';
+import { RoleWatcher, BoostDetector, Welcome } from '../../functions';
 
 const guildMemberUpdate = client => {
   client.on('guildMemberUpdate', async (oldState, newState) => {
-    const server = selectServer(newState.guild.id || oldState.guild.id);
+    const activeMember = oldState || newState;
+
+    const server = selectServer(activeMember.guild.id);
 
     // If User is a bot
     if (newState.user.bot) return;
@@ -14,6 +16,12 @@ const guildMemberUpdate = client => {
 
     // Boost Detection Function
     BoostDetector(server, oldState, newState);
+
+    // Welcome Message
+    if (oldState.pending && !newState.pending) {
+      const welcomeChannel = activeMember.guild.channels.cache.get(server.welcome.Id);
+      Welcome(server, welcomeChannel, activeMember);
+    }
   });
 };
 
