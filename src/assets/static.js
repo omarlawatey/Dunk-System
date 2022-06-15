@@ -19,6 +19,7 @@ version: 1.16.5 -> 1.18.2`
           {
             command: 'helpme',
             responseFunction: async message => {
+              message.reply({ content: 'One of our mods will help you as soon as possible.' });
               await message.guild.channels.cache.get(selectServer(message.guild.id).moderationChannel).send({
                 content: `> <@${message.member.id}\>
 > Requested help at <#${message.channel.id}>
