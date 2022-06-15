@@ -143,7 +143,6 @@ __**Java**__
             {
               id: '937480624602775572',
               deny: [
-                Permissions.FLAGS.VIEW_CHANNEL,
                 Permissions.FLAGS.CREATE_PRIVATE_THREADS,
                 Permissions.FLAGS.CREATE_PUBLIC_THREADS,
                 Permissions.FLAGS.SEND_MESSAGES_IN_THREADS

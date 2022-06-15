@@ -179,12 +179,7 @@ export const twitchLiveStreamTempChannels = async (
         parent: categoryId
       })
       .then(async vc => {
-        const streamTextChannel = await guild.channels.create(fontGenerator(serverInfo, `${twitchUsername} Stream`), {
-          type: 'GUILD_TEXT',
-          parent: categoryId
-        });
-
-        [vc, streamTextChannel].forEach(async streamChannel => {
+        [vc].forEach(async streamChannel => {
           await streamChannel.permissionOverwrites.set([
             ...serverInfo.TwitchApi.liveStreamChannelRoles,
             {
@@ -224,7 +219,6 @@ export const twitchLiveStreamTempChannels = async (
       });
   else if (!isLive) {
     [
-      fontGenerator(serverInfo, `${twitchUsername}-stream`),
       fontGenerator(serverInfo, `${twitchUsername} Stream VC`),
       fontGenerator(serverInfo, `${twitchUsername} Queue`)
     ].forEach(async item => {
