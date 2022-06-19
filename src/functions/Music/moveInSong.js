@@ -1,7 +1,3 @@
-import React from 'react';
-
-const moveInSong = () => {
-  return <div>moveInSong</div>;
-};
+const moveInSong = () => {};
 
 export default moveInSong;
