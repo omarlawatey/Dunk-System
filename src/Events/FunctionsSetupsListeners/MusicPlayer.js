@@ -35,13 +35,10 @@ const MusicPlayer = client => {
   });
 
   // Bot Disconnected handler
-  client.player.addListener('botDisconnect', queue => {
-    console.log(queue.lastSongMessage);
+  client.player.addListener('botDisconnect', async queue => {
     try {
-      if (queue.lastSongMessage) queue.lastSongMessage.reactions.removeAll();
-    } catch (error) {
-      console.log(error);
-    }
+      await queue.connect(queue.channel.guild.id);
+    } catch (error) {}
   });
 
   // on Error handler
