@@ -7,6 +7,24 @@ const messageCreate = client => {
     // Guild Selection
     const server = selectServer(message.guild.id);
 
+    // If user is bot
+    if (!message?.member?.user?.bot) {
+      // Link Blocking Functions
+      LinkBlocker(server, message);
+
+      // Bad Words Watcher Functions
+      BadWordWatcher(server, message);
+
+      // Anti Spam Functions
+      AntiSpammer(server, message);
+
+      // Auto Response Functions
+      AutoResponder(server, message);
+
+      // Music Function
+      Music(server, client, message);
+    }
+
     // Temporary Channels Functions
     server.tempChannels.forEach(tempChannel => {
       if (message?.channel?.parent?.id === tempChannel.tempCategoryId) {
@@ -20,24 +38,6 @@ const messageCreate = client => {
         TempChannelsCommands(user, message, id, baseRoles, tempChannel);
       }
     });
-
-    // If user is bot
-    if (message?.member?.user?.bot) return;
-
-    // Link Blocking Functions
-    LinkBlocker(server, message);
-
-    // Bad Words Watcher Functions
-    BadWordWatcher(server, message);
-
-    // Anti Spam Functions
-    AntiSpammer(server, message);
-
-    // Auto Response Functions
-    AutoResponder(server, message);
-
-    // Music Function
-    Music(server, client, message);
   });
 };
 
