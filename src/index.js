@@ -27,9 +27,7 @@ CrashHandler();
 
 // =========================================
 // Events Listeners
-setTimeout(() => {
-  Events(client);
-}, 5000);
+Events(client);
 
 // =========================================
 //Bot Login Handler
