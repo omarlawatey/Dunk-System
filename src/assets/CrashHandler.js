@@ -15,8 +15,8 @@ const CrashHandler = async () => {
   });
 
   process.on('multipleResolves', (reason, p) => {
-    console.log(`[Crash-Handler] :: Unhandled MultipleResolves/catch`);
-    console.log(reason, p);
+    // console.log(`[Crash-Handler] :: Unhandled MultipleResolves/catch`);
+    // console.log(reason, p);
   });
 };
 

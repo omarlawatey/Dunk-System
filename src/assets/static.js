@@ -1,10 +1,14 @@
 import { Permissions } from 'discord.js';
+import DotEnv from 'dotenv';
 
-export const testMode = false;
+DotEnv.config();
+
+export const testMode = process.env.TESTMODE;
 
 export const serverInfo = !testMode
   ? [
       {
+        prefix: '!',
         serverId: '937480624602775572',
         generalRoles: [{ name: 'members', id: '952242871854063669' }],
         lowestMangmentRole: '960633351427981332',
@@ -29,6 +33,7 @@ version: 1.16.5 -> 1.18.2`
             }
           }
         ],
+        commandsChannel: '950086892160946246',
         welcome: {
           Id: '941665272811630632',
           autoRole: ['952242871854063669'],
@@ -237,6 +242,7 @@ __**Java**__
         }
       },
       {
+        prefix: '!',
         serverId: '968193432667443220',
         generalRoles: [{ name: 'members', id: '968320047028256798' }],
         // moderation: {
@@ -471,9 +477,11 @@ __**Versions**__
     ]
   : [
       {
+        prefix: '!',
         serverId: '949153972936122398',
         generalRoles: [{ name: 'members', id: '949153972948701236' }],
         lowestMangmentRole: '949153972973875284',
+        commandsChannel: '949681510464749688',
         welcome: {
           Id: '949153972986462282',
           autoRole: ['949153972948701236'],

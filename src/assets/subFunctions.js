@@ -153,7 +153,7 @@ export const welcomeImage = async (member, link) => {
 };
 
 export const privateMessageServerData = async (serverInfo, author) => {
-  const embed = new MessageEmbed().setColor('#ff0000').setDescription(serverInfo.welcome.welcomePrivateMessage);
+  const embed = new MessageEmbed().setColor('GOLD').setDescription(serverInfo.welcome.welcomePrivateMessage);
 
   author.send({ embeds: [embed] });
 };

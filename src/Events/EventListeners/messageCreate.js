@@ -1,6 +1,6 @@
 import { selectServer } from '../../assets/static';
 
-import { TempChannelsCommands, LinkBlocker, BadWordWatcher, AntiSpammer, AutoResponder } from '../../functions';
+import { TempChannelsCommands, LinkBlocker, BadWordWatcher, AntiSpammer, AutoResponder, Music } from '../../functions';
 
 const messageCreate = client => {
   client.on('messageCreate', async message => {
@@ -35,6 +35,9 @@ const messageCreate = client => {
 
     // Auto Response Functions
     AutoResponder(server, message);
+
+    // Music Function
+    Music(server, client, message);
   });
 };
 

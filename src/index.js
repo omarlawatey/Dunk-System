@@ -1,4 +1,4 @@
-import DiscordJS, { Intents, Permissions } from 'discord.js';
+import DiscordJS, { Intents } from 'discord.js';
 import DotEnv from 'dotenv';
 
 // =========================================

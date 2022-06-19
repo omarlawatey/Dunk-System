@@ -12,3 +12,4 @@ export { default as TwictchStreamDetector } from './TwictchStreamDetector.js';
 export { default as YouTubeVideosNotifier } from './YouTubeVideosNotifier.js';
 export { default as AutoResponder } from './AutoResponder.js';
 export { default as CustomStatus } from './CustomStatus.js';
+export { default as Music } from './Music';
