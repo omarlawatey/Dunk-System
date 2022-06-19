@@ -8,7 +8,9 @@ const voiceStateUpdate = client => {
 
     // Server Selection
     const server = selectServer(newState.guild.id || oldState.guild.id);
-    const guild = client.guilds.cache.get(server.serverId);
+    const guild = client.guilds.cache.get(server?.serverId);
+
+    if (!guild) return;
 
     server.tempChannels.forEach(tempChannel => {
       if (
