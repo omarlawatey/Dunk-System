@@ -2,7 +2,17 @@ import { selectServer } from '../../assets/static';
 import { TempChannels } from '../../functions';
 
 const voiceStateUpdate = client => {
-  client.on('voiceStateUpdate', (oldState, newState) => {
+  client.on('voiceStateUpdate', async (oldState, newState) => {
+    const queue = await client.player.getQueue(oldState.guild.id || newState.guild.id);
+
+    if (oldState.id === client.user.id) {
+      if (oldState.channel && !newState.channel) {
+        queue.clear();
+        queue.isPlaying = false;
+        queue?.lastSongMessage?.reactions?.removeAll();
+      }
+    }
+
     // If User is a bot
     if (newState.member.user.bot) return;
 

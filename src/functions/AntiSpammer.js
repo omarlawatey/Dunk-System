@@ -45,7 +45,7 @@ const AntiSpammer = async (serverInfo, message) => {
             .map(i => i)
             .slice(0, 5);
 
-          message.channel.bulkDelete(messages).catch(error => console.log(error.stack));
+          message.channel.bulkDelete(messages);
 
           message.reply({ content: `${message.member} Spamed In chat` }).then(msg => {
             setTimeout(() => {

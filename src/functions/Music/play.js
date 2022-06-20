@@ -8,11 +8,19 @@ const play = async ({ client, message, args }) => {
   // Get the Guild Queue
   const queue = await client.player.createQueue(message.guild);
   // connect the client to the voice channel
-  if (!queue.connection) await queue.connect(message.member.voice.channel);
+  // console.log(queue.connection);
+
+  if (
+    !queue?.connection ||
+    !message.member.voice.channel.members.map(i => i).some(member => member.id === client.user.id)
+  ) {
+    await queue.connect(message.member.voice.channel);
+  }
 
   queue.lastSongMessage = null;
   queue.currentVolume = 100;
   queue.repeatMode = 0;
+  queue.isPlaying = false;
 
   // Check if the args are url or a search
   let url = urlFinder(
@@ -71,8 +79,10 @@ const play = async ({ client, message, args }) => {
     });
   }
 
-  if (!queue.playing) await queue.play();
-  return await queue;
+  if (!queue?.playing && !queue.isPlaying) {
+    await queue.play();
+    queue.isPlaying = true;
+  }
 };
 
 export default play;

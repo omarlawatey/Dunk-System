@@ -47,9 +47,7 @@ const Welcome = async (serverInfo, welcomeChannel, member) => {
 
         try {
           await privateMessageServerData(serverInfo, member.user);
-        } catch (err) {
-          console.log(err);
-        }
+        } catch (err) {}
       });
   }
 
