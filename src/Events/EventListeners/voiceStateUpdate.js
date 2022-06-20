@@ -3,13 +3,12 @@ import { TempChannels } from '../../functions';
 
 const voiceStateUpdate = client => {
   client.on('voiceStateUpdate', async (oldState, newState) => {
-    
     if (oldState.id === client.user.id) {
       if (oldState.channel && !newState.channel) {
         const queue = await client.player.getQueue(oldState.guild.id || newState.guild.id);
-        
+
         queue?.clear();
-        queue?.isPlaying = false;
+        queue.isPlaying = false;
         queue?.lastSongMessage?.reactions?.removeAll();
       }
     }
