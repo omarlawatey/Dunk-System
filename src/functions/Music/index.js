@@ -14,7 +14,7 @@ const Music = async (server, client, message) => {
   const args = message.content.split(' ').slice(1).join(' ');
 
   // Check if the message is a music command
-  const commands = ['p', 'q', 'quit', 'pause', 'resume', 's', 'st', 'l', 'v', 'vi', 'i'].map(
+  const commands = ['p', 'q', 'quit', 'pause', 'resume', 's', 'l', 'v', 'i'].map(
     musicCommand => `${server.prefix}${musicCommand}`
   );
   if (!commands.includes(command)) return;

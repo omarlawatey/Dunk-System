@@ -3,7 +3,9 @@ import DotEnv from 'dotenv';
 
 DotEnv.config();
 
-export const testMode = false;
+// if (process.env.TESTMODE) return;
+
+export const testMode = process.env.TESTMODE;
 
 export const serverInfo = !testMode
   ? [

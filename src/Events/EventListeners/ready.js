@@ -20,6 +20,7 @@ const ready = client => {
     CustomStatus(client);
 
     console.log(`Test Mode is set to ${testMode}`);
+    console.log(`Logged in as ${client.user.tag}`);
     console.log('The Bot Is Ready');
   });
 };
