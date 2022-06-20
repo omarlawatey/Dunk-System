@@ -49,6 +49,8 @@ const guildReactionAdd = client => {
           return;
 
         case '⏹️':
+          queue?.lastSongMessage?.reactions?.removeAll();
+          queue.isPlaying = false;
           queue?.destroy();
           return;
 
