@@ -1,10 +1,9 @@
 const quit = async ({ client, message, args }) => {
   const queue = await client.player.getQueue(message.guild.id);
 
-  queue?.destroy();
-  queue.clear();
+  queue?.lastSongMessage?.reactions?.removeAll();
   queue.isPlaying = false;
-  queue.lastSongMessage.reactions.removeAll();
+  queue?.destroy();
 
   await message.reply({ content: `Disconnected` });
 };

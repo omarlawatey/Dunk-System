@@ -7,9 +7,12 @@ const voiceStateUpdate = client => {
       if (oldState.channel && !newState.channel) {
         const queue = await client.player.getQueue(oldState.guild.id || newState.guild.id);
 
+        if (queue) {
+          queue?.lastSongMessage?.reactions?.removeAll();
+          queue.isPlaying = false;
+        }
+
         queue?.clear();
-        queue.isPlaying = false;
-        queue?.lastSongMessage?.reactions?.removeAll();
       }
     }
 

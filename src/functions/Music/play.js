@@ -79,7 +79,7 @@ const play = async ({ client, message, args }) => {
     });
   }
 
-  if (!queue?.playing && !queue.isPlaying) {
+  if (!queue?.playing || !queue.isPlaying) {
     await queue.play();
     queue.isPlaying = true;
   }
